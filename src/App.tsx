@@ -11,135 +11,131 @@ function FadeIn({ children, delay=0, duration=.7, x=0, y=30, as='div', className
 function ContactButton(){return <a href="#contact" className="group inline-flex items-center gap-2 rounded-full px-8 py-3 text-xs font-medium uppercase tracking-widest text-white outline outline-2 outline-offset-[-3px] outline-white transition-transform duration-300 hover:scale-[1.03] sm:px-10 sm:py-3.5 sm:text-sm md:px-12 md:py-4 md:text-base" style={{background:'linear-gradient(123deg,#18011F 7%,#B600A8 37%,#7621B0 72%,#BE4C00 100%)',boxShadow:'0 4px 4px rgba(181,1,167,.25),4px 4px 12px #7721B1 inset'}}>Contact me <ArrowUpRight className="h-4 w-4 transition-transform group-hover:rotate-45"/></a>}
 function LiveProjectButton(){return <button className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-[#D7E2EA] px-5 py-2.5 text-[10px] font-medium uppercase tracking-widest transition-colors hover:bg-[#D7E2EA]/10 sm:px-8 sm:py-3 sm:text-sm md:px-10 md:py-3.5 md:text-base">Live project <ArrowUpRight className="h-4 w-4"/></button>}
 
-type GazeDirection='left'|'center'|'right';
-const clamp=(value:number,min:number,max:number)=>Math.min(max,Math.max(min,value));
+const TAU=Math.PI*2;
+const FRONT_TIME=1.55;
+const directionFrames=[
+  {angle:0,time:3.2},{angle:Math.PI/4,time:4.4},{angle:Math.PI/2,time:5.4},
+  {angle:Math.PI*3/4,time:6.3},{angle:Math.PI,time:7.2},{angle:Math.PI*5/4,time:8.1},
+  {angle:Math.PI*3/2,time:8.9},{angle:Math.PI*7/4,time:9.6}
+];
+const directionName=(angle:number)=>['right','upper-right','up','upper-left','left','lower-left','down','lower-right'][Math.round(((angle%TAU)+TAU)%TAU/(TAU/8))%8];
+const angleToVideoTime=(angle:number,duration:number)=>{
+  const normalized=((angle%TAU)+TAU)%TAU;
+  const points=[...directionFrames,{angle:TAU,time:duration+directionFrames[0].time}];
+  const next=Math.max(1,points.findIndex(point=>point.angle>=normalized));
+  const from=points[next-1],to=points[next];
+  const progress=(normalized-from.angle)/(to.angle-from.angle||1);
+  return (from.time+(to.time-from.time)*progress)%duration;
+};
 
 function InteractiveCharacter(){
   const hostRef=useRef<HTMLDivElement>(null);
   const videoRef=useRef<HTMLVideoElement>(null);
   const canvasRef=useRef<HTMLCanvasElement>(null);
-  const baseRef=useRef<HTMLCanvasElement>();
-  const targetGaze=useRef(0);
-  const currentGaze=useRef(0);
+  const bufferRef=useRef<HTMLCanvasElement>();
+  const maskRef=useRef<Uint8Array>();
+  const targetAngle=useRef(0);
+  const currentAngle=useRef(0);
+  const currentTime=useRef(FRONT_TIME);
+  const targetTime=useRef(FRONT_TIME);
+  const neutral=useRef(true);
+  const seeking=useRef(false);
   const scrolling=useRef(false);
   const scrollTimer=useRef<number>();
   const animationFrame=useRef<number>();
   const [ready,setReady]=useState(false);
-  const [direction,setDirection]=useState<GazeDirection>('center');
-
-  const drawEyes=(ctx:CanvasRenderingContext2D,gaze:number)=>{
-    const eyes=[{x:251,y:334,rotation:-.05},{x:372,y:341,rotation:.04}];
-    eyes.forEach(({x,y,rotation})=>{
-      ctx.save();
-      ctx.translate(x,y);
-      ctx.rotate(rotation);
-      ctx.beginPath();
-      ctx.ellipse(0,0,39,27,0,0,Math.PI*2);
-      const white=ctx.createRadialGradient(-8,-9,2,0,0,42);
-      white.addColorStop(0,'#f7f1e8');
-      white.addColorStop(.72,'#ece7df');
-      white.addColorStop(1,'#cec8c0');
-      ctx.fillStyle=white;
-      ctx.fill();
-      ctx.lineWidth=2;
-      ctx.strokeStyle='rgba(42,25,20,.58)';
-      ctx.stroke();
-
-      const pupilX=gaze*15;
-      const iris=ctx.createRadialGradient(pupilX-4,-5,1,pupilX,0,18);
-      iris.addColorStop(0,'#886348');
-      iris.addColorStop(.55,'#3d291f');
-      iris.addColorStop(1,'#17100d');
-      ctx.beginPath();
-      ctx.ellipse(pupilX,1,14.5,17.5,0,0,Math.PI*2);
-      ctx.fillStyle=iris;
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(pupilX,2,7.5,0,Math.PI*2);
-      ctx.fillStyle='#0a0807';
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(pupilX-5,-6,4,0,Math.PI*2);
-      ctx.fillStyle='rgba(255,255,255,.92)';
-      ctx.fill();
-      ctx.restore();
-    });
-  };
-
-  const renderFrame=()=>{
-    const canvas=canvasRef.current;
-    const base=baseRef.current;
-    if(!canvas||!base)return;
-    const ctx=canvas.getContext('2d');
-    if(!ctx)return;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.drawImage(base,0,0);
-    drawEyes(ctx,currentGaze.current);
-  };
+  const [direction,setDirection]=useState('front');
 
   useEffect(()=>{
-    const video=videoRef.current;
-    const canvas=canvasRef.current;
+    const video=videoRef.current,canvas=canvasRef.current;
     if(!video||!canvas)return;
-    const capture=()=>{
-      const base=document.createElement('canvas');
-      base.width=600;base.height=720;
-      const ctx=base.getContext('2d',{willReadFrequently:true});
-      if(!ctx)return;
-      ctx.drawImage(video,340,0,600,720,0,0,600,720);
-      const frame=ctx.getImageData(0,0,600,720);
-      const total=600*720,background=new Uint8Array(total),queue=new Uint32Array(total);
-      let head=0,tail=0;
-      const isBackground=(pixel:number)=>{const i=pixel*4,r=frame.data[i],g=frame.data[i+1],b=frame.data[i+2];return (r+g+b)/3>150&&Math.max(r,g,b)-Math.min(r,g,b)<82};
+    const width=canvas.width,height=canvas.height,total=width*height;
+    const buffer=document.createElement('canvas');
+    buffer.width=width;buffer.height=height;bufferRef.current=buffer;
+    const bufferContext=buffer.getContext('2d',{willReadFrequently:true});
+    const outputContext=canvas.getContext('2d');
+    if(!bufferContext||!outputContext)return;
+    const background=new Uint8Array(total),queue=new Uint32Array(total);
+    const render=()=>{
+      const sourceHeight=video.videoHeight||720;
+      const sourceWidth=sourceHeight*5/6;
+      const sourceX=((video.videoWidth||1280)-sourceWidth)/2;
+      bufferContext.clearRect(0,0,width,height);
+      bufferContext.drawImage(video,sourceX,0,sourceWidth,sourceHeight,0,0,width,height);
+      const frame=bufferContext.getImageData(0,0,width,height),data=frame.data;
+      background.fill(0);let head=0,tail=0;
+      const isBackground=(pixel:number)=>{const i=pixel*4,r=data[i],g=data[i+1],b=data[i+2];return (r+g+b)/3>154&&Math.max(r,g,b)-Math.min(r,g,b)<80};
       const enqueue=(pixel:number)=>{if(!background[pixel]&&isBackground(pixel)){background[pixel]=1;queue[tail++]=pixel}};
-      for(let x=0;x<600;x++){enqueue(x);enqueue(719*600+x)}
-      for(let y=0;y<720;y++){enqueue(y*600);enqueue(y*600+599)}
-      while(head<tail){const pixel=queue[head++],x=pixel%600,y=Math.floor(pixel/600);if(x>0)enqueue(pixel-1);if(x<599)enqueue(pixel+1);if(y>0)enqueue(pixel-600);if(y<719)enqueue(pixel+600)}
-      for(let pixel=0;pixel<total;pixel++)if(background[pixel])frame.data[pixel*4+3]=0;
-      ctx.putImageData(frame,0,0);
-      baseRef.current=base;
-      renderFrame();
-      setReady(true);
+      for(let x=0;x<width;x++){enqueue(x);enqueue((height-1)*width+x)}
+      for(let y=0;y<height;y++){enqueue(y*width);enqueue(y*width+width-1)}
+      while(head<tail){const pixel=queue[head++],x=pixel%width,y=(pixel/width)|0;if(x)enqueue(pixel-1);if(x<width-1)enqueue(pixel+1);if(y)enqueue(pixel-width);if(y<height-1)enqueue(pixel+width)}
+      const hitMask=new Uint8Array(total);
+      for(let pixel=0;pixel<total;pixel++){
+        const i=pixel*4;
+        if(background[pixel]){data[i+3]=0;continue}
+        hitMask[pixel]=255;
+        const x=pixel%width,y=(pixel/width)|0;
+        const touchesBackground=(x&&background[pixel-1])||(x<width-1&&background[pixel+1])||(y&&background[pixel-width])||(y<height-1&&background[pixel+width]);
+        if(touchesBackground){const mean=(data[i]+data[i+1]+data[i+2])/3;data[i+3]=Math.max(70,Math.min(255,(238-mean)*5))}
+      }
+      outputContext.clearRect(0,0,width,height);outputContext.putImageData(frame,0,0);
+      maskRef.current=hitMask;seeking.current=false;setReady(true);
     };
-    const seek=()=>{video.currentTime=Math.min(2.4,video.duration||2.4)};
-    video.addEventListener('loadedmetadata',seek,{once:true});
-    video.addEventListener('seeked',capture,{once:true});
-    if(video.readyState>=1)seek();
-    return()=>{video.removeEventListener('loadedmetadata',seek);video.removeEventListener('seeked',capture)};
+    const seekFront=()=>{video.currentTime=Math.min(FRONT_TIME,Math.max(0,video.duration-.05))};
+    video.addEventListener('loadedmetadata',seekFront);
+    video.addEventListener('seeked',render);
+    if(video.readyState>=1)seekFront();
+    return()=>{video.removeEventListener('loadedmetadata',seekFront);video.removeEventListener('seeked',render)};
   },[]);
 
   useEffect(()=>{
-    const animate=()=>{
-      const delta=targetGaze.current-currentGaze.current;
-      if(Math.abs(delta)>.001){currentGaze.current+=delta*.14;renderFrame()}
-      animationFrame.current=requestAnimationFrame(animate);
+    const reset=()=>{neutral.current=true;targetTime.current=FRONT_TIME;setDirection('front')};
+    const pointerHitsCharacter=(x:number,y:number)=>{
+      const rect=hostRef.current?.getBoundingClientRect(),mask=maskRef.current,canvas=canvasRef.current;
+      if(!rect||!mask||!canvas||x<rect.left||x>rect.right||y<rect.top||y>rect.bottom)return false;
+      const px=Math.min(canvas.width-1,Math.max(0,Math.floor((x-rect.left)/rect.width*canvas.width)));
+      const py=Math.min(canvas.height-1,Math.max(0,Math.floor((y-rect.top)/rect.height*canvas.height)));
+      return mask[py*canvas.width+px]>0;
     };
-    animationFrame.current=requestAnimationFrame(animate);
-    const updateDirection=(value:number)=>setDirection(value<-.12?'left':value>.12?'right':'center');
-    const reset=()=>{targetGaze.current=0;updateDirection(0)};
-    const pointerMove=(event:PointerEvent)=>{
-      if(scrolling.current||event.pointerType==='touch')return reset();
-      const rect=hostRef.current?.getBoundingClientRect();
-      if(!rect)return;
-      const overCharacter=event.clientX>=rect.left&&event.clientX<=rect.right&&event.clientY>=rect.top&&event.clientY<=rect.bottom;
-      if(overCharacter)return reset();
-      const gaze=clamp((event.clientX/window.innerWidth-.5)*2,-1,1);
-      targetGaze.current=Math.abs(gaze)<.08?0:gaze;
-      updateDirection(targetGaze.current);
+    const pointerMove=(event:MouseEvent)=>{
+      if(scrolling.current)return;
+      if(pointerHitsCharacter(event.clientX,event.clientY))return reset();
+      const x=event.clientX-window.innerWidth/2,y=event.clientY-window.innerHeight/2;
+      if(Math.hypot(x,y)<42)return reset();
+      neutral.current=false;targetAngle.current=Math.atan2(-y,x);setDirection(directionName(targetAngle.current));
     };
     const scroll=()=>{
-      scrolling.current=true;reset();
-      window.clearTimeout(scrollTimer.current);
-      scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},160);
+      scrolling.current=true;reset();window.clearTimeout(scrollTimer.current);
+      scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},180);
     };
-    window.addEventListener('pointermove',pointerMove,{passive:true});
+    const animate=()=>{
+      const video=videoRef.current;
+      if(video?.duration){
+        if(!neutral.current){
+          const angleDelta=Math.atan2(Math.sin(targetAngle.current-currentAngle.current),Math.cos(targetAngle.current-currentAngle.current));
+          currentAngle.current+=angleDelta*.105;
+          targetTime.current=angleToVideoTime(currentAngle.current,video.duration);
+        }
+        const duration=video.duration;
+        let timeDelta=targetTime.current-currentTime.current;
+        if(timeDelta>duration/2)timeDelta-=duration;
+        if(timeDelta<-duration/2)timeDelta+=duration;
+        if(Math.abs(timeDelta)>.012&&!seeking.current){
+          currentTime.current=(currentTime.current+timeDelta*.16+duration)%duration;
+          seeking.current=true;video.currentTime=currentTime.current;
+        }
+      }
+      animationFrame.current=requestAnimationFrame(animate);
+    };
+    window.addEventListener('mousemove',pointerMove,{passive:true});
     window.addEventListener('scroll',scroll,{passive:true});
-    return()=>{window.removeEventListener('pointermove',pointerMove);window.removeEventListener('scroll',scroll);window.clearTimeout(scrollTimer.current);if(animationFrame.current)cancelAnimationFrame(animationFrame.current)};
+    window.addEventListener('blur',reset);
+    animationFrame.current=requestAnimationFrame(animate);
+    return()=>{window.removeEventListener('mousemove',pointerMove);window.removeEventListener('scroll',scroll);window.removeEventListener('blur',reset);window.clearTimeout(scrollTimer.current);if(animationFrame.current)cancelAnimationFrame(animationFrame.current)};
   },[]);
 
-  return <div ref={hostRef} data-gaze={direction} className={`hero-character relative aspect-[5/6] w-full transition-[opacity,filter] duration-700 ${ready?'opacity-100 blur-0':'opacity-0 blur-md'}`} aria-label={`Joji IP character looking ${direction}`}>
-    <div className="absolute inset-x-[12%] bottom-[2%] h-[56%] rounded-full bg-[#7621B0]/20 blur-3xl"/>
-    <canvas ref={canvasRef} width="600" height="720" className="relative h-full w-full select-none object-contain"/>
+  return <div ref={hostRef} data-direction={direction} className={`hero-character relative aspect-[5/6] w-full transition-[opacity,filter] duration-700 ${ready?'opacity-100 blur-0':'opacity-0 blur-md'}`} role="img" aria-label={`Joji IP character looking ${direction}`}>
+    <canvas ref={canvasRef} width="480" height="576" className="relative h-full w-full select-none object-contain"/>
     <video ref={videoRef} src="/assets/joji-ip-expression.mp4" muted playsInline preload="auto" className="hidden" aria-hidden="true"/>
   </div>
 }
