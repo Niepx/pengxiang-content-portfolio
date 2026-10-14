@@ -17,10 +17,19 @@ function Magnet({children}:{children:ReactNode}){
   return <div ref={ref} onMouseMove={move} onMouseLeave={()=>{setActive(false);setP({x:0,y:0})}} style={{transform:`translate3d(${p.x}px,${p.y}px,0)`,transition:active?'transform .3s ease-out':'transform .6s ease-in-out',willChange:'transform'}}>{children}</div>
 }
 
+function HeroVideo(){
+  const videoRef=useRef<HTMLVideoElement>(null); const [ready,setReady]=useState(false);
+  const softenLoop=()=>{const video=videoRef.current;if(!video||!Number.isFinite(video.duration))return;const edge=Math.min(1,video.currentTime/.45,(video.duration-video.currentTime)/.45);video.style.opacity=String(Math.max(.08,edge))};
+  return <div className="relative aspect-[4/5] w-full overflow-hidden">
+    <div className="absolute inset-x-[8%] bottom-[3%] h-[62%] rounded-full bg-[#7621B0]/25 blur-3xl"/>
+    <video ref={videoRef} src="/assets/joji-ip-expression.mp4" aria-label="Joji IP character expression animation" autoPlay muted loop playsInline preload="auto" onCanPlay={()=>setReady(true)} onTimeUpdate={softenLoop} className={`hero-video absolute inset-0 h-full w-full select-none object-cover object-center transition-[opacity,transform,filter] duration-1000 ease-out ${ready?'scale-100 blur-0':'scale-[.96] opacity-0 blur-md'}`} draggable={false}/>
+  </div>
+}
+
 function HeroSection(){return <section className="relative flex h-screen min-h-[620px] flex-col overflow-x-clip px-6 md:px-10">
   <FadeIn as="nav" y={-20} className="z-30 flex justify-between pt-6 text-sm font-medium uppercase tracking-wider md:pt-8 md:text-lg lg:text-[1.4rem]">{['About','Price','Projects','Contact'].map((x,i)=><a key={x} className="transition-opacity duration-200 hover:opacity-70" href={i===0?'#about':i===1?'#services':i===2?'#projects':'#contact'}>{x}</a>)}</FadeIn>
   <div className="overflow-hidden"><FadeIn id="hero-title" as="h1" delay={.15} y={40} className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[14vw] font-black uppercase leading-none tracking-tight sm:mt-4 sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]">Hi, i&apos;m joji</FadeIn></div>
-  <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="pointer-events-auto w-[280px] sm:w-[360px] md:w-[440px] lg:w-[520px]"><Magnet><img src="https://shrug-person-78902957.figma.site/_components/v2/d24c01ad3a56fc65e942a1f501eb73db42d7cf9a/Rectangle_40443.81459862.png" alt="Portrait of Jack, 3D creator" className="w-full select-none object-contain" draggable={false}/></Magnet></FadeIn></div>
+  <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="pointer-events-auto w-[270px] sm:w-[340px] md:w-[420px] lg:w-[480px]"><Magnet><HeroVideo/></Magnet></FadeIn></div>
   <div className="relative z-20 mt-auto flex items-end justify-between pb-7 sm:pb-8 md:pb-10"><FadeIn as="p" delay={.35} y={20} className="max-w-[160px] text-[clamp(.75rem,1.4vw,1.5rem)] font-light uppercase leading-snug tracking-wide sm:max-w-[220px] md:max-w-[260px]">A 3D creator driven by crafting striking and unforgettable projects</FadeIn><FadeIn delay={.5} y={20}><ContactButton/></FadeIn></div>
   </section>}
 
