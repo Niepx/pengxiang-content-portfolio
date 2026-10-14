@@ -32,8 +32,10 @@ function InteractiveCharacter(){
   const hostRef=useRef<HTMLDivElement>(null);
   const videoRef=useRef<HTMLVideoElement>(null);
   const canvasRef=useRef<HTMLCanvasElement>(null);
+  const nextCanvasRef=useRef<HTMLCanvasElement>(null);
   const bufferRef=useRef<HTMLCanvasElement>();
   const maskRef=useRef<Uint8Array>();
+  const activeLayerRef=useRef(0);
   const targetAngle=useRef(0);
   const currentAngle=useRef(0);
   const currentTime=useRef(FRONT_TIME);
@@ -44,17 +46,17 @@ function InteractiveCharacter(){
   const scrollTimer=useRef<number>();
   const animationFrame=useRef<number>();
   const [ready,setReady]=useState(false);
+  const [activeLayer,setActiveLayer]=useState(0);
   const [direction,setDirection]=useState('front');
 
   useEffect(()=>{
-    const video=videoRef.current,canvas=canvasRef.current;
-    if(!video||!canvas)return;
+    const video=videoRef.current,canvas=canvasRef.current,nextCanvas=nextCanvasRef.current;
+    if(!video||!canvas||!nextCanvas)return;
     const width=canvas.width,height=canvas.height,total=width*height;
     const buffer=document.createElement('canvas');
     buffer.width=width;buffer.height=height;bufferRef.current=buffer;
     const bufferContext=buffer.getContext('2d',{willReadFrequently:true});
-    const outputContext=canvas.getContext('2d');
-    if(!bufferContext||!outputContext)return;
+    if(!bufferContext)return;
     const background=new Uint8Array(total),queue=new Uint32Array(total);
     const render=()=>{
       const sourceHeight=video.videoHeight||720;
@@ -74,11 +76,28 @@ function InteractiveCharacter(){
       const colorDistance=(r:number,g:number,b:number)=>Math.hypot(r-backdrop[0],g-backdrop[1],b-backdrop[2]);
       if(darkBackdrop){
         const hitMask=new Uint8Array(total);
-        for(let pixel=0;pixel<total;pixel++){
-          const i=pixel*4;
-          hitMask[pixel]=colorDistance(data[i],data[i+1],data[i+2])>18?255:0;
+        const leftEdge=new Int16Array(height),rightEdge=new Int16Array(height);
+        leftEdge.fill(width);rightEdge.fill(-1);
+        for(let y=0;y<height;y++){
+          for(let x=0;x<width;x++){
+            const i=(y*width+x)*4;
+            if(colorDistance(data[i],data[i+1],data[i+2])>24){leftEdge[y]=Math.min(leftEdge[y],x);rightEdge[y]=x}
+          }
+          if(rightEdge[y]-leftEdge[y]<3){leftEdge[y]=width;rightEdge[y]=-1}
         }
-        outputContext.clearRect(0,0,width,height);outputContext.putImageData(frame,0,0);
+        for(let y=1;y<height-1;y++){
+          if(rightEdge[y]<0&&rightEdge[y-1]>=0&&rightEdge[y+1]>=0){leftEdge[y]=Math.min(leftEdge[y-1],leftEdge[y+1]);rightEdge[y]=Math.max(rightEdge[y-1],rightEdge[y+1])}
+        }
+        for(let y=0;y<height;y++)for(let x=0;x<width;x++){
+          const pixel=y*width+x,i=pixel*4,left=leftEdge[y],right=rightEdge[y];
+          if(right<0||x<left||x>right){data[i+3]=0;continue}
+          hitMask[pixel]=255;
+          data[i+3]=(x===left||x===right)?150:255;
+        }
+        const nextLayer=activeLayerRef.current===0?1:0;
+        const output=nextLayer===0?canvas:nextCanvas,outputContext=output.getContext('2d');
+        outputContext?.clearRect(0,0,width,height);outputContext?.putImageData(frame,0,0);
+        activeLayerRef.current=nextLayer;setActiveLayer(nextLayer);
         maskRef.current=hitMask;seeking.current=false;setReady(true);return;
       }
       const isBackground=(pixel:number)=>{
@@ -110,7 +129,10 @@ function InteractiveCharacter(){
           }else data[i+3]=Math.max(72,Math.min(255,(distance-tolerance*.4)/(.7*tolerance)*255));
         }
       }
-      outputContext.clearRect(0,0,width,height);outputContext.putImageData(frame,0,0);
+      const nextLayer=activeLayerRef.current===0?1:0;
+      const output=nextLayer===0?canvas:nextCanvas,outputContext=output.getContext('2d');
+      outputContext?.clearRect(0,0,width,height);outputContext?.putImageData(frame,0,0);
+      activeLayerRef.current=nextLayer;setActiveLayer(nextLayer);
       maskRef.current=hitMask;seeking.current=false;setReady(true);
     };
     const seekFront=()=>{video.currentTime=Math.min(FRONT_TIME,Math.max(0,video.duration-.05))};
@@ -121,6 +143,7 @@ function InteractiveCharacter(){
   },[]);
 
   useEffect(()=>{
+    let lastScrollY=window.scrollY;
     const reset=()=>{neutral.current=true;targetTime.current=FRONT_TIME;setDirection('front')};
     const pointerHitsCharacter=(x:number,y:number)=>{
       const rect=hostRef.current?.getBoundingClientRect(),mask=maskRef.current,canvas=canvasRef.current;
@@ -133,11 +156,15 @@ function InteractiveCharacter(){
       if(scrolling.current)return;
       if(pointerHitsCharacter(event.clientX,event.clientY))return reset();
       const x=event.clientX-window.innerWidth/2,y=event.clientY-window.innerHeight/2;
-      if(Math.hypot(x,y)<42)return reset();
-      neutral.current=false;targetAngle.current=Math.atan2(-y,x);setDirection(directionName(targetAngle.current));
+      const pointerY=Math.min(y,0);
+      if(Math.hypot(x,pointerY)<42)return reset();
+      neutral.current=false;targetAngle.current=Math.atan2(-pointerY,x);setDirection(directionName(targetAngle.current));
     };
     const scroll=()=>{
-      scrolling.current=true;reset();window.clearTimeout(scrollTimer.current);
+      const nextScrollY=window.scrollY,scrollingDown=nextScrollY>lastScrollY+1;
+      lastScrollY=nextScrollY;scrolling.current=true;window.clearTimeout(scrollTimer.current);
+      if(scrollingDown){neutral.current=false;targetAngle.current=Math.PI*3/2;setDirection('down')}
+      else reset();
       scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},180);
     };
     const animate=()=>{
@@ -145,15 +172,15 @@ function InteractiveCharacter(){
       if(video?.duration){
         if(!neutral.current){
           const angleDelta=Math.atan2(Math.sin(targetAngle.current-currentAngle.current),Math.cos(targetAngle.current-currentAngle.current));
-          currentAngle.current+=angleDelta*.105;
+          currentAngle.current+=angleDelta*.075;
           targetTime.current=angleToVideoTime(currentAngle.current,video.duration);
         }
         const duration=video.duration;
         let timeDelta=targetTime.current-currentTime.current;
         if(timeDelta>duration/2)timeDelta-=duration;
         if(timeDelta<-duration/2)timeDelta+=duration;
-        if(Math.abs(timeDelta)>.012&&!seeking.current){
-          currentTime.current=(currentTime.current+timeDelta*.16+duration)%duration;
+        if(Math.abs(timeDelta)>.006&&!seeking.current){
+          currentTime.current=(currentTime.current+timeDelta*.2+duration)%duration;
           seeking.current=true;video.currentTime=currentTime.current;
         }
       }
@@ -167,12 +194,13 @@ function InteractiveCharacter(){
   },[]);
 
   return <div ref={hostRef} data-direction={direction} className={`hero-character relative aspect-[5/6] w-full transition-[opacity,filter] duration-700 ${ready?'opacity-100 blur-0':'opacity-0 blur-md'}`} role="img" aria-label={`Joji IP character looking ${direction}`}>
-    <canvas ref={canvasRef} width="480" height="576" className="relative h-full w-full select-none object-contain"/>
+    <canvas ref={canvasRef} width="480" height="576" className={`absolute inset-0 h-full w-full select-none object-contain transition-opacity duration-150 ${activeLayer===0?'opacity-100':'opacity-0'}`}/>
+    <canvas ref={nextCanvasRef} width="480" height="576" className={`absolute inset-0 h-full w-full select-none object-contain transition-opacity duration-150 ${activeLayer===1?'opacity-100':'opacity-0'}`}/>
     <video ref={videoRef} src="/assets/joji-ip-expression-v2.mp4" muted playsInline preload="auto" className="hidden" aria-hidden="true"/>
   </div>
 }
 
-function HeroSection(){return <section className="relative flex h-screen min-h-[620px] flex-col overflow-x-clip bg-black px-6 md:px-10">
+function HeroSection(){return <section className="relative flex h-screen min-h-[620px] flex-col overflow-x-clip px-6 md:px-10">
   <FadeIn as="nav" y={-20} className="z-30 flex justify-between pt-6 text-sm font-medium uppercase tracking-wider md:pt-8 md:text-lg lg:text-[1.4rem]">{[{label:'About',href:'#about'},{label:'Projects',href:'#projects'},{label:'Experience',href:'#services'},{label:'Contact',href:'#contact'}].map(({label,href})=><a key={label} className="transition-opacity duration-200 hover:opacity-70" href={href}>{label}</a>)}</FadeIn>
   <div className="overflow-hidden"><FadeIn id="hero-title" as="h1" delay={.15} y={40} className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[14vw] font-black uppercase leading-none tracking-tight sm:mt-4 sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]">Hi, i&apos;m joji</FadeIn></div>
   <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="pointer-events-auto w-[270px] sm:w-[340px] md:w-[420px] lg:w-[480px]"><InteractiveCharacter/></FadeIn></div>
