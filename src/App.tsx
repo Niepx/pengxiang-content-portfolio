@@ -266,14 +266,14 @@ function AboutSkillsScene(){
   const skillsImageBottom=useTransform(smoothProgress,[.68,.72,.88],['0vh','0vh','4vh']);
   const skillsImageInset=useTransform(smoothProgress,[.68,.72,.88],['0vw','0vw','9vw']);
   const skillsImageRadius=useTransform(smoothProgress,[.68,.72,.88],[0,24,48]);
-  const skillsOpacity=useTransform(smoothProgress,[.46,.54,.68,.91,.985],[0,.5,1,1,0]);
-  const skillsY=useTransform(smoothProgress,[.46,.68,.91,.985],[46,0,0,-44]);
+  const skillsOpacity=useTransform(smoothProgress,[.46,.54,.68,1],[0,.5,1,1]);
+  const skillsY=useTransform(smoothProgress,[.46,.68,1],[46,0,0]);
   const canvasScale=useTransform(smoothProgress,[0,.68],[1,1]);
   const canvasY=useTransform(smoothProgress,[0,.68],['0%','0%']);
   const canvasRadius=useTransform(smoothProgress,[0,.68],[0,0]);
-  const sceneScale=useTransform(smoothProgress,[0,.9,1],[1,1,.94]);
-  const sceneY=useTransform(smoothProgress,[0,.9,1],['0%','0%','-3%']);
-  const sceneRadius=useTransform(smoothProgress,[0,.9,1],[0,0,60]);
+  const sceneScale=useTransform(smoothProgress,[0,1],[1,1]);
+  const sceneY=useTransform(smoothProgress,[0,1],['0%','0%']);
+  const sceneRadius=useTransform(smoothProgress,[0,.94,1],[0,0,40]);
 
   useEffect(()=>{
     const canvas=canvasRef.current;
