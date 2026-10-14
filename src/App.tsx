@@ -214,7 +214,7 @@ function InteractiveCharacter(){
   </div>
 }
 
-function HeroSection(){return <section className="relative flex h-screen min-h-[620px] flex-col overflow-x-clip px-6 md:px-10">
+function HeroSection(){return <section className="relative flex h-[100svh] min-h-[620px] flex-col overflow-x-clip px-6 md:px-10">
   <FadeIn as="nav" y={-20} className="z-30 flex justify-between pt-6 text-sm font-medium uppercase tracking-wider md:pt-8 md:text-lg lg:text-[1.4rem]">{[{label:'About',href:'#about'},{label:'Projects',href:'#projects'},{label:'Experience',href:'#services'},{label:'Contact',href:'#contact'}].map(({label,href})=><a key={label} className="transition-opacity duration-200 hover:opacity-70" href={href}>{label}</a>)}</FadeIn>
   <div className="overflow-hidden"><FadeIn id="hero-title" as="h1" delay={.15} y={40} className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[14vw] font-black uppercase leading-none tracking-tight sm:mt-4 sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]">Hi, i&apos;m joji</FadeIn></div>
   <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="pointer-events-auto w-[270px] sm:w-[340px] md:w-[420px] lg:w-[480px]"><InteractiveCharacter/></FadeIn></div>
@@ -255,15 +255,18 @@ function AboutSkillsScene(){
   const aboutX=useTransform(smoothProgress,[0,.28,.39],['0%','0%','-10%']);
   const aboutMobileY=useTransform(smoothProgress,[0,.2,.3,.39],[0,-330,-470,-540]);
   const aboutImageOpacity=useTransform(smoothProgress,[0,.27,.34],[1,1,0]);
-  const canvasOpacity=useTransform(smoothProgress,[0,.27,.34,.65,.75],[0,0,1,1,0]);
-  const skillsImageOpacity=useTransform(smoothProgress,[.65,.75],[0,1]);
-  const skillsImageScale=useTransform(smoothProgress,[.65,.78],[.92,1]);
+  const canvasOpacity=useTransform(smoothProgress,[0,.27,.34,.62,.69],[0,0,1,1,0]);
+  const skillsImageOpacity=useTransform(smoothProgress,[.61,.69],[0,1]);
+  const skillsImageScale=useTransform(smoothProgress,[.61,.69],[.94,.9]);
+  const skillsImageY=useTransform(smoothProgress,[.61,.69],['6%','10%']);
+  const skillsImageRadius=useTransform(smoothProgress,[.61,.69],[24,48]);
+  const skillsImageFilter=useTransform(smoothProgress,[.61,.65,.69],['blur(1.5px)','blur(1px)','blur(0px)']);
   const skillsOpacity=useTransform(smoothProgress,[.45,.52,.62],[0,.5,1]);
   const skillsY=useTransform(smoothProgress,[.45,.62],[46,0]);
-  const canvasScale=useTransform(smoothProgress,[0,.5,.68,.76],[1,1,.84,.76]);
-  const canvasY=useTransform(smoothProgress,[0,.5,.7,.78],['0%','0%','14%','20%']);
-  const aboutShadeOpacity=useTransform(smoothProgress,[0,.28,.36],[1,.9,0]);
-  const skillsShadeOpacity=useTransform(smoothProgress,[.43,.54,.68],[0,.86,1]);
+  const canvasScale=useTransform(smoothProgress,[0,.5,.6,.66],[1,1,.94,.9]);
+  const canvasY=useTransform(smoothProgress,[0,.5,.6,.66],['0%','0%','6%','10%']);
+  const canvasRadius=useTransform(smoothProgress,[.3,.56,.66],[0,24,48]);
+  const canvasFilter=useTransform(smoothProgress,[.58,.64,.69],['blur(0px)','blur(1px)','blur(1.5px)']);
 
   useEffect(()=>{
     const canvas=canvasRef.current;
@@ -325,31 +328,29 @@ function AboutSkillsScene(){
 
   return <section ref={sectionRef} id="about" className="relative h-[500vh] bg-white text-[#0C0C0C]">
     <div id="skills" className="pointer-events-none absolute left-0 top-[72%] h-px w-px"/>
-    <div className="sticky top-0 h-screen overflow-hidden bg-white">
-      <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity}} className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center md:object-center"/>
-      <motion.div aria-hidden="true" style={{opacity:canvasOpacity,scale:canvasScale,y:canvasY}} className="absolute inset-0 origin-center will-change-transform">
+    <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#F3F3F0]">
+      <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity}} className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] w-full object-contain object-bottom md:inset-0 md:h-full md:object-cover md:object-center"/>
+      <motion.div aria-hidden="true" style={{opacity:canvasOpacity,scale:canvasScale,y:canvasY,borderRadius:canvasRadius,filter:canvasFilter}} className="absolute inset-0 origin-center overflow-hidden bg-white will-change-transform">
         <canvas ref={canvasRef} role="img" aria-label="Joji moves from his About workspace into the Skills scene" className={`h-full w-full transition-opacity duration-500 ${framesReady?'opacity-100':'opacity-0'}`}/>
       </motion.div>
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[3%] top-[35%] z-[1] flex items-center justify-center px-4 sm:px-8">
-        <motion.div style={{opacity:skillsImageOpacity,scale:skillsImageScale}} className="h-full w-[92vw] overflow-hidden rounded-[28px] bg-white shadow-[0_24px_80px_rgba(12,12,12,.08)] sm:rounded-[38px] md:w-[76vw] md:max-w-[1120px] md:rounded-[48px]">
-          <img src="/assets/skill-falling-boy.png" alt="" loading="eager" className="h-full w-full object-contain"/>
-        </motion.div>
-      </div>
-      <motion.div aria-hidden="true" style={{opacity:aboutShadeOpacity}} className="pointer-events-none absolute inset-y-0 left-0 w-[94%] bg-[rgba(255,255,255,.82)] md:w-[59%] md:bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(255,255,255,1)_78%,rgba(255,255,255,0)_100%)]"/>
+      <motion.div aria-hidden="true" style={{opacity:skillsImageOpacity,scale:skillsImageScale,y:skillsImageY,borderRadius:skillsImageRadius,filter:skillsImageFilter}} className="pointer-events-none absolute inset-0 z-[1] origin-center overflow-hidden bg-white will-change-transform">
+        <img src="/assets/skill-falling-boy.png" alt="" loading="eager" className="h-full w-full object-contain"/>
+      </motion.div>
       <motion.div style={{opacity:aboutOpacity,x:aboutX}} className="absolute inset-0 z-10 mx-auto hidden w-full max-w-[1600px] items-start px-10 py-[6vh] md:flex lg:px-16">
         <div className="w-[49%] max-w-[700px]">
           <h2 className="mb-7 text-[clamp(3.25rem,6.3vw,96px)] font-black uppercase leading-[.84] tracking-tight lg:mb-9">About me</h2>
-          <SceneAnimatedText progress={smoothProgress} className="max-w-[680px] !text-[clamp(.78rem,1vw,1rem)] !leading-[1.6] text-left">{aboutCopy}</SceneAnimatedText>
+          <SceneAnimatedText progress={smoothProgress} className="max-w-[680px] text-left !text-[clamp(1rem,.9vw,1.05rem)] !leading-[1.52] [text-wrap:pretty]">{aboutCopy}</SceneAnimatedText>
         </div>
       </motion.div>
-      <motion.div style={{opacity:aboutOpacity,y:aboutMobileY}} className="absolute inset-x-0 top-[7vh] z-10 px-5 md:hidden">
+      <motion.div style={{opacity:aboutOpacity}} className="absolute inset-x-0 top-[6vh] z-10 h-[58vh] overflow-hidden bg-white px-5 md:hidden">
+        <motion.div style={{y:aboutMobileY}}>
         <h2 className="mb-8 text-[3.25rem] font-black uppercase leading-[.82] tracking-tight">About me</h2>
-        <SceneAnimatedText progress={smoothProgress} className="!text-[.82rem] !leading-[1.65]">{aboutCopy}</SceneAnimatedText>
+        <SceneAnimatedText progress={smoothProgress} className="!text-[1rem] !leading-[1.58] [text-wrap:pretty]">{aboutCopy}</SceneAnimatedText>
+        </motion.div>
       </motion.div>
-      <motion.div aria-hidden="true" style={{opacity:skillsShadeOpacity}} className="pointer-events-none absolute inset-x-0 top-0 h-[44%] bg-gradient-to-b from-white via-white/95 to-transparent"/>
       <motion.div style={{opacity:skillsOpacity,y:skillsY}} className="absolute inset-0 z-20 mx-auto flex w-full max-w-[1500px] flex-col items-center px-5 pt-[7vh] text-center sm:px-8 md:px-10 lg:px-16">
         <h2 className="text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight">Skills</h2>
-        <p className="mt-7 w-full max-w-[900px] text-[clamp(.9rem,1.35vw,1.18rem)] font-medium leading-[1.8] sm:mt-9 md:mt-11">{skillCopy}</p>
+        <p className="mt-7 w-full max-w-[820px] text-[clamp(1rem,1.15vw,1.16rem)] font-medium leading-[1.55] [text-wrap:pretty] sm:mt-9 md:mt-11">{skillCopy}</p>
       </motion.div>
     </div>
   </section>
