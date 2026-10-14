@@ -12,34 +12,35 @@ function ContactButton(){return <a href="#contact" className="group inline-flex 
 function LiveProjectButton(){return <button className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-[#D7E2EA] px-5 py-2.5 text-[10px] font-medium uppercase tracking-widest transition-colors hover:bg-[#D7E2EA]/10 sm:px-8 sm:py-3 sm:text-sm md:px-10 md:py-3.5 md:text-base">Live project <ArrowUpRight className="h-4 w-4"/></button>}
 
 const TAU=Math.PI*2;
-const FRONT_TIME=1.55;
+const DIRECTION_FRAME_COUNT=73;
+const DIRECTION_START_TIME=2.6;
+const DIRECTION_END_TIME=9.8;
 const directionFrames=[
   {angle:0,time:3.2},{angle:Math.PI/4,time:4.4},{angle:Math.PI/2,time:5.4},
   {angle:Math.PI*3/4,time:6.3},{angle:Math.PI,time:7.2},{angle:Math.PI*5/4,time:8.1},
   {angle:Math.PI*3/2,time:8.9},{angle:Math.PI*7/4,time:9.6}
 ];
 const directionName=(angle:number)=>['right','upper-right','up','upper-left','left','lower-left','down','lower-right'][Math.round(((angle%TAU)+TAU)%TAU/(TAU/8))%8];
-const angleToVideoTime=(angle:number,duration:number)=>{
+const angleToVideoTime=(angle:number)=>{
   const normalized=((angle%TAU)+TAU)%TAU;
-  const points=[...directionFrames,{angle:TAU,time:duration+directionFrames[0].time}];
+  const points=[...directionFrames,{angle:TAU,time:10.08+directionFrames[0].time}];
   const next=Math.max(1,points.findIndex(point=>point.angle>=normalized));
   const from=points[next-1],to=points[next];
   const progress=(normalized-from.angle)/(to.angle-from.angle||1);
-  return (from.time+(to.time-from.time)*progress)%duration;
+  return (from.time+(to.time-from.time)*progress)%10.08;
 };
+const frameUrl=(index:number)=>`/assets/joji-ip-frames/direction-${String(index).padStart(3,'0')}.webp`;
 
 function InteractiveCharacter(){
   const hostRef=useRef<HTMLDivElement>(null);
-  const videoRef=useRef<HTMLVideoElement>(null);
   const canvasRef=useRef<HTMLCanvasElement>(null);
-  const bufferRef=useRef<HTMLCanvasElement>();
-  const maskRef=useRef<Uint8Array>();
+  const framesRef=useRef<HTMLImageElement[]>([]);
+  const frontRef=useRef<HTMLImageElement>();
   const targetAngle=useRef(0);
   const currentAngle=useRef(0);
-  const currentTime=useRef(FRONT_TIME);
-  const targetTime=useRef(FRONT_TIME);
   const neutral=useRef(true);
-  const seeking=useRef(false);
+  const neutralBlend=useRef(1);
+  const lastFrameTime=useRef(0);
   const scrolling=useRef(false);
   const scrollTimer=useRef<number>();
   const animationFrame=useRef<number>();
@@ -47,55 +48,22 @@ function InteractiveCharacter(){
   const [direction,setDirection]=useState('front');
 
   useEffect(()=>{
-    const video=videoRef.current,canvas=canvasRef.current;
-    if(!video||!canvas)return;
-    const width=canvas.width,height=canvas.height,total=width*height;
-    const buffer=document.createElement('canvas');
-    buffer.width=width;buffer.height=height;bufferRef.current=buffer;
-    const bufferContext=buffer.getContext('2d',{willReadFrequently:true});
-    const outputContext=canvas.getContext('2d');
-    if(!bufferContext||!outputContext)return;
-    const background=new Uint8Array(total),queue=new Uint32Array(total);
-    const render=()=>{
-      const sourceHeight=video.videoHeight||720;
-      const sourceWidth=sourceHeight*5/6;
-      const sourceX=((video.videoWidth||1280)-sourceWidth)/2;
-      bufferContext.clearRect(0,0,width,height);
-      bufferContext.drawImage(video,sourceX,0,sourceWidth,sourceHeight,0,0,width,height);
-      const frame=bufferContext.getImageData(0,0,width,height),data=frame.data;
-      background.fill(0);let head=0,tail=0;
-      const isBackground=(pixel:number)=>{const i=pixel*4,r=data[i],g=data[i+1],b=data[i+2];return (r+g+b)/3>154&&Math.max(r,g,b)-Math.min(r,g,b)<80};
-      const enqueue=(pixel:number)=>{if(!background[pixel]&&isBackground(pixel)){background[pixel]=1;queue[tail++]=pixel}};
-      for(let x=0;x<width;x++){enqueue(x);enqueue((height-1)*width+x)}
-      for(let y=0;y<height;y++){enqueue(y*width);enqueue(y*width+width-1)}
-      while(head<tail){const pixel=queue[head++],x=pixel%width,y=(pixel/width)|0;if(x)enqueue(pixel-1);if(x<width-1)enqueue(pixel+1);if(y)enqueue(pixel-width);if(y<height-1)enqueue(pixel+width)}
-      const hitMask=new Uint8Array(total);
-      for(let pixel=0;pixel<total;pixel++){
-        const i=pixel*4;
-        if(background[pixel]){data[i+3]=0;continue}
-        hitMask[pixel]=255;
-        const x=pixel%width,y=(pixel/width)|0;
-        const touchesBackground=(x&&background[pixel-1])||(x<width-1&&background[pixel+1])||(y&&background[pixel-width])||(y<height-1&&background[pixel+width]);
-        if(touchesBackground){const mean=(data[i]+data[i+1]+data[i+2])/3;data[i+3]=Math.max(70,Math.min(255,(238-mean)*5))}
-      }
-      outputContext.clearRect(0,0,width,height);outputContext.putImageData(frame,0,0);
-      maskRef.current=hitMask;seeking.current=false;setReady(true);
-    };
-    const seekFront=()=>{video.currentTime=Math.min(FRONT_TIME,Math.max(0,video.duration-.05))};
-    video.addEventListener('loadedmetadata',seekFront);
-    video.addEventListener('seeked',render);
-    if(video.readyState>=1)seekFront();
-    return()=>{video.removeEventListener('loadedmetadata',seekFront);video.removeEventListener('seeked',render)};
+    let cancelled=false;
+    const load=(src:string)=>new Promise<HTMLImageElement>((resolve,reject)=>{const image=new Image();image.decoding='async';image.onload=()=>resolve(image);image.onerror=reject;image.src=src});
+    Promise.all([load('/assets/joji-ip-frames/front.webp'),...Array.from({length:DIRECTION_FRAME_COUNT},(_,index)=>load(frameUrl(index)))]).then(([front,...frames])=>{
+      if(cancelled)return;frontRef.current=front;framesRef.current=frames;setReady(true);
+    });
+    return()=>{cancelled=true};
   },[]);
 
   useEffect(()=>{
-    const reset=()=>{neutral.current=true;targetTime.current=FRONT_TIME;setDirection('front')};
+    const reset=()=>{neutral.current=true;setDirection('front')};
     const pointerHitsCharacter=(x:number,y:number)=>{
-      const rect=hostRef.current?.getBoundingClientRect(),mask=maskRef.current,canvas=canvasRef.current;
-      if(!rect||!mask||!canvas||x<rect.left||x>rect.right||y<rect.top||y>rect.bottom)return false;
+      const rect=hostRef.current?.getBoundingClientRect(),canvas=canvasRef.current;
+      if(!rect||!canvas||x<rect.left||x>rect.right||y<rect.top||y>rect.bottom)return false;
       const px=Math.min(canvas.width-1,Math.max(0,Math.floor((x-rect.left)/rect.width*canvas.width)));
       const py=Math.min(canvas.height-1,Math.max(0,Math.floor((y-rect.top)/rect.height*canvas.height)));
-      return mask[py*canvas.width+px]>0;
+      return (canvas.getContext('2d')?.getImageData(px,py,1,1).data[3]||0)>24;
     };
     const pointerMove=(event:MouseEvent)=>{
       if(scrolling.current)return;
@@ -108,21 +76,27 @@ function InteractiveCharacter(){
       scrolling.current=true;reset();window.clearTimeout(scrollTimer.current);
       scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},180);
     };
-    const animate=()=>{
-      const video=videoRef.current;
-      if(video?.duration){
-        if(!neutral.current){
-          const angleDelta=Math.atan2(Math.sin(targetAngle.current-currentAngle.current),Math.cos(targetAngle.current-currentAngle.current));
-          currentAngle.current+=angleDelta*.105;
-          targetTime.current=angleToVideoTime(currentAngle.current,video.duration);
-        }
-        const duration=video.duration;
-        let timeDelta=targetTime.current-currentTime.current;
-        if(timeDelta>duration/2)timeDelta-=duration;
-        if(timeDelta<-duration/2)timeDelta+=duration;
-        if(Math.abs(timeDelta)>.012&&!seeking.current){
-          currentTime.current=(currentTime.current+timeDelta*.16+duration)%duration;
-          seeking.current=true;video.currentTime=currentTime.current;
+    const animate=(timestamp:number)=>{
+      const canvas=canvasRef.current,front=frontRef.current,frames=framesRef.current;
+      const elapsed=Math.min(48,timestamp-(lastFrameTime.current||timestamp));lastFrameTime.current=timestamp;
+      const ease=1-Math.exp(-elapsed/82);
+      if(!neutral.current){
+        const angleDelta=Math.atan2(Math.sin(targetAngle.current-currentAngle.current),Math.cos(targetAngle.current-currentAngle.current));
+        currentAngle.current+=angleDelta*ease;
+      }
+      neutralBlend.current+=(Number(neutral.current)-neutralBlend.current)*(1-Math.exp(-elapsed/105));
+      if(canvas&&front&&frames.length===DIRECTION_FRAME_COUNT){
+        const context=canvas.getContext('2d');
+        if(context){
+          const videoTime=angleToVideoTime(currentAngle.current);
+          const clampedTime=Math.min(DIRECTION_END_TIME,Math.max(DIRECTION_START_TIME,videoTime));
+          const position=(clampedTime-DIRECTION_START_TIME)/(DIRECTION_END_TIME-DIRECTION_START_TIME)*(DIRECTION_FRAME_COUNT-1);
+          const first=Math.floor(position),second=Math.min(DIRECTION_FRAME_COUNT-1,first+1),mix=position-first;
+          context.clearRect(0,0,canvas.width,canvas.height);
+          context.globalAlpha=1-mix;context.drawImage(frames[first],0,0,canvas.width,canvas.height);
+          context.globalAlpha=mix;context.drawImage(frames[second],0,0,canvas.width,canvas.height);
+          context.globalAlpha=neutralBlend.current;context.drawImage(front,0,0,canvas.width,canvas.height);
+          context.globalAlpha=1;
         }
       }
       animationFrame.current=requestAnimationFrame(animate);
@@ -136,7 +110,6 @@ function InteractiveCharacter(){
 
   return <div ref={hostRef} data-direction={direction} className={`hero-character relative aspect-[5/6] w-full transition-[opacity,filter] duration-700 ${ready?'opacity-100 blur-0':'opacity-0 blur-md'}`} role="img" aria-label={`Joji IP character looking ${direction}`}>
     <canvas ref={canvasRef} width="480" height="576" className="relative h-full w-full select-none object-contain"/>
-    <video ref={videoRef} src="/assets/joji-ip-expression.mp4" muted playsInline preload="auto" className="hidden" aria-hidden="true"/>
   </div>
 }
 
