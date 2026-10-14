@@ -32,10 +32,8 @@ function InteractiveCharacter(){
   const hostRef=useRef<HTMLDivElement>(null);
   const videoRef=useRef<HTMLVideoElement>(null);
   const canvasRef=useRef<HTMLCanvasElement>(null);
-  const nextCanvasRef=useRef<HTMLCanvasElement>(null);
   const bufferRef=useRef<HTMLCanvasElement>();
   const maskRef=useRef<Uint8Array>();
-  const activeLayerRef=useRef(0);
   const targetAngle=useRef(0);
   const currentAngle=useRef(0);
   const currentTime=useRef(FRONT_TIME);
@@ -46,17 +44,17 @@ function InteractiveCharacter(){
   const scrollTimer=useRef<number>();
   const animationFrame=useRef<number>();
   const [ready,setReady]=useState(false);
-  const [activeLayer,setActiveLayer]=useState(0);
   const [direction,setDirection]=useState('front');
 
   useEffect(()=>{
-    const video=videoRef.current,canvas=canvasRef.current,nextCanvas=nextCanvasRef.current;
-    if(!video||!canvas||!nextCanvas)return;
+    const video=videoRef.current,canvas=canvasRef.current;
+    if(!video||!canvas)return;
     const width=canvas.width,height=canvas.height,total=width*height;
     const buffer=document.createElement('canvas');
     buffer.width=width;buffer.height=height;bufferRef.current=buffer;
     const bufferContext=buffer.getContext('2d',{willReadFrequently:true});
-    if(!bufferContext)return;
+    const outputContext=canvas.getContext('2d');
+    if(!bufferContext||!outputContext)return;
     const background=new Uint8Array(total),queue=new Uint32Array(total);
     const render=()=>{
       const sourceHeight=video.videoHeight||720;
@@ -94,10 +92,7 @@ function InteractiveCharacter(){
           hitMask[pixel]=255;
           data[i+3]=(x===left||x===right)?150:255;
         }
-        const nextLayer=activeLayerRef.current===0?1:0;
-        const output=nextLayer===0?canvas:nextCanvas,outputContext=output.getContext('2d');
-        outputContext?.clearRect(0,0,width,height);outputContext?.putImageData(frame,0,0);
-        activeLayerRef.current=nextLayer;setActiveLayer(nextLayer);
+        outputContext.putImageData(frame,0,0);
         maskRef.current=hitMask;seeking.current=false;setReady(true);return;
       }
       const isBackground=(pixel:number)=>{
@@ -129,10 +124,7 @@ function InteractiveCharacter(){
           }else data[i+3]=Math.max(72,Math.min(255,(distance-tolerance*.4)/(.7*tolerance)*255));
         }
       }
-      const nextLayer=activeLayerRef.current===0?1:0;
-      const output=nextLayer===0?canvas:nextCanvas,outputContext=output.getContext('2d');
-      outputContext?.clearRect(0,0,width,height);outputContext?.putImageData(frame,0,0);
-      activeLayerRef.current=nextLayer;setActiveLayer(nextLayer);
+      outputContext.putImageData(frame,0,0);
       maskRef.current=hitMask;seeking.current=false;setReady(true);
     };
     const seekFront=()=>{video.currentTime=Math.min(FRONT_TIME,Math.max(0,video.duration-.05))};
@@ -194,8 +186,7 @@ function InteractiveCharacter(){
   },[]);
 
   return <div ref={hostRef} data-direction={direction} className={`hero-character relative aspect-[5/6] w-full transition-[opacity,filter] duration-700 ${ready?'opacity-100 blur-0':'opacity-0 blur-md'}`} role="img" aria-label={`Joji IP character looking ${direction}`}>
-    <canvas ref={canvasRef} width="480" height="576" className={`absolute inset-0 h-full w-full select-none object-contain transition-opacity duration-150 ${activeLayer===0?'opacity-100':'opacity-0'}`}/>
-    <canvas ref={nextCanvasRef} width="480" height="576" className={`absolute inset-0 h-full w-full select-none object-contain transition-opacity duration-150 ${activeLayer===1?'opacity-100':'opacity-0'}`}/>
+    <canvas ref={canvasRef} width="480" height="576" className="relative h-full w-full select-none object-contain"/>
     <video ref={videoRef} src="/assets/joji-ip-expression-v2.mp4" muted playsInline preload="auto" className="hidden" aria-hidden="true"/>
   </div>
 }
