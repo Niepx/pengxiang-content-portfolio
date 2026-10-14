@@ -221,15 +221,36 @@ function HeroSection(){return <section className="relative flex h-screen min-h-[
   <div className="relative z-20 mt-auto flex items-end justify-between gap-4 pb-7 sm:pb-8 md:pb-10"><FadeIn as="p" delay={.35} y={20} className="shrink-0 text-[clamp(.55rem,.9vw,.95rem)] font-light leading-tight tracking-[.02em]"><span className="block whitespace-nowrap">From product insight to final output,</span><span className="block whitespace-nowrap">make ideas easier to see, understand, and share.</span></FadeIn><FadeIn delay={.5} y={20}><ContactButton/></FadeIn></div>
   </section>}
 
-function Character({char,progress,range}:{char:string;progress:MotionValue<number>;range:[number,number]}){const opacity=useTransform(progress,range,[.2,1]);return <span className="relative inline-block"><span className="opacity-0">{char===' '?'\u00a0':char}</span><motion.span aria-hidden className="absolute inset-0" style={{opacity}}>{char===' '?'\u00a0':char}</motion.span></span>}
-function AnimatedText({children}:{children:string}){const ref=useRef<HTMLParagraphElement>(null);const {scrollYProgress}=useScroll({target:ref,offset:['start 0.8','end 0.2']});return <p ref={ref} className="max-w-[560px] text-center text-[clamp(1rem,2vw,1.35rem)] font-medium leading-relaxed">{children.split('').map((c,i,a)=><Character key={i} char={c} progress={scrollYProgress} range={[i/a.length,Math.min(1,i/a.length+.12)]}/>)}</p>}
-const ornaments=[
-['https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png','3D moon','top-[4%] left-[1%] sm:left-[2%] md:left-[4%] w-[120px] sm:w-[160px] md:w-[210px]',.1,-80],
-['https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png','Abstract chrome form','bottom-[8%] left-[3%] sm:left-[6%] md:left-[10%] w-[100px] sm:w-[140px] md:w-[180px]',.25,-80],
-['https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png','3D toy brick','top-[4%] right-[1%] sm:right-[2%] md:right-[4%] w-[120px] sm:w-[160px] md:w-[210px]',.15,80],
-['https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png','Colorful 3D composition','bottom-[8%] right-[3%] sm:right-[6%] md:right-[10%] w-[130px] sm:w-[170px] md:w-[220px]',.3,80]
-] as const;
-function AboutSection(){return <section id="about" className="relative flex min-h-screen items-center justify-center overflow-hidden px-5 py-20 sm:px-8 md:px-10">{ornaments.map(([src,alt,cls,delay,x])=><FadeIn key={src} delay={delay} x={x} y={0} duration={.9} className={`pointer-events-none absolute z-0 ${cls}`}><img src={src} alt={alt} loading="lazy" className="w-full object-contain"/></FadeIn>)}<div className="relative z-10 flex flex-col items-center gap-10 sm:gap-14 md:gap-16"><FadeIn as="h2" y={40} className="hero-heading text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight">About me</FadeIn><div className="flex flex-col items-center gap-16 sm:gap-20 md:gap-24"><AnimatedText>With more than five years of experience in design, i focus on branding, web design, and user experience, i truly enjoy working with businesses that aim to stand out and present their best image. Let&apos;s build something incredible together!</AnimatedText><ContactButton/></div></div></section>}
+function Character({char,progress,range}:{char:string;progress:MotionValue<number>;range:[number,number]}){const opacity=useTransform(progress,range,[.2,1]);if(char==='\n')return <br/>;return <span className="relative inline-block"><span className="opacity-0">{char===' '?'\u00a0':char}</span><motion.span aria-hidden className="absolute inset-0" style={{opacity}}>{char===' '?'\u00a0':char}</motion.span></span>}
+function AnimatedText({children,className=''}:{children:string;className?:string}){const ref=useRef<HTMLParagraphElement>(null);const {scrollYProgress}=useScroll({target:ref,offset:['start 0.8','end 0.2']});return <p ref={ref} className={`text-[clamp(.96rem,1.35vw,1.2rem)] font-medium leading-[1.85] ${className}`}>{children.split('').map((c,i,a)=><Character key={i} char={c} progress={scrollYProgress} range={[i/a.length,Math.min(1,i/a.length+.12)]}/>)}</p>}
+
+const aboutCopy=`我是聂鹏翔，我有 4 年新媒体与内容相关工作经验，过往经历覆盖医疗、本地生活、AI 机器人、AI 智能硬件及个人自媒体等不同方向。
+
+早期主要从事新媒体内容与账号运营，接触过短视频二创、文案策划、平台发布、评论私信维护及线索承接等工作；之后逐渐转向产品内容方向，开始参与 AI 桌面机器人、AI 陪伴产品、智能硬件等项目。
+
+近两段工作中，主要围绕产品卖点梳理、图文视觉、电商物料、短视频策划拍摄剪辑、AIGC 内容制作及多平台内容运营展开，同时也参与过新品发布、展会宣传、商务展示及品牌传播相关内容。
+
+除工作外，我也持续运营个人 Bilibili 音乐账号，并尝试不同类型的个人内容创作。目前也在尝试抖音和小红书的美食自媒体，从选题、拍摄、画面表达，到内容形式和账号方向都在持续摸索。
+
+与此同时，我也保持对 AI 工具在实际创作中的应用，包括现在这个个人作品集网站，也是在 AI 辅助下完成视觉构思、页面结构与交互实现，并持续迭代。`;
+
+function AboutSection(){
+  const sectionRef=useRef<HTMLElement>(null);
+  const {scrollYProgress}=useScroll({target:sectionRef,offset:['start end','end start']});
+  const imageX=useTransform(scrollYProgress,[0,.26,.72,1],['20%','0%','0%','-3%']);
+  const imageScale=useTransform(scrollYProgress,[0,.3,1],[.94,1,1.025]);
+  const imageOpacity=useTransform(scrollYProgress,[0,.12,.28],[0,.5,1]);
+  return <section ref={sectionRef} id="about" className="relative min-h-[125vh] overflow-hidden bg-[#f8f8f6] text-[#0C0C0C]">
+    <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{x:imageX,scale:imageScale,opacity:imageOpacity}} className="pointer-events-none absolute inset-0 h-full w-full origin-right object-cover object-[68%_center] will-change-transform sm:object-[66%_center] lg:object-center"/>
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(248,248,246,.99)_0%,rgba(248,248,246,.96)_34%,rgba(248,248,246,.78)_48%,rgba(248,248,246,.08)_76%)] max-md:bg-[linear-gradient(90deg,rgba(248,248,246,.97)_0%,rgba(248,248,246,.92)_62%,rgba(248,248,246,.38)_100%)]"/>
+    <div className="relative z-10 mx-auto flex min-h-[125vh] w-full max-w-[1600px] items-center px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-16">
+      <div className="w-full max-w-[760px] lg:max-w-[52%]">
+        <FadeIn as="h2" y={40} className="mb-10 text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight sm:mb-14 md:mb-16">About me</FadeIn>
+        <AnimatedText className="max-w-[720px] text-left">{aboutCopy}</AnimatedText>
+      </div>
+    </div>
+  </section>
+}
 
 const services=[['3D Modeling','Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.'],['Rendering','High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.'],['Motion Design','Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.'],['Branding','Crafting cohesive visual identities — from logos to full brand systems — that communicate a clear and memorable presence.'],['Web Design','Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.']];
 function ServicesSection(){return <section id="services" className="relative rounded-t-[40px] bg-white px-5 py-20 text-[#0C0C0C] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"><FadeIn as="h2" className="mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-28">Services</FadeIn><div className="mx-auto max-w-5xl border-t border-black/15">{services.map(([name,description],i)=><FadeIn key={name} delay={i*.1} className="grid grid-cols-[70px_1fr] gap-4 border-b border-black/15 py-8 sm:grid-cols-[150px_1fr] sm:gap-8 sm:py-10 md:grid-cols-[230px_1fr] md:py-12"><div className="text-[clamp(3rem,10vw,140px)] font-black leading-[.8]">{String(i+1).padStart(2,'0')}</div><div className="pt-1 sm:pt-3"><h3 className="text-[clamp(1rem,2.2vw,2.1rem)] font-medium uppercase">{name}</h3><p className="mt-3 max-w-2xl text-[clamp(.85rem,1.6vw,1.25rem)] font-light leading-relaxed opacity-60">{description}</p></div></FadeIn>)}</div></section>}
