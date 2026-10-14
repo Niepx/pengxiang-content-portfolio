@@ -1,6 +1,6 @@
 import { ElementType, ReactNode, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { motion, MotionValue, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
+import { motion, MotionValue, useMotionValueEvent, useScroll, useSpring, useTransform } from 'framer-motion';
 
 type FadeProps = { children: ReactNode; delay?: number; duration?: number; x?: number; y?: number; as?: ElementType; className?: string; id?: string };
 function FadeIn({ children, delay=0, duration=.7, x=0, y=30, as='div', className, id }: FadeProps) {
@@ -224,6 +224,8 @@ function HeroSection(){return <section className="relative flex h-screen min-h-[
 function Character({char,progress,range}:{char:string;progress:MotionValue<number>;range:[number,number]}){const opacity=useTransform(progress,range,[.2,1]);if(char==='\n')return <br/>;return <span className="relative inline-block"><span className="opacity-0">{char===' '?'\u00a0':char}</span><motion.span aria-hidden className="absolute inset-0" style={{opacity}}>{char===' '?'\u00a0':char}</motion.span></span>}
 function AnimatedText({children,className=''}:{children:string;className?:string}){const ref=useRef<HTMLParagraphElement>(null);const {scrollYProgress}=useScroll({target:ref,offset:['start 0.8','end 0.2']});return <p ref={ref} className={`text-[clamp(.96rem,1.35vw,1.2rem)] font-medium leading-[1.85] ${className}`}>{children.split('').map((c,i,a)=><Character key={i} char={c} progress={scrollYProgress} range={[i/a.length,Math.min(1,i/a.length+.12)]}/>)}</p>}
 
+function SceneAnimatedText({children,progress,className=''}:{children:string;progress:MotionValue<number>;className?:string}){return <p className={`text-[clamp(.96rem,1.35vw,1.2rem)] font-medium leading-[1.85] ${className}`}>{children.split('').map((c,i,a)=>{const start=.025+i/a.length*.18;return <Character key={i} char={c} progress={progress} range={[start,Math.min(.25,start+.035)]}/>})}</p>}
+
 const aboutCopy=`我是聂鹏翔，我有 4 年新媒体与内容相关工作经验，过往经历覆盖医疗、本地生活、AI 机器人、AI 智能硬件及个人自媒体等不同方向。
 
 早期主要从事新媒体内容与账号运营，接触过短视频二创、文案策划、平台发布、评论私信维护及线索承接等工作；之后逐渐转向产品内容方向，开始参与 AI 桌面机器人、AI 陪伴产品、智能硬件等项目。
@@ -234,61 +236,111 @@ const aboutCopy=`我是聂鹏翔，我有 4 年新媒体与内容相关工作经
 
 与此同时，我也保持对 AI 工具在实际创作中的应用，包括现在这个个人作品集网站，也是在 AI 辅助下完成视觉构思、页面结构与交互实现，并持续迭代。`;
 
-function AboutSection(){
-  const sectionRef=useRef<HTMLElement>(null);
-  const {scrollYProgress}=useScroll({target:sectionRef,offset:['start end','end start']});
-  const imageX=useTransform(scrollYProgress,[0,.24],['20%','0%']);
-  const imageScale=useTransform(scrollYProgress,[0,.28],[.94,1]);
-  const imageOpacity=useTransform(scrollYProgress,[0,.12,.28],[0,.5,1]);
-  return <section ref={sectionRef} id="about" className="relative z-10 min-h-[135vh] overflow-hidden bg-white text-[#0C0C0C]">
-    <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{x:imageX,scale:imageScale,opacity:imageOpacity}} className="pointer-events-none absolute inset-0 h-full w-full origin-[72%_52%] object-cover object-[68%_center] will-change-transform sm:object-[66%_center] lg:object-center"/>
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,.99)_0%,rgba(255,255,255,.96)_34%,rgba(255,255,255,.78)_48%,rgba(255,255,255,.08)_76%)] max-md:bg-[linear-gradient(90deg,rgba(255,255,255,.97)_0%,rgba(255,255,255,.92)_62%,rgba(255,255,255,.38)_100%)]"/>
-    <div className="relative z-10 mx-auto flex min-h-[135vh] w-full max-w-[1600px] items-center px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-16">
-      <div className="w-full max-w-[760px] lg:max-w-[52%]">
-        <FadeIn as="h2" y={40} className="mb-10 text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight sm:mb-14 md:mb-16">About me</FadeIn>
-        <AnimatedText className="max-w-[720px] text-left">{aboutCopy}</AnimatedText>
-      </div>
-    </div>
-  </section>
-}
-
 const skillCopy='我习惯把 AI 工具融入完整的内容生产流程，从灵感梳理、文案与脚本，到视觉生成、视频剪辑、页面搭建和内容发布。会根据不同任务组合 ChatGPT、Gemini、Canva、剪映、Codex 等工具，提高内容制作效率，并持续尝试将 AI 应用到新媒体、产品内容和个人创作中。';
 
 const skillFramePaths=Array.from({length:54},(_,index)=>`/assets/skill-sequence/frame-${String(index).padStart(3,'0')}.jpg`);
 
-function SkillTransitionSection(){
+function AboutSkillsScene(){
   const sectionRef=useRef<HTMLElement>(null);
-  const currentFrameRef=useRef(0);
-  const [currentFrame,setCurrentFrame]=useState(0);
+  const canvasRef=useRef<HTMLCanvasElement>(null);
+  const framesRef=useRef<HTMLImageElement[]>([]);
+  const progressRef=useRef(0);
+  const frameRef=useRef(-1);
+  const drawRef=useRef<(progress:number,force?:boolean)=>void>(()=>{});
+  const animationFrameRef=useRef<number>();
+  const [framesReady,setFramesReady]=useState(false);
   const {scrollYProgress}=useScroll({target:sectionRef,offset:['start start','end end']});
+  const smoothProgress=useSpring(scrollYProgress,{stiffness:135,damping:28,mass:.22});
+  const aboutOpacity=useTransform(smoothProgress,[0,.24,.34,.41],[1,1,.45,0]);
+  const aboutX=useTransform(smoothProgress,[0,.27,.41],['0%','0%','-12%']);
+  const aboutMobileY=useTransform(smoothProgress,[0,.2,.31,.41],[0,-330,-470,-540]);
+  const skillsOpacity=useTransform(smoothProgress,[.58,.68,.78],[0,.45,1]);
+  const skillsY=useTransform(smoothProgress,[.58,.77],[55,0]);
+  const canvasScale=useTransform(smoothProgress,[0,.58,.72,.85],[1,1,.82,.72]);
+  const canvasY=useTransform(smoothProgress,[0,.58,.74,.86],['0%','0%','16%','22%']);
+  const aboutShadeOpacity=useTransform(smoothProgress,[0,.27,.43],[1,.92,0]);
+  const skillsShadeOpacity=useTransform(smoothProgress,[.56,.7,.82],[0,.85,1]);
 
   useEffect(()=>{
-    const preloaders=skillFramePaths.map(src=>{const image=new Image();image.decoding='async';image.src=src;return image});
-    return()=>preloaders.forEach(image=>{image.src=''})
+    const canvas=canvasRef.current;
+    if(!canvas)return;
+    const context=canvas.getContext('2d',{alpha:false});
+    if(!context)return;
+    let cancelled=false,loaded=0;
+    const frames=skillFramePaths.map((src,index)=>{
+      const image=new Image();
+      image.decoding='async';
+      image.src=src;
+      image.onload=()=>{
+        loaded+=1;
+        if(cancelled)return;
+        if(index===0)drawRef.current(progressRef.current,true);
+        if(loaded===skillFramePaths.length)setFramesReady(true);
+      };
+      return image;
+    });
+    framesRef.current=frames;
+    const draw=(progress:number,force=false)=>{
+      const frameProgress=Math.max(0,Math.min(1,(progress-.27)/.31));
+      const targetFrame=Math.round(frameProgress*(frames.length-1));
+      const isMobile=canvas.clientWidth<640;
+      if(!force&&targetFrame===frameRef.current&&!(isMobile&&progress>.58))return;
+      const image=frames[targetFrame];
+      if(!image?.complete||!image.naturalWidth)return;
+      frameRef.current=targetFrame;
+      const ratio=Math.min(window.devicePixelRatio||1,2);
+      const width=Math.max(1,Math.round(canvas.clientWidth*ratio));
+      const height=Math.max(1,Math.round(canvas.clientHeight*ratio));
+      if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height}
+      const imageRatio=image.naturalWidth/image.naturalHeight;
+      const canvasRatio=width/height;
+      let drawWidth=width,drawHeight=height,drawX=0,drawY=0;
+      if(isMobile){
+        const actionScale=1.35-.35*Math.min(1,frameProgress*1.5);
+        const landingProgress=Math.max(0,Math.min(1,(progress-.58)/.2));
+        const mobileScale=actionScale-(actionScale-.82)*landingProgress;
+        drawWidth=width*mobileScale;drawHeight=drawWidth/imageRatio;
+        drawX=(width-drawWidth)*.52;drawY=(height-drawHeight)*.54;
+      }else if(canvasRatio>imageRatio){drawHeight=width/imageRatio;drawY=(height-drawHeight)/2}
+      else{drawWidth=height*imageRatio;drawX=(width-drawWidth)/2}
+      context.fillStyle='#fff';context.fillRect(0,0,width,height);
+      context.drawImage(image,drawX,drawY,drawWidth,drawHeight);
+    };
+    drawRef.current=draw;
+    const resize=()=>draw(progressRef.current,true);
+    window.addEventListener('resize',resize,{passive:true});
+    draw(progressRef.current,true);
+    return()=>{cancelled=true;window.removeEventListener('resize',resize);frames.forEach(image=>{image.onload=null});if(animationFrameRef.current)cancelAnimationFrame(animationFrameRef.current)}
   },[]);
 
   useMotionValueEvent(scrollYProgress,'change',progress=>{
-    const nextFrame=Math.max(0,Math.min(skillFramePaths.length-1,Math.round(progress*(skillFramePaths.length-1))));
-    if(nextFrame!==currentFrameRef.current){currentFrameRef.current=nextFrame;setCurrentFrame(nextFrame)}
+    progressRef.current=progress;
+    if(animationFrameRef.current)cancelAnimationFrame(animationFrameRef.current);
+    animationFrameRef.current=requestAnimationFrame(()=>drawRef.current(progress));
   });
 
-  return <section ref={sectionRef} aria-label="About to skills transition" className="relative h-[270vh] bg-white">
-    <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden bg-white">
-      <img src={skillFramePaths[currentFrame]} alt="Joji falling from his workspace into a world of creative tools" draggable={false} loading="eager" className="h-full w-full select-none object-contain"/>
-    </div>
-  </section>
-}
-
-function SkillsSection(){
-  return <section id="skills" className="relative min-h-screen overflow-hidden bg-white px-5 py-20 text-[#0C0C0C] sm:px-8 sm:py-24 md:px-10 md:py-28 lg:px-16">
-    <div className="mx-auto flex min-h-[calc(100vh-10rem)] w-full max-w-[1500px] flex-col items-center">
-      <FadeIn as="h2" y={40} className="text-center text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight">Skills</FadeIn>
-      <FadeIn delay={.1} y={30} className="mt-8 flex w-full justify-center sm:mt-10 md:mt-12">
-        <p className="w-full max-w-[900px] text-center text-[clamp(.9rem,1.35vw,1.18rem)] font-medium leading-[1.8]">{skillCopy}</p>
-      </FadeIn>
-      <FadeIn delay={.18} y={42} className="mt-10 flex min-h-[300px] w-full flex-1 items-center justify-center sm:mt-12 md:mt-14">
-        <img src={skillFramePaths[skillFramePaths.length-1]} alt="Joji surrounded by creative and AI tools" loading="eager" className="max-h-[50vh] w-full max-w-[1120px] object-contain"/>
-      </FadeIn>
+  return <section ref={sectionRef} id="about" className="relative h-[500vh] bg-white text-[#0C0C0C]">
+    <div id="skills" className="pointer-events-none absolute left-0 top-[72%] h-px w-px"/>
+    <div className="sticky top-0 h-screen overflow-hidden bg-white">
+      <motion.div aria-hidden="true" style={{scale:canvasScale,y:canvasY}} className="absolute inset-0 origin-center will-change-transform">
+        <canvas ref={canvasRef} role="img" aria-label="Joji moves from his About workspace into the Skills scene" className={`h-full w-full transition-opacity duration-500 ${framesReady?'opacity-100':'opacity-0'}`}/>
+      </motion.div>
+      <motion.div aria-hidden="true" style={{opacity:aboutShadeOpacity}} className="pointer-events-none absolute inset-0 bg-[rgba(255,255,255,.9)] md:bg-[linear-gradient(90deg,rgba(255,255,255,.99)_0%,rgba(255,255,255,.96)_38%,rgba(255,255,255,.72)_53%,rgba(255,255,255,.04)_78%)]"/>
+      <motion.div style={{opacity:aboutOpacity,x:aboutX}} className="absolute inset-0 z-10 mx-auto hidden w-full max-w-[1600px] items-center px-10 py-20 md:flex lg:px-16">
+        <div className="w-full max-w-[760px] lg:max-w-[52%]">
+          <h2 className="mb-10 text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight sm:mb-14 md:mb-16">About me</h2>
+          <SceneAnimatedText progress={smoothProgress} className="max-w-[720px] text-left">{aboutCopy}</SceneAnimatedText>
+        </div>
+      </motion.div>
+      <motion.div style={{opacity:aboutOpacity,y:aboutMobileY}} className="absolute inset-x-0 top-[7vh] z-10 px-5 md:hidden">
+        <h2 className="mb-8 text-[3.25rem] font-black uppercase leading-[.82] tracking-tight">About me</h2>
+        <SceneAnimatedText progress={smoothProgress} className="!text-[.82rem] !leading-[1.65]">{aboutCopy}</SceneAnimatedText>
+      </motion.div>
+      <motion.div aria-hidden="true" style={{opacity:skillsShadeOpacity}} className="pointer-events-none absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-white via-white/95 to-transparent"/>
+      <motion.div style={{opacity:skillsOpacity,y:skillsY}} className="absolute inset-0 z-20 mx-auto flex w-full max-w-[1500px] flex-col items-center px-5 pt-[7vh] text-center sm:px-8 md:px-10 lg:px-16">
+        <h2 className="text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight">Skills</h2>
+        <p className="mt-7 w-full max-w-[900px] text-[clamp(.9rem,1.35vw,1.18rem)] font-medium leading-[1.8] sm:mt-9 md:mt-11">{skillCopy}</p>
+      </motion.div>
     </div>
   </section>
 }
@@ -304,4 +356,4 @@ const projects=[
 function ProjectCard({project,index}:{project:typeof projects[number];index:number}){const ref=useRef<HTMLDivElement>(null);const {scrollYProgress}=useScroll({target:ref,offset:['start end','end start']});const scale=useTransform(scrollYProgress,[0,.8],[1,1-(projects.length-1-index)*.03]);return <div ref={ref} className="relative h-[85vh] min-h-[640px]"><motion.article style={{scale,top:`calc(6rem + ${index*28}px)`}} className="sticky flex max-h-[760px] min-h-[600px] flex-col rounded-[40px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 sm:rounded-[50px] sm:p-6 md:top-32 md:rounded-[60px] md:p-8"><div className="mb-5 grid grid-cols-[auto_1fr_auto] items-center gap-4 sm:mb-7 md:grid-cols-[auto_1fr_1.5fr_auto]"><span className="text-[clamp(3rem,8vw,110px)] font-black leading-none">{String(index+1).padStart(2,'0')}</span><span className="text-xs font-light uppercase tracking-widest opacity-60 sm:text-sm">{project.category}</span><h3 className="col-span-2 text-xl font-medium uppercase sm:col-span-1 sm:text-3xl md:text-4xl">{project.name}</h3><LiveProjectButton/></div><div className="grid min-h-0 flex-1 grid-cols-[40%_60%] gap-2 sm:gap-3"><div className="grid min-h-0 grid-rows-[42%_58%] gap-2 sm:gap-3"><img src={project.images[0]} alt={`${project.name} detail one`} loading="lazy" className="h-full min-h-0 w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[50px]"/><img src={project.images[1]} alt={`${project.name} detail two`} loading="lazy" className="h-full min-h-0 w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[50px]"/></div><img src={project.images[2]} alt={`${project.name} hero`} loading="lazy" className="h-full min-h-0 w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[50px]"/></div></motion.article></div>}
 function ProjectsSection(){return <section id="projects" className="relative z-10 -mt-10 rounded-t-[40px] bg-[#0C0C0C] px-3 pb-16 pt-20 sm:-mt-12 sm:rounded-t-[50px] sm:px-6 sm:pt-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pb-24 md:pt-32"><FadeIn as="h2" className="hero-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-28">Project</FadeIn><div className="mx-auto max-w-[1500px]">{projects.map((p,i)=><ProjectCard key={p.name} project={p} index={i}/>)}</div><footer id="contact" className="flex flex-col items-center gap-8 pt-16 text-center"><p className="hero-heading text-[clamp(2.5rem,8vw,110px)] font-black uppercase leading-none">Have a wild idea?</p><ContactButton/><p className="mt-10 text-xs font-light uppercase tracking-[.3em] opacity-50">© 2026 Pengxiang studio</p></footer></section>}
 
-export default function App(){return <main className="overflow-x-clip bg-[#0C0C0C]"><HeroSection/><AboutSection/><SkillTransitionSection/><SkillsSection/><ServicesSection/><ProjectsSection/></main>}
+export default function App(){return <main className="overflow-x-clip bg-[#0C0C0C]"><HeroSection/><AboutSkillsScene/><ServicesSection/><ProjectsSection/></main>}
