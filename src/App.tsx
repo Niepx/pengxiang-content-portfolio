@@ -12,7 +12,7 @@ function ContactButton(){return <a href="#contact" className="group inline-flex 
 function LiveProjectButton(){return <button className="inline-flex shrink-0 items-center gap-2 rounded-full border-2 border-[#D7E2EA] px-5 py-2.5 text-[10px] font-medium uppercase tracking-widest transition-colors hover:bg-[#D7E2EA]/10 sm:px-8 sm:py-3 sm:text-sm md:px-10 md:py-3.5 md:text-base">Live project <ArrowUpRight className="h-4 w-4"/></button>}
 
 const TAU=Math.PI*2;
-const FRONT_TIME=1.55;
+const FRONT_TIME=.7;
 const directionFrames=[
   {angle:0,time:3.2},{angle:Math.PI/4,time:4.4},{angle:Math.PI/2,time:5.4},
   {angle:Math.PI*3/4,time:6.3},{angle:Math.PI,time:7.2},{angle:Math.PI*5/4,time:8.1},
