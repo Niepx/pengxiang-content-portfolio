@@ -146,11 +146,10 @@ function InteractiveCharacter(){
     };
     const pointerMove=(event:MouseEvent)=>{
       if(scrolling.current)return;
-      if(pointerHitsCharacter(event.clientX,event.clientY))return reset();
       const x=event.clientX-window.innerWidth/2,y=event.clientY-window.innerHeight/2;
-      const pointerY=Math.min(y,0);
-      if(Math.hypot(x,pointerY)<42)return reset();
-      neutral.current=false;targetAngle.current=Math.atan2(-pointerY,x);setDirection(directionName(targetAngle.current));
+      if(y>=0||pointerHitsCharacter(event.clientX,event.clientY))return reset();
+      if(Math.hypot(x,y)<42)return reset();
+      neutral.current=false;targetAngle.current=Math.atan2(-y,x);setDirection(directionName(targetAngle.current));
     };
     const scroll=()=>{
       const nextScrollY=window.scrollY,scrollingDown=nextScrollY>lastScrollY+1;
@@ -195,7 +194,7 @@ function HeroSection(){return <section className="relative flex h-screen min-h-[
   <FadeIn as="nav" y={-20} className="z-30 flex justify-between pt-6 text-sm font-medium uppercase tracking-wider md:pt-8 md:text-lg lg:text-[1.4rem]">{[{label:'About',href:'#about'},{label:'Projects',href:'#projects'},{label:'Experience',href:'#services'},{label:'Contact',href:'#contact'}].map(({label,href})=><a key={label} className="transition-opacity duration-200 hover:opacity-70" href={href}>{label}</a>)}</FadeIn>
   <div className="overflow-hidden"><FadeIn id="hero-title" as="h1" delay={.15} y={40} className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[14vw] font-black uppercase leading-none tracking-tight sm:mt-4 sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]">Hi, i&apos;m joji</FadeIn></div>
   <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="pointer-events-auto w-[270px] sm:w-[340px] md:w-[420px] lg:w-[480px]"><InteractiveCharacter/></FadeIn></div>
-  <div className="relative z-20 mt-auto flex items-end justify-between pb-7 sm:pb-8 md:pb-10"><FadeIn as="p" delay={.35} y={20} className="max-w-[160px] text-[clamp(.75rem,1.4vw,1.5rem)] font-light uppercase leading-snug tracking-wide sm:max-w-[220px] md:max-w-[260px]">A 3D creator driven by crafting striking and unforgettable projects</FadeIn><FadeIn delay={.5} y={20}><ContactButton/></FadeIn></div>
+  <div className="relative z-20 mt-auto flex items-end justify-between gap-4 pb-7 sm:pb-8 md:pb-10"><FadeIn as="p" delay={.35} y={20} className="shrink-0 text-[clamp(.55rem,.9vw,.95rem)] font-light leading-tight tracking-[.02em]"><span className="block whitespace-nowrap">From product insight to final output,</span><span className="block whitespace-nowrap">make ideas easier to see, understand, and share.</span></FadeIn><FadeIn delay={.5} y={20}><ContactButton/></FadeIn></div>
   </section>}
 
 const motionImages=['https://motionsites.org/assets/hero-space-voyage-preview-eECLH3Yc.gif','https://motionsites.org/assets/hero-codenest-preview-Cgppc2qV.gif','https://motionsites.org/assets/hero-vex-ventures-preview-BczMFIiw.gif','https://motionsites.org/assets/hero-stellar-ai-v2-preview-DjvxjG3C.gif','https://motionsites.org/assets/hero-asme-preview-B_nGDnTP.gif','https://motionsites.org/assets/hero-transform-data-preview-Cx5OU29N.gif','https://motionsites.org/assets/hero-vitara-preview-Cjz2QYyU.gif','https://motionsites.org/assets/hero-terra-preview-BFjrCr7T.gif','https://motionsites.org/assets/hero-skyelite-preview-DHaZIgUv.gif','https://motionsites.org/assets/hero-aethera-preview-DknSlcTa.gif','https://motionsites.org/assets/hero-designpro-preview-D8c5_een.gif','https://motionsites.org/assets/hero-stellar-ai-preview-D3HL6bw1.gif','https://motionsites.org/assets/hero-xportfolio-preview-D4A8maiC.gif','https://motionsites.org/assets/hero-orbit-web3-preview-BXt4OttD.gif','https://motionsites.org/assets/hero-nexora-preview-cx5HmUgo.gif','https://motionsites.org/assets/hero-evr-ventures-preview-DZxeVFEX.gif','https://motionsites.org/assets/hero-planet-orbit-preview-DWAP8Z1P.gif','https://motionsites.org/assets/hero-new-era-preview-CocuDUm9.gif','https://motionsites.org/assets/hero-wealth-preview-B70idl_u.gif','https://motionsites.org/assets/hero-luminex-preview-CxOP7ce6.gif','https://motionsites.org/assets/hero-celestia-preview-0yO3jXO8.gif'];
