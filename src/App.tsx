@@ -1,6 +1,6 @@
 import { ElementType, ReactNode, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { motion, MotionValue, useMotionValueEvent, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, MotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 
 type FadeProps = { children: ReactNode; delay?: number; duration?: number; x?: number; y?: number; as?: ElementType; className?: string; id?: string };
 function FadeIn({ children, delay=0, duration=.7, x=0, y=30, as='div', className, id }: FadeProps) {
@@ -252,12 +252,17 @@ function AboutSkillsScene(){
   const drawRef=useRef<(progress:number,force?:boolean)=>void>(()=>{});
   const animationFrameRef=useRef<number>();
   const [framesReady,setFramesReady]=useState(false);
+  const prefersReducedMotion=useReducedMotion();
   const {scrollYProgress}=useScroll({target:sectionRef,offset:['start start','end end']});
   const smoothProgress=useSpring(scrollYProgress,{stiffness:78,damping:24,mass:.36});
   const aboutOpacity=useTransform(smoothProgress,[0,.2,.27,.34],[1,1,.45,0]);
   const aboutX=useTransform(smoothProgress,[0,.22,.34],['0%','0%','-10%']);
   const aboutMobileY=useTransform(smoothProgress,[0,.15,.25,.34],[0,-330,-470,-540]);
-  const aboutImageOpacity=useTransform(smoothProgress,[0,.2,.3],[1,1,0]);
+  const aboutImageOpacity=useTransform(smoothProgress,[0,.03,.075,.2,.3],prefersReducedMotion?[1,1,1,1,0]:[0,.55,1,1,0]);
+  const aboutImageX=useTransform(smoothProgress,[0,.075],prefersReducedMotion?['0%','0%']:['12%','0%']);
+  const aboutImageY=useTransform(smoothProgress,[0,.075],prefersReducedMotion?['0%','0%']:['9%','0%']);
+  const aboutImageScale=useTransform(smoothProgress,[0,.06,.09],prefersReducedMotion?[1,1,1]:[.88,1.015,1]);
+  const aboutImageFilter=useTransform(smoothProgress,[0,.055],prefersReducedMotion?['blur(0px)','blur(0px)']:['blur(6px)','blur(0px)']);
   // Let the sequence finish at full size, crossfade to the matching HD still,
   // then create the final Skills composition by shrinking the still itself.
   const canvasOpacity=useTransform(smoothProgress,[0,.2,.29,.6799,.68],[0,0,1,1,0]);
@@ -336,7 +341,7 @@ function AboutSkillsScene(){
   return <section ref={sectionRef} id="about" className="relative h-[500vh] bg-[#0C0C0C] text-[#0C0C0C]">
     <div id="skills" className="pointer-events-none absolute left-0 top-[72%] h-px w-px"/>
     <motion.div style={{scale:sceneScale,y:sceneY,borderRadius:sceneRadius}} className="sticky top-0 h-[100svh] overflow-hidden bg-[#F3F3F0] will-change-transform">
-      <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity}} className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] w-full object-contain object-bottom md:inset-0 md:h-full md:object-cover md:object-center"/>
+      <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity,x:aboutImageX,y:aboutImageY,scale:aboutImageScale,filter:aboutImageFilter,transformOrigin:'72% 68%'}} className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] w-full object-contain object-bottom will-change-[transform,opacity,filter] md:inset-0 md:h-full md:object-cover md:object-center"/>
       <motion.div aria-hidden="true" style={{opacity:canvasOpacity,scale:canvasScale,y:canvasY,borderRadius:canvasRadius}} className="absolute inset-0 origin-center overflow-hidden bg-white will-change-transform">
         <canvas ref={canvasRef} role="img" aria-label="Joji moves from his About workspace into the Skills scene" className={`h-full w-full transition-opacity duration-500 ${framesReady?'opacity-100':'opacity-0'}`}/>
       </motion.div>
