@@ -237,13 +237,14 @@ const aboutCopy=`我是聂鹏翔，我有 4 年新媒体与内容相关工作经
 function AboutSection(){
   const sectionRef=useRef<HTMLElement>(null);
   const {scrollYProgress}=useScroll({target:sectionRef,offset:['start end','end start']});
-  const imageX=useTransform(scrollYProgress,[0,.26,.72,1],['20%','0%','0%','-3%']);
-  const imageScale=useTransform(scrollYProgress,[0,.3,1],[.94,1,1.025]);
-  const imageOpacity=useTransform(scrollYProgress,[0,.12,.28],[0,.5,1]);
-  return <section ref={sectionRef} id="about" className="relative min-h-[125vh] overflow-hidden bg-[#f8f8f6] text-[#0C0C0C]">
-    <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{x:imageX,scale:imageScale,opacity:imageOpacity}} className="pointer-events-none absolute inset-0 h-full w-full origin-right object-cover object-[68%_center] will-change-transform sm:object-[66%_center] lg:object-center"/>
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(248,248,246,.99)_0%,rgba(248,248,246,.96)_34%,rgba(248,248,246,.78)_48%,rgba(248,248,246,.08)_76%)] max-md:bg-[linear-gradient(90deg,rgba(248,248,246,.97)_0%,rgba(248,248,246,.92)_62%,rgba(248,248,246,.38)_100%)]"/>
-    <div className="relative z-10 mx-auto flex min-h-[125vh] w-full max-w-[1600px] items-center px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-16">
+  const imageX=useTransform(scrollYProgress,[0,.24,.62,.78,1],['20%','0%','0%','-8%','-30%']);
+  const imageY=useTransform(scrollYProgress,[0,.62,.78,.9,1],['0%','0%','20%','86%','125%']);
+  const imageScale=useTransform(scrollYProgress,[0,.28,.62,.78,.9,1],[.94,1,1,.64,.4,.32]);
+  const imageOpacity=useTransform(scrollYProgress,[0,.12,.28,.72,.88,1],[0,.5,1,1,.58,0]);
+  return <section ref={sectionRef} id="about" className="relative z-10 min-h-[145vh] overflow-visible bg-white text-[#0C0C0C]">
+    <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{x:imageX,y:imageY,scale:imageScale,opacity:imageOpacity}} className="pointer-events-none absolute inset-0 h-full w-full origin-[72%_52%] object-cover object-[68%_center] will-change-transform sm:object-[66%_center] lg:object-center"/>
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,.99)_0%,rgba(255,255,255,.96)_34%,rgba(255,255,255,.78)_48%,rgba(255,255,255,.08)_76%)] max-md:bg-[linear-gradient(90deg,rgba(255,255,255,.97)_0%,rgba(255,255,255,.92)_62%,rgba(255,255,255,.38)_100%)]"/>
+    <div className="relative z-10 mx-auto flex min-h-[145vh] w-full max-w-[1600px] items-center px-5 py-24 sm:px-8 sm:py-28 md:px-10 lg:px-16">
       <div className="w-full max-w-[760px] lg:max-w-[52%]">
         <FadeIn as="h2" y={40} className="mb-10 text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight sm:mb-14 md:mb-16">About me</FadeIn>
         <AnimatedText className="max-w-[720px] text-left">{aboutCopy}</AnimatedText>
@@ -257,18 +258,20 @@ const skillCopy='我习惯把 AI 工具融入完整的内容生产流程，从�
 function SkillsSection(){
   const sectionRef=useRef<HTMLElement>(null);
   const {scrollYProgress}=useScroll({target:sectionRef,offset:['start end','end start']});
-  const sceneY=useTransform(scrollYProgress,[0,.18,.4,.76,1],['-38%','-14%','8%','11%','14%']);
-  const sceneScale=useTransform(scrollYProgress,[0,.2,.45,1],[.78,.9,1,1.035]);
-  const sceneRotate=useTransform(scrollYProgress,[0,.16,.34,.55,1],[-6,2.5,-1,0,.5]);
-  const sceneOpacity=useTransform(scrollYProgress,[0,.08,.25],[0,.62,1]);
-  const titleY=useTransform(scrollYProgress,[.08,.28],[70,0]);
-  const titleOpacity=useTransform(scrollYProgress,[.08,.24],[0,1]);
+  const sceneY=useTransform(scrollYProgress,[0,.16,.36,.72,1],['-76%','-28%','4%','8%','10%']);
+  const sceneScale=useTransform(scrollYProgress,[0,.18,.4,.72,1],[.32,.52,.78,.84,.86]);
+  const sceneRotate=useTransform(scrollYProgress,[0,.15,.32,.56,1],[-8,3.5,-1.5,0,.35]);
+  const sceneOpacity=useTransform(scrollYProgress,[0,.06,.22],[0,.45,1]);
+  const titleY=useTransform(scrollYProgress,[.16,.36],[70,0]);
+  const titleOpacity=useTransform(scrollYProgress,[.18,.34],[0,1]);
   const copyY=useTransform(scrollYProgress,[.18,.4],[50,0]);
   const copyOpacity=useTransform(scrollYProgress,[.2,.42],[0,1]);
-  return <section ref={sectionRef} id="skills" className="relative h-[185vh] bg-[#f8f8f6] text-[#0C0C0C]">
-    <div className="sticky top-0 h-screen overflow-hidden bg-[#f8f8f6]">
-      <motion.img src="/assets/skill-falling-boy.png" alt="Joji surrounded by creative and AI tools" loading="lazy" style={{y:sceneY,scale:sceneScale,rotate:sceneRotate,opacity:sceneOpacity}} className="absolute inset-y-0 -left-[12.5%] h-full w-[125%] origin-center object-contain object-[center_68%] will-change-transform md:inset-0 md:w-full md:object-cover md:object-[center_58%]"/>
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-[#f8f8f6] via-[#f8f8f6]/90 to-transparent md:h-[43%]"/>
+  return <section ref={sectionRef} id="skills" className="relative z-0 h-[210vh] bg-white text-[#0C0C0C]">
+    <div className="sticky top-0 h-screen overflow-hidden bg-white">
+      <motion.div style={{y:sceneY,scale:sceneScale,rotate:sceneRotate,opacity:sceneOpacity}} className="absolute inset-x-[-6%] bottom-[1%] top-[44%] origin-center will-change-transform sm:inset-x-[2%] md:inset-x-[7%] md:top-[36%] lg:inset-x-[10%]">
+        <img src="/assets/skill-falling-boy.png" alt="Joji surrounded by creative and AI tools" loading="lazy" className="h-full w-full object-contain"/>
+      </motion.div>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[42%] bg-gradient-to-b from-white via-white/95 to-transparent"/>
       <div className="relative z-10 mx-auto h-full w-full max-w-[1600px] px-5 sm:px-8 md:px-10 lg:px-16">
         <motion.h2 style={{y:titleY,opacity:titleOpacity}} className="absolute inset-x-5 top-[6%] text-center text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight sm:inset-x-8 md:inset-x-10 lg:inset-x-16">Skills</motion.h2>
         <div className="absolute inset-x-5 top-[21%] flex justify-center sm:inset-x-8 md:inset-x-10 md:top-[22%] lg:inset-x-16">
