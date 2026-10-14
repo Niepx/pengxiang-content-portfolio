@@ -164,9 +164,13 @@ function InteractiveCharacter(){
       // the opening smile until the pointer has actually moved.
       if(!previous||Math.hypot(event.clientX-previous.x,event.clientY-previous.y)<2)return;
       const x=event.clientX-window.innerWidth/2,y=event.clientY-window.innerHeight/2;
-      if(y>=0||pointerHitsCharacter(event.clientX,event.clientY))return reset();
-      if(Math.hypot(x,y)<42)return reset();
-      lookAt(Math.atan2(-y,x));
+      if(pointerHitsCharacter(event.clientX,event.clientY))return reset();
+      // Extend the active field into the lower half of the hero. Lower pointer
+      // positions resolve to left/right instead of a downward pose; looking
+      // down remains reserved exclusively for page scrolling.
+      const directionalY=Math.min(y,0);
+      if(Math.hypot(x,directionalY)<28)return reset();
+      lookAt(Math.atan2(-directionalY,x));
     };
     const scroll=()=>{
       const nextScrollY=window.scrollY,scrollingDown=nextScrollY>lastScrollY+1;
