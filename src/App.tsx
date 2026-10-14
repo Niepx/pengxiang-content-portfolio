@@ -149,9 +149,7 @@ function InteractiveCharacter(){
     };
     const finishScrollLater=()=>{
       window.clearTimeout(scrollTimer.current);
-      // Ending a gesture only unlocks pointer input. The pose remains where
-      // that gesture placed it: down after scrolling down, front after up.
-      scrollTimer.current=window.setTimeout(()=>{scrolling.current=false},420);
+      scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},420);
     };
     const beginDownScroll=()=>{
       // Treat an entire wheel/touchpad sequence as one gesture. Only the first
@@ -163,26 +161,19 @@ function InteractiveCharacter(){
       }
       finishScrollLater();
     };
-    const beginUpScroll=()=>{
-      if(!scrolling.current){
-        scrolling.current=true;
-        reset();
-      }
-      finishScrollLater();
-    };
     const wheel=(event:WheelEvent)=>{
       // Wheel fires before layout moves, so lock out the synthetic mousemove
       // caused by scrolling and continue from the current gaze without a
       // one-frame detour through the front pose.
       if(event.deltaY>0){beginDownScroll();return}
-      if(event.deltaY<0){beginUpScroll();return}
+      if(!scrolling.current&&event.deltaY<0){scrolling.current=true;reset()}
       finishScrollLater();
     };
     const scroll=()=>{
       const nextScrollY=window.scrollY,scrollDelta=nextScrollY-lastScrollY;
       lastScrollY=nextScrollY;
       if(scrollDelta>0){beginDownScroll();return}
-      if(scrollDelta<0){beginUpScroll();return}
+      if(!scrolling.current&&scrollDelta<0){scrolling.current=true;reset()}
       finishScrollLater();
     };
     const animate=()=>{
