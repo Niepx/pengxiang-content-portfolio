@@ -147,12 +147,25 @@ function InteractiveCharacter(){
       if(Math.hypot(x,directionalY)<28)return reset();
       lookAt(Math.atan2(-directionalY,x));
     };
+    const finishScrollLater=()=>{
+      window.clearTimeout(scrollTimer.current);
+      scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},280);
+    };
+    const wheel=(event:WheelEvent)=>{
+      // Wheel fires before layout moves, so lock out the synthetic mousemove
+      // caused by scrolling and continue from the current gaze without a
+      // one-frame detour through the front pose.
+      scrolling.current=true;
+      if(event.deltaY>0)lookAt(Math.PI*3/2,'down');
+      else if(event.deltaY<0)reset();
+      finishScrollLater();
+    };
     const scroll=()=>{
-      const nextScrollY=window.scrollY,scrollingDown=nextScrollY>lastScrollY+1;
-      lastScrollY=nextScrollY;scrolling.current=true;window.clearTimeout(scrollTimer.current);
-      if(scrollingDown)lookAt(Math.PI*3/2,'down')
-      else reset();
-      scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},180);
+      const nextScrollY=window.scrollY,scrollDelta=nextScrollY-lastScrollY;
+      lastScrollY=nextScrollY;scrolling.current=true;
+      if(scrollDelta>0)lookAt(Math.PI*3/2,'down');
+      else if(scrollDelta<0)reset();
+      finishScrollLater();
     };
     const animate=()=>{
       const video=videoRef.current;
@@ -179,10 +192,11 @@ function InteractiveCharacter(){
       animationFrame.current=requestAnimationFrame(animate);
     };
     window.addEventListener('mousemove',pointerMove,{passive:true});
+    window.addEventListener('wheel',wheel,{passive:true,capture:true});
     window.addEventListener('scroll',scroll,{passive:true});
     window.addEventListener('blur',reset);
     animationFrame.current=requestAnimationFrame(animate);
-    return()=>{window.removeEventListener('mousemove',pointerMove);window.removeEventListener('scroll',scroll);window.removeEventListener('blur',reset);window.clearTimeout(scrollTimer.current);if(animationFrame.current)cancelAnimationFrame(animationFrame.current)};
+    return()=>{window.removeEventListener('mousemove',pointerMove);window.removeEventListener('wheel',wheel,{capture:true});window.removeEventListener('scroll',scroll);window.removeEventListener('blur',reset);window.clearTimeout(scrollTimer.current);if(animationFrame.current)cancelAnimationFrame(animationFrame.current)};
   },[]);
 
   return <div ref={hostRef} data-direction={direction} className={`hero-character relative aspect-[5/6] w-full transition-[opacity,filter] duration-700 ${ready?'opacity-100 blur-0':'opacity-0 blur-md'}`} role="img" aria-label={`Joji IP character looking ${direction}`}>
