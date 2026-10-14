@@ -255,18 +255,18 @@ function AboutSkillsScene(){
   const aboutX=useTransform(smoothProgress,[0,.28,.39],['0%','0%','-10%']);
   const aboutMobileY=useTransform(smoothProgress,[0,.2,.3,.39],[0,-330,-470,-540]);
   const aboutImageOpacity=useTransform(smoothProgress,[0,.27,.34],[1,1,0]);
-  const canvasOpacity=useTransform(smoothProgress,[0,.27,.34,.62,.69],[0,0,1,1,0]);
-  const skillsImageOpacity=useTransform(smoothProgress,[.61,.69],[0,1]);
-  const skillsImageScale=useTransform(smoothProgress,[.61,.69],[.94,.9]);
-  const skillsImageY=useTransform(smoothProgress,[.61,.69],['6%','10%']);
-  const skillsImageRadius=useTransform(smoothProgress,[.61,.69],[24,48]);
-  const skillsImageFilter=useTransform(smoothProgress,[.61,.65,.69],['blur(1.5px)','blur(1px)','blur(0px)']);
+  // Let the sequence finish at full size, crossfade to the matching HD still,
+  // then create the final Skills composition by shrinking the still itself.
+  const canvasOpacity=useTransform(smoothProgress,[0,.27,.34,.6099,.61],[0,0,1,1,0]);
+  const skillsImageOpacity=useTransform(smoothProgress,[.6099,.61],[0,1]);
+  const skillsImageScale=useTransform(smoothProgress,[.61,.64,.78],[1,1,.76]);
+  const skillsImageY=useTransform(smoothProgress,[.61,.64,.78],['0%','0%','21%']);
+  const skillsImageRadius=useTransform(smoothProgress,[.61,.64,.78],[0,24,48]);
   const skillsOpacity=useTransform(smoothProgress,[.45,.52,.62],[0,.5,1]);
   const skillsY=useTransform(smoothProgress,[.45,.62],[46,0]);
-  const canvasScale=useTransform(smoothProgress,[0,.5,.6,.66],[1,1,.94,.9]);
-  const canvasY=useTransform(smoothProgress,[0,.5,.6,.66],['0%','0%','6%','10%']);
-  const canvasRadius=useTransform(smoothProgress,[.3,.56,.66],[0,24,48]);
-  const canvasFilter=useTransform(smoothProgress,[.58,.64,.69],['blur(0px)','blur(1px)','blur(1.5px)']);
+  const canvasScale=useTransform(smoothProgress,[0,.61],[1,1]);
+  const canvasY=useTransform(smoothProgress,[0,.61],['0%','0%']);
+  const canvasRadius=useTransform(smoothProgress,[0,.61],[0,0]);
 
   useEffect(()=>{
     const canvas=canvasRef.current;
@@ -330,10 +330,10 @@ function AboutSkillsScene(){
     <div id="skills" className="pointer-events-none absolute left-0 top-[72%] h-px w-px"/>
     <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#F3F3F0]">
       <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity}} className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] w-full object-contain object-bottom md:inset-0 md:h-full md:object-cover md:object-center"/>
-      <motion.div aria-hidden="true" style={{opacity:canvasOpacity,scale:canvasScale,y:canvasY,borderRadius:canvasRadius,filter:canvasFilter}} className="absolute inset-0 origin-center overflow-hidden bg-white will-change-transform">
+      <motion.div aria-hidden="true" style={{opacity:canvasOpacity,scale:canvasScale,y:canvasY,borderRadius:canvasRadius}} className="absolute inset-0 origin-center overflow-hidden bg-white will-change-transform">
         <canvas ref={canvasRef} role="img" aria-label="Joji moves from his About workspace into the Skills scene" className={`h-full w-full transition-opacity duration-500 ${framesReady?'opacity-100':'opacity-0'}`}/>
       </motion.div>
-      <motion.div aria-hidden="true" style={{opacity:skillsImageOpacity,scale:skillsImageScale,y:skillsImageY,borderRadius:skillsImageRadius,filter:skillsImageFilter}} className="pointer-events-none absolute inset-0 z-[1] origin-center overflow-hidden bg-white will-change-transform">
+      <motion.div aria-hidden="true" style={{opacity:skillsImageOpacity,scale:skillsImageScale,y:skillsImageY,borderRadius:skillsImageRadius}} className="pointer-events-none absolute inset-0 z-[1] origin-center overflow-hidden bg-white shadow-[0_28px_90px_rgba(25,20,14,0.08)] will-change-transform">
         <img src="/assets/skill-falling-boy.png" alt="" loading="eager" className="h-full w-full object-contain"/>
       </motion.div>
       <motion.div style={{opacity:aboutOpacity,x:aboutX}} className="absolute inset-0 z-10 mx-auto hidden w-full max-w-[1600px] items-start px-10 py-[6vh] md:flex lg:px-16">
