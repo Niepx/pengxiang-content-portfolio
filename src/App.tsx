@@ -39,8 +39,10 @@ function InteractiveCharacter(){
   const currentTime=useRef(FRONT_TIME);
   const targetTime=useRef(FRONT_TIME);
   const neutral=useRef(true);
+  const transitioningFront=useRef(true);
   const seeking=useRef(false);
   const scrolling=useRef(false);
+  const lastPointer=useRef<{x:number;y:number}|null>(null);
   const scrollTimer=useRef<number>();
   const animationFrame=useRef<number>();
   const [ready,setReady]=useState(false);
@@ -136,7 +138,17 @@ function InteractiveCharacter(){
 
   useEffect(()=>{
     let lastScrollY=window.scrollY;
-    const reset=()=>{neutral.current=true;targetTime.current=FRONT_TIME;setDirection('front')};
+    const reset=()=>{neutral.current=true;transitioningFront.current=true;targetTime.current=FRONT_TIME;setDirection('front')};
+    const lookAt=(angle:number,name=directionName(angle))=>{
+      if(neutral.current){
+        // A smile is a separate pose rather than part of the circular direction
+        // timeline. Start a fresh directional arc so stale angles cannot send the
+        // character around the back of the video on the next interaction.
+        currentAngle.current=angle;
+        transitioningFront.current=true;
+      }
+      neutral.current=false;targetAngle.current=angle;setDirection(name);
+    };
     const pointerHitsCharacter=(x:number,y:number)=>{
       const rect=hostRef.current?.getBoundingClientRect(),mask=maskRef.current,canvas=canvasRef.current;
       if(!rect||!mask||!canvas||x<rect.left||x>rect.right||y<rect.top||y>rect.bottom)return false;
@@ -146,15 +158,20 @@ function InteractiveCharacter(){
     };
     const pointerMove=(event:MouseEvent)=>{
       if(scrolling.current)return;
+      const previous=lastPointer.current;
+      lastPointer.current={x:event.clientX,y:event.clientY};
+      // Browsers can dispatch a synthetic mousemove as the page appears. Keep
+      // the opening smile until the pointer has actually moved.
+      if(!previous||Math.hypot(event.clientX-previous.x,event.clientY-previous.y)<2)return;
       const x=event.clientX-window.innerWidth/2,y=event.clientY-window.innerHeight/2;
       if(y>=0||pointerHitsCharacter(event.clientX,event.clientY))return reset();
       if(Math.hypot(x,y)<42)return reset();
-      neutral.current=false;targetAngle.current=Math.atan2(-y,x);setDirection(directionName(targetAngle.current));
+      lookAt(Math.atan2(-y,x));
     };
     const scroll=()=>{
       const nextScrollY=window.scrollY,scrollingDown=nextScrollY>lastScrollY+1;
       lastScrollY=nextScrollY;scrolling.current=true;window.clearTimeout(scrollTimer.current);
-      if(scrollingDown){neutral.current=false;targetAngle.current=Math.PI*3/2;setDirection('down')}
+      if(scrollingDown)lookAt(Math.PI*3/2,'down')
       else reset();
       scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},180);
     };
@@ -168,12 +185,17 @@ function InteractiveCharacter(){
         }
         const duration=video.duration;
         let timeDelta=targetTime.current-currentTime.current;
-        if(timeDelta>duration/2)timeDelta-=duration;
-        if(timeDelta<-duration/2)timeDelta+=duration;
+        // Circular wrapping is correct between directional poses, but wrong
+        // while entering or leaving the standalone smile pose.
+        if(!neutral.current&&!transitioningFront.current){
+          if(timeDelta>duration/2)timeDelta-=duration;
+          if(timeDelta<-duration/2)timeDelta+=duration;
+        }
         if(Math.abs(timeDelta)>.006&&!seeking.current){
           currentTime.current=(currentTime.current+timeDelta*.2+duration)%duration;
           seeking.current=true;video.currentTime=currentTime.current;
         }
+        if(!neutral.current&&Math.abs(timeDelta)<.04)transitioningFront.current=false;
       }
       animationFrame.current=requestAnimationFrame(animate);
     };
