@@ -74,33 +74,10 @@ function InteractiveCharacter(){
       const darkBackdrop=backdropLightness<90;
       const tolerance=darkBackdrop?26:74;
       const colorDistance=(r:number,g:number,b:number)=>Math.hypot(r-backdrop[0],g-backdrop[1],b-backdrop[2]);
-      if(darkBackdrop){
-        const hitMask=new Uint8Array(total);
-        const leftEdge=new Int16Array(height),rightEdge=new Int16Array(height);
-        leftEdge.fill(width);rightEdge.fill(-1);
-        for(let y=0;y<height;y++){
-          for(let x=0;x<width;x++){
-            const i=(y*width+x)*4;
-            if(colorDistance(data[i],data[i+1],data[i+2])>24){leftEdge[y]=Math.min(leftEdge[y],x);rightEdge[y]=x}
-          }
-          if(rightEdge[y]-leftEdge[y]<3){leftEdge[y]=width;rightEdge[y]=-1}
-        }
-        for(let y=1;y<height-1;y++){
-          if(rightEdge[y]<0&&rightEdge[y-1]>=0&&rightEdge[y+1]>=0){leftEdge[y]=Math.min(leftEdge[y-1],leftEdge[y+1]);rightEdge[y]=Math.max(rightEdge[y-1],rightEdge[y+1])}
-        }
-        for(let y=0;y<height;y++)for(let x=0;x<width;x++){
-          const pixel=y*width+x,i=pixel*4,left=leftEdge[y],right=rightEdge[y];
-          if(right<0||x<left||x>right){data[i+3]=0;continue}
-          hitMask[pixel]=255;
-          data[i+3]=(x===left||x===right)?150:255;
-        }
-        outputContext.putImageData(frame,0,0);
-        maskRef.current=hitMask;seeking.current=false;setReady(true);return;
-      }
       const isBackground=(pixel:number)=>{
         const i=pixel*4,r=data[i],g=data[i+1],b=data[i+2],chroma=Math.max(r,g,b)-Math.min(r,g,b),lightness=(r+g+b)/3;
         return darkBackdrop
-          ? lightness<22&&chroma<18
+          ? colorDistance(r,g,b)<18&&lightness<42&&chroma<22
           : colorDistance(r,g,b)<tolerance&&chroma<92;
       };
       const enqueue=(pixel:number)=>{if(!background[pixel]&&isBackground(pixel)){background[pixel]=1;queue[tail++]=pixel}};
@@ -111,20 +88,18 @@ function InteractiveCharacter(){
       for(let pixel=0;pixel<total;pixel++){
         const i=pixel*4;
         if(background[pixel]){
-          if(darkBackdrop){data[i]=12;data[i+1]=12;data[i+2]=12;data[i+3]=255}
-          else data[i+3]=0;
+          data[i+3]=0;
           continue;
         }
-        hitMask[pixel]=255;
         const x=pixel%width,y=(pixel/width)|0;
         const touchesBackground=(x&&background[pixel-1])||(x<width-1&&background[pixel+1])||(y&&background[pixel-width])||(y<height-1&&background[pixel+width]);
         if(touchesBackground){
           const distance=colorDistance(data[i],data[i+1],data[i+2]);
-          if(darkBackdrop){
-            const mix=Math.max(0,Math.min(1,(distance-6)/34));
-            data[i]=12+(data[i]-12)*mix;data[i+1]=12+(data[i+1]-12)*mix;data[i+2]=12+(data[i+2]-12)*mix;data[i+3]=255;
-          }else data[i+3]=Math.max(72,Math.min(255,(distance-tolerance*.4)/(.7*tolerance)*255));
+          data[i+3]=darkBackdrop
+            ? Math.max(72,Math.min(255,(distance-12)/18*255))
+            : Math.max(72,Math.min(255,(distance-tolerance*.4)/(.7*tolerance)*255));
         }
+        if(data[i+3]>96)hitMask[pixel]=255;
       }
       outputContext.putImageData(frame,0,0);
       maskRef.current=hitMask;seeking.current=false;setReady(true);
