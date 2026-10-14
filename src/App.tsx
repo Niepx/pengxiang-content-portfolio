@@ -149,22 +149,31 @@ function InteractiveCharacter(){
     };
     const finishScrollLater=()=>{
       window.clearTimeout(scrollTimer.current);
-      scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},280);
+      scrollTimer.current=window.setTimeout(()=>{scrolling.current=false;reset()},420);
+    };
+    const beginDownScroll=()=>{
+      // Treat an entire wheel/touchpad sequence as one gesture. Only the first
+      // downward event changes the target; later events merely keep the session
+      // alive so the character stays locked looking down.
+      if(!scrolling.current){
+        scrolling.current=true;
+        lookAt(Math.PI*3/2,'down');
+      }
+      finishScrollLater();
     };
     const wheel=(event:WheelEvent)=>{
       // Wheel fires before layout moves, so lock out the synthetic mousemove
       // caused by scrolling and continue from the current gaze without a
       // one-frame detour through the front pose.
-      scrolling.current=true;
-      if(event.deltaY>0)lookAt(Math.PI*3/2,'down');
-      else if(event.deltaY<0)reset();
+      if(event.deltaY>0){beginDownScroll();return}
+      if(!scrolling.current&&event.deltaY<0){scrolling.current=true;reset()}
       finishScrollLater();
     };
     const scroll=()=>{
       const nextScrollY=window.scrollY,scrollDelta=nextScrollY-lastScrollY;
-      lastScrollY=nextScrollY;scrolling.current=true;
-      if(scrollDelta>0)lookAt(Math.PI*3/2,'down');
-      else if(scrollDelta<0)reset();
+      lastScrollY=nextScrollY;
+      if(scrollDelta>0){beginDownScroll();return}
+      if(!scrolling.current&&scrollDelta<0){scrolling.current=true;reset()}
       finishScrollLater();
     };
     const animate=()=>{
