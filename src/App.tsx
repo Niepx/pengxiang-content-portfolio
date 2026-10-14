@@ -251,15 +251,19 @@ function AboutSkillsScene(){
   const [framesReady,setFramesReady]=useState(false);
   const {scrollYProgress}=useScroll({target:sectionRef,offset:['start start','end end']});
   const smoothProgress=useSpring(scrollYProgress,{stiffness:135,damping:28,mass:.22});
-  const aboutOpacity=useTransform(smoothProgress,[0,.24,.34,.41],[1,1,.45,0]);
-  const aboutX=useTransform(smoothProgress,[0,.27,.41],['0%','0%','-12%']);
-  const aboutMobileY=useTransform(smoothProgress,[0,.2,.31,.41],[0,-330,-470,-540]);
-  const skillsOpacity=useTransform(smoothProgress,[.58,.68,.78],[0,.45,1]);
-  const skillsY=useTransform(smoothProgress,[.58,.77],[55,0]);
-  const canvasScale=useTransform(smoothProgress,[0,.58,.72,.85],[1,1,.82,.72]);
-  const canvasY=useTransform(smoothProgress,[0,.58,.74,.86],['0%','0%','16%','22%']);
-  const aboutShadeOpacity=useTransform(smoothProgress,[0,.27,.43],[1,.92,0]);
-  const skillsShadeOpacity=useTransform(smoothProgress,[.56,.7,.82],[0,.85,1]);
+  const aboutOpacity=useTransform(smoothProgress,[0,.27,.32,.39],[1,1,.45,0]);
+  const aboutX=useTransform(smoothProgress,[0,.28,.39],['0%','0%','-10%']);
+  const aboutMobileY=useTransform(smoothProgress,[0,.2,.3,.39],[0,-330,-470,-540]);
+  const aboutImageOpacity=useTransform(smoothProgress,[0,.27,.34],[1,1,0]);
+  const canvasOpacity=useTransform(smoothProgress,[0,.27,.34,.65,.75],[0,0,1,1,0]);
+  const skillsImageOpacity=useTransform(smoothProgress,[.65,.75],[0,1]);
+  const skillsImageScale=useTransform(smoothProgress,[.65,.78],[.92,1]);
+  const skillsOpacity=useTransform(smoothProgress,[.45,.52,.62],[0,.5,1]);
+  const skillsY=useTransform(smoothProgress,[.45,.62],[46,0]);
+  const canvasScale=useTransform(smoothProgress,[0,.5,.68,.76],[1,1,.84,.76]);
+  const canvasY=useTransform(smoothProgress,[0,.5,.7,.78],['0%','0%','14%','20%']);
+  const aboutShadeOpacity=useTransform(smoothProgress,[0,.28,.36],[1,.9,0]);
+  const skillsShadeOpacity=useTransform(smoothProgress,[.43,.54,.68],[0,.86,1]);
 
   useEffect(()=>{
     const canvas=canvasRef.current;
@@ -322,21 +326,27 @@ function AboutSkillsScene(){
   return <section ref={sectionRef} id="about" className="relative h-[500vh] bg-white text-[#0C0C0C]">
     <div id="skills" className="pointer-events-none absolute left-0 top-[72%] h-px w-px"/>
     <div className="sticky top-0 h-screen overflow-hidden bg-white">
-      <motion.div aria-hidden="true" style={{scale:canvasScale,y:canvasY}} className="absolute inset-0 origin-center will-change-transform">
+      <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity}} className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center md:object-center"/>
+      <motion.div aria-hidden="true" style={{opacity:canvasOpacity,scale:canvasScale,y:canvasY}} className="absolute inset-0 origin-center will-change-transform">
         <canvas ref={canvasRef} role="img" aria-label="Joji moves from his About workspace into the Skills scene" className={`h-full w-full transition-opacity duration-500 ${framesReady?'opacity-100':'opacity-0'}`}/>
       </motion.div>
-      <motion.div aria-hidden="true" style={{opacity:aboutShadeOpacity}} className="pointer-events-none absolute inset-0 bg-[rgba(255,255,255,.9)] md:bg-[linear-gradient(90deg,rgba(255,255,255,.99)_0%,rgba(255,255,255,.96)_38%,rgba(255,255,255,.72)_53%,rgba(255,255,255,.04)_78%)]"/>
-      <motion.div style={{opacity:aboutOpacity,x:aboutX}} className="absolute inset-0 z-10 mx-auto hidden w-full max-w-[1600px] items-center px-10 py-20 md:flex lg:px-16">
-        <div className="w-full max-w-[760px] lg:max-w-[52%]">
-          <h2 className="mb-10 text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight sm:mb-14 md:mb-16">About me</h2>
-          <SceneAnimatedText progress={smoothProgress} className="max-w-[720px] text-left">{aboutCopy}</SceneAnimatedText>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-[3%] top-[35%] z-[1] flex items-center justify-center px-4 sm:px-8">
+        <motion.div style={{opacity:skillsImageOpacity,scale:skillsImageScale}} className="h-full w-[92vw] overflow-hidden rounded-[28px] bg-white shadow-[0_24px_80px_rgba(12,12,12,.08)] sm:rounded-[38px] md:w-[76vw] md:max-w-[1120px] md:rounded-[48px]">
+          <img src="/assets/skill-falling-boy.png" alt="" loading="eager" className="h-full w-full object-contain"/>
+        </motion.div>
+      </div>
+      <motion.div aria-hidden="true" style={{opacity:aboutShadeOpacity}} className="pointer-events-none absolute inset-y-0 left-0 w-[94%] bg-[rgba(255,255,255,.82)] md:w-[59%] md:bg-[linear-gradient(90deg,rgba(255,255,255,1)_0%,rgba(255,255,255,1)_78%,rgba(255,255,255,0)_100%)]"/>
+      <motion.div style={{opacity:aboutOpacity,x:aboutX}} className="absolute inset-0 z-10 mx-auto hidden w-full max-w-[1600px] items-start px-10 py-[6vh] md:flex lg:px-16">
+        <div className="w-[49%] max-w-[700px]">
+          <h2 className="mb-7 text-[clamp(3.25rem,6.3vw,96px)] font-black uppercase leading-[.84] tracking-tight lg:mb-9">About me</h2>
+          <SceneAnimatedText progress={smoothProgress} className="max-w-[680px] !text-[clamp(.78rem,1vw,1rem)] !leading-[1.6] text-left">{aboutCopy}</SceneAnimatedText>
         </div>
       </motion.div>
       <motion.div style={{opacity:aboutOpacity,y:aboutMobileY}} className="absolute inset-x-0 top-[7vh] z-10 px-5 md:hidden">
         <h2 className="mb-8 text-[3.25rem] font-black uppercase leading-[.82] tracking-tight">About me</h2>
         <SceneAnimatedText progress={smoothProgress} className="!text-[.82rem] !leading-[1.65]">{aboutCopy}</SceneAnimatedText>
       </motion.div>
-      <motion.div aria-hidden="true" style={{opacity:skillsShadeOpacity}} className="pointer-events-none absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-white via-white/95 to-transparent"/>
+      <motion.div aria-hidden="true" style={{opacity:skillsShadeOpacity}} className="pointer-events-none absolute inset-x-0 top-0 h-[44%] bg-gradient-to-b from-white via-white/95 to-transparent"/>
       <motion.div style={{opacity:skillsOpacity,y:skillsY}} className="absolute inset-0 z-20 mx-auto flex w-full max-w-[1500px] flex-col items-center px-5 pt-[7vh] text-center sm:px-8 md:px-10 lg:px-16">
         <h2 className="text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight">Skills</h2>
         <p className="mt-7 w-full max-w-[900px] text-[clamp(.9rem,1.35vw,1.18rem)] font-medium leading-[1.8] sm:mt-9 md:mt-11">{skillCopy}</p>
