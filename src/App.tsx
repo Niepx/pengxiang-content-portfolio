@@ -64,19 +64,51 @@ function InteractiveCharacter(){
       bufferContext.drawImage(video,sourceX,0,sourceWidth,sourceHeight,0,0,width,height);
       const frame=bufferContext.getImageData(0,0,width,height),data=frame.data;
       background.fill(0);let head=0,tail=0;
-      const isBackground=(pixel:number)=>{const i=pixel*4,r=data[i],g=data[i+1],b=data[i+2];return (r+g+b)/3>154&&Math.max(r,g,b)-Math.min(r,g,b)<80};
+      // The character fills the lower corners, so estimate the studio backdrop
+      // from the two clear upper corners only.
+      const samplePixels=[4,width-5];
+      const backdrop=samplePixels.reduce((color,pixel)=>{const i=pixel*4;color[0]+=data[i];color[1]+=data[i+1];color[2]+=data[i+2];return color},[0,0,0]).map(value=>value/samplePixels.length);
+      const backdropLightness=(backdrop[0]+backdrop[1]+backdrop[2])/3;
+      const darkBackdrop=backdropLightness<90;
+      const tolerance=darkBackdrop?26:74;
+      const colorDistance=(r:number,g:number,b:number)=>Math.hypot(r-backdrop[0],g-backdrop[1],b-backdrop[2]);
+      if(darkBackdrop){
+        const hitMask=new Uint8Array(total);
+        for(let pixel=0;pixel<total;pixel++){
+          const i=pixel*4;
+          hitMask[pixel]=colorDistance(data[i],data[i+1],data[i+2])>18?255:0;
+        }
+        outputContext.clearRect(0,0,width,height);outputContext.putImageData(frame,0,0);
+        maskRef.current=hitMask;seeking.current=false;setReady(true);return;
+      }
+      const isBackground=(pixel:number)=>{
+        const i=pixel*4,r=data[i],g=data[i+1],b=data[i+2],chroma=Math.max(r,g,b)-Math.min(r,g,b),lightness=(r+g+b)/3;
+        return darkBackdrop
+          ? lightness<22&&chroma<18
+          : colorDistance(r,g,b)<tolerance&&chroma<92;
+      };
       const enqueue=(pixel:number)=>{if(!background[pixel]&&isBackground(pixel)){background[pixel]=1;queue[tail++]=pixel}};
-      for(let x=0;x<width;x++){enqueue(x);enqueue((height-1)*width+x)}
+      for(let x=0;x<width;x++)enqueue(x)
       for(let y=0;y<height;y++){enqueue(y*width);enqueue(y*width+width-1)}
       while(head<tail){const pixel=queue[head++],x=pixel%width,y=(pixel/width)|0;if(x)enqueue(pixel-1);if(x<width-1)enqueue(pixel+1);if(y)enqueue(pixel-width);if(y<height-1)enqueue(pixel+width)}
       const hitMask=new Uint8Array(total);
       for(let pixel=0;pixel<total;pixel++){
         const i=pixel*4;
-        if(background[pixel]){data[i+3]=0;continue}
+        if(background[pixel]){
+          if(darkBackdrop){data[i]=12;data[i+1]=12;data[i+2]=12;data[i+3]=255}
+          else data[i+3]=0;
+          continue;
+        }
         hitMask[pixel]=255;
         const x=pixel%width,y=(pixel/width)|0;
         const touchesBackground=(x&&background[pixel-1])||(x<width-1&&background[pixel+1])||(y&&background[pixel-width])||(y<height-1&&background[pixel+width]);
-        if(touchesBackground){const mean=(data[i]+data[i+1]+data[i+2])/3;data[i+3]=Math.max(70,Math.min(255,(238-mean)*5))}
+        if(touchesBackground){
+          const distance=colorDistance(data[i],data[i+1],data[i+2]);
+          if(darkBackdrop){
+            const mix=Math.max(0,Math.min(1,(distance-6)/34));
+            data[i]=12+(data[i]-12)*mix;data[i+1]=12+(data[i+1]-12)*mix;data[i+2]=12+(data[i+2]-12)*mix;data[i+3]=255;
+          }else data[i+3]=Math.max(72,Math.min(255,(distance-tolerance*.4)/(.7*tolerance)*255));
+        }
       }
       outputContext.clearRect(0,0,width,height);outputContext.putImageData(frame,0,0);
       maskRef.current=hitMask;seeking.current=false;setReady(true);
@@ -136,11 +168,11 @@ function InteractiveCharacter(){
 
   return <div ref={hostRef} data-direction={direction} className={`hero-character relative aspect-[5/6] w-full transition-[opacity,filter] duration-700 ${ready?'opacity-100 blur-0':'opacity-0 blur-md'}`} role="img" aria-label={`Joji IP character looking ${direction}`}>
     <canvas ref={canvasRef} width="480" height="576" className="relative h-full w-full select-none object-contain"/>
-    <video ref={videoRef} src="/assets/joji-ip-expression.mp4" muted playsInline preload="auto" className="hidden" aria-hidden="true"/>
+    <video ref={videoRef} src="/assets/joji-ip-expression-v2.mp4" muted playsInline preload="auto" className="hidden" aria-hidden="true"/>
   </div>
 }
 
-function HeroSection(){return <section className="relative flex h-screen min-h-[620px] flex-col overflow-x-clip px-6 md:px-10">
+function HeroSection(){return <section className="relative flex h-screen min-h-[620px] flex-col overflow-x-clip bg-black px-6 md:px-10">
   <FadeIn as="nav" y={-20} className="z-30 flex justify-between pt-6 text-sm font-medium uppercase tracking-wider md:pt-8 md:text-lg lg:text-[1.4rem]">{[{label:'About',href:'#about'},{label:'Projects',href:'#projects'},{label:'Experience',href:'#services'},{label:'Contact',href:'#contact'}].map(({label,href})=><a key={label} className="transition-opacity duration-200 hover:opacity-70" href={href}>{label}</a>)}</FadeIn>
   <div className="overflow-hidden"><FadeIn id="hero-title" as="h1" delay={.15} y={40} className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[14vw] font-black uppercase leading-none tracking-tight sm:mt-4 sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]">Hi, i&apos;m joji</FadeIn></div>
   <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="pointer-events-auto w-[270px] sm:w-[340px] md:w-[420px] lg:w-[480px]"><InteractiveCharacter/></FadeIn></div>
