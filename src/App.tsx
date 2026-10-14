@@ -250,23 +250,27 @@ function AboutSkillsScene(){
   const animationFrameRef=useRef<number>();
   const [framesReady,setFramesReady]=useState(false);
   const {scrollYProgress}=useScroll({target:sectionRef,offset:['start start','end end']});
-  const smoothProgress=useSpring(scrollYProgress,{stiffness:135,damping:28,mass:.22});
-  const aboutOpacity=useTransform(smoothProgress,[0,.27,.32,.39],[1,1,.45,0]);
-  const aboutX=useTransform(smoothProgress,[0,.28,.39],['0%','0%','-10%']);
-  const aboutMobileY=useTransform(smoothProgress,[0,.2,.3,.39],[0,-330,-470,-540]);
-  const aboutImageOpacity=useTransform(smoothProgress,[0,.27,.34],[1,1,0]);
+  const smoothProgress=useSpring(scrollYProgress,{stiffness:78,damping:24,mass:.36});
+  const aboutOpacity=useTransform(smoothProgress,[0,.2,.27,.34],[1,1,.45,0]);
+  const aboutX=useTransform(smoothProgress,[0,.22,.34],['0%','0%','-10%']);
+  const aboutMobileY=useTransform(smoothProgress,[0,.15,.25,.34],[0,-330,-470,-540]);
+  const aboutImageOpacity=useTransform(smoothProgress,[0,.2,.3],[1,1,0]);
   // Let the sequence finish at full size, crossfade to the matching HD still,
   // then create the final Skills composition by shrinking the still itself.
-  const canvasOpacity=useTransform(smoothProgress,[0,.27,.34,.6099,.61],[0,0,1,1,0]);
-  const skillsImageOpacity=useTransform(smoothProgress,[.6099,.61],[0,1]);
-  const skillsImageScale=useTransform(smoothProgress,[.61,.64,.78],[1,1,.76]);
-  const skillsImageY=useTransform(smoothProgress,[.61,.64,.78],['0%','0%','21%']);
-  const skillsImageRadius=useTransform(smoothProgress,[.61,.64,.78],[0,24,48]);
-  const skillsOpacity=useTransform(smoothProgress,[.45,.52,.62],[0,.5,1]);
-  const skillsY=useTransform(smoothProgress,[.45,.62],[46,0]);
-  const canvasScale=useTransform(smoothProgress,[0,.61],[1,1]);
-  const canvasY=useTransform(smoothProgress,[0,.61],['0%','0%']);
-  const canvasRadius=useTransform(smoothProgress,[0,.61],[0,0]);
+  const canvasOpacity=useTransform(smoothProgress,[0,.2,.29,.6799,.68],[0,0,1,1,0]);
+  const skillsImageOpacity=useTransform(smoothProgress,[.6799,.68],[0,1]);
+  const skillsImageTop=useTransform(smoothProgress,[.68,.72,.88],['0vh','0vh','34vh']);
+  const skillsImageBottom=useTransform(smoothProgress,[.68,.72,.88],['0vh','0vh','4vh']);
+  const skillsImageInset=useTransform(smoothProgress,[.68,.72,.88],['0vw','0vw','9vw']);
+  const skillsImageRadius=useTransform(smoothProgress,[.68,.72,.88],[0,24,48]);
+  const skillsOpacity=useTransform(smoothProgress,[.46,.54,.68,.91,.985],[0,.5,1,1,0]);
+  const skillsY=useTransform(smoothProgress,[.46,.68,.91,.985],[46,0,0,-44]);
+  const canvasScale=useTransform(smoothProgress,[0,.68],[1,1]);
+  const canvasY=useTransform(smoothProgress,[0,.68],['0%','0%']);
+  const canvasRadius=useTransform(smoothProgress,[0,.68],[0,0]);
+  const sceneScale=useTransform(smoothProgress,[0,.9,1],[1,1,.94]);
+  const sceneY=useTransform(smoothProgress,[0,.9,1],['0%','0%','-3%']);
+  const sceneRadius=useTransform(smoothProgress,[0,.9,1],[0,0,60]);
 
   useEffect(()=>{
     const canvas=canvasRef.current;
@@ -288,7 +292,7 @@ function AboutSkillsScene(){
     });
     framesRef.current=frames;
     const draw=(progress:number,force=false)=>{
-      const frameProgress=Math.max(0,Math.min(1,(progress-.27)/.31));
+      const frameProgress=Math.max(0,Math.min(1,(progress-.2)/.48));
       const targetFrame=Math.round(frameProgress*(frames.length-1));
       const isMobile=canvas.clientWidth<640;
       if(!force&&targetFrame===frameRef.current&&!(isMobile&&progress>.58))return;
@@ -320,20 +324,20 @@ function AboutSkillsScene(){
     return()=>{cancelled=true;window.removeEventListener('resize',resize);frames.forEach(image=>{image.onload=null});if(animationFrameRef.current)cancelAnimationFrame(animationFrameRef.current)}
   },[]);
 
-  useMotionValueEvent(scrollYProgress,'change',progress=>{
+  useMotionValueEvent(smoothProgress,'change',progress=>{
     progressRef.current=progress;
     if(animationFrameRef.current)cancelAnimationFrame(animationFrameRef.current);
     animationFrameRef.current=requestAnimationFrame(()=>drawRef.current(progress));
   });
 
-  return <section ref={sectionRef} id="about" className="relative h-[500vh] bg-white text-[#0C0C0C]">
+  return <section ref={sectionRef} id="about" className="relative h-[500vh] bg-[#0C0C0C] text-[#0C0C0C]">
     <div id="skills" className="pointer-events-none absolute left-0 top-[72%] h-px w-px"/>
-    <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#F3F3F0]">
+    <motion.div style={{scale:sceneScale,y:sceneY,borderRadius:sceneRadius}} className="sticky top-0 h-[100svh] overflow-hidden bg-[#F3F3F0] will-change-transform">
       <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity}} className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] w-full object-contain object-bottom md:inset-0 md:h-full md:object-cover md:object-center"/>
       <motion.div aria-hidden="true" style={{opacity:canvasOpacity,scale:canvasScale,y:canvasY,borderRadius:canvasRadius}} className="absolute inset-0 origin-center overflow-hidden bg-white will-change-transform">
         <canvas ref={canvasRef} role="img" aria-label="Joji moves from his About workspace into the Skills scene" className={`h-full w-full transition-opacity duration-500 ${framesReady?'opacity-100':'opacity-0'}`}/>
       </motion.div>
-      <motion.div aria-hidden="true" style={{opacity:skillsImageOpacity,scale:skillsImageScale,y:skillsImageY,borderRadius:skillsImageRadius}} className="pointer-events-none absolute inset-0 z-[1] origin-center overflow-hidden bg-white shadow-[0_28px_90px_rgba(25,20,14,0.08)] will-change-transform">
+      <motion.div aria-hidden="true" style={{opacity:skillsImageOpacity,top:skillsImageTop,bottom:skillsImageBottom,left:skillsImageInset,right:skillsImageInset,borderRadius:skillsImageRadius}} className="pointer-events-none absolute z-[1] overflow-hidden bg-white shadow-[0_28px_90px_rgba(25,20,14,0.08)] will-change-[top,bottom,left,right,border-radius]">
         <img src="/assets/skill-falling-boy.png" alt="" loading="eager" className="h-full w-full object-contain"/>
       </motion.div>
       <motion.div style={{opacity:aboutOpacity,x:aboutX}} className="absolute inset-0 z-10 mx-auto hidden w-full max-w-[1600px] items-start px-10 py-[6vh] md:flex lg:px-16">
@@ -352,7 +356,7 @@ function AboutSkillsScene(){
         <h2 className="text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight">Skills</h2>
         <p className="mt-7 w-full max-w-[820px] text-[clamp(1rem,1.15vw,1.16rem)] font-medium leading-[1.55] [text-wrap:pretty] sm:mt-9 md:mt-11">{skillCopy}</p>
       </motion.div>
-    </div>
+    </motion.div>
   </section>
 }
 
