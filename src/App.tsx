@@ -236,7 +236,10 @@ const aboutCopy=`我是聂鹏翔，我有 4 年新媒体与内容相关工作经
 
 与此同时，我也保持对 AI 工具在实际创作中的应用，包括现在这个个人作品集网站，也是在 AI 辅助下完成视觉构思、页面结构与交互实现，并持续迭代。`;
 
-const skillCopy='我习惯把 AI 工具融入完整的内容生产流程，从灵感梳理、文案与脚本，到视觉生成、视频剪辑、页面搭建和内容发布。会根据不同任务组合 ChatGPT、Gemini、Canva、剪映、Codex 等工具，提高内容制作效率，并持续尝试将 AI 应用到新媒体、产品内容和个人创作中。';
+const skillCopyLines = [
+  '我习惯把 AI 工具融入完整的内容生产流程，从灵感梳理、文案与脚本，到视觉生成、视频剪辑、页面搭建和内容发布。会根据不同任务组合',
+  'ChatGPT、Gemini、Canva、剪映、Codex 等工具，提高内容制作效率，并持续尝试将 AI 应用到新媒体、产品内容和个人创作中。',
+];
 
 const skillFramePaths=Array.from({length:54},(_,index)=>`/assets/skill-sequence/frame-${String(index).padStart(3,'0')}.jpg`);
 
@@ -354,7 +357,13 @@ function AboutSkillsScene(){
       </motion.div>
       <motion.div style={{opacity:skillsOpacity,y:skillsY}} className="absolute inset-0 z-20 mx-auto flex w-full max-w-[1500px] flex-col items-center px-5 pt-[7vh] text-center sm:px-8 md:px-10 lg:px-16">
         <h2 className="text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight">Skills</h2>
-        <p className="mt-7 w-full max-w-[820px] text-[clamp(1rem,1.15vw,1.16rem)] font-medium leading-[1.55] [text-wrap:pretty] sm:mt-9 md:mt-11">{skillCopy}</p>
+        <p className="mt-7 w-full max-w-[1280px] text-[clamp(.95rem,1.05vw,1.08rem)] font-medium leading-[1.55] [text-wrap:pretty] sm:mt-9 md:mt-11">
+          {skillCopyLines.map((line, index) => (
+            <span key={line} className="xl:block xl:whitespace-nowrap">
+              {line}{index === 0 ? ' ' : ''}
+            </span>
+          ))}
+        </p>
       </motion.div>
     </motion.div>
   </section>
