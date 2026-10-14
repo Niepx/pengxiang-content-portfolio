@@ -252,6 +252,33 @@ function AboutSection(){
   </section>
 }
 
+const skillCopy='我习惯把 AI 工具融入完整的内容生产流程，从灵感梳理、文案与脚本，到视觉生成、视频剪辑、页面搭建和内容发布。会根据不同任务组合 ChatGPT、Gemini、Canva、剪映、Codex 等工具，提高内容制作效率，并持续尝试将 AI 应用到新媒体、产品内容和个人创作中。';
+
+function SkillsSection(){
+  const sectionRef=useRef<HTMLElement>(null);
+  const {scrollYProgress}=useScroll({target:sectionRef,offset:['start end','end start']});
+  const sceneY=useTransform(scrollYProgress,[0,.18,.4,.76,1],['-38%','-14%','8%','11%','14%']);
+  const sceneScale=useTransform(scrollYProgress,[0,.2,.45,1],[.78,.9,1,1.035]);
+  const sceneRotate=useTransform(scrollYProgress,[0,.16,.34,.55,1],[-6,2.5,-1,0,.5]);
+  const sceneOpacity=useTransform(scrollYProgress,[0,.08,.25],[0,.62,1]);
+  const titleY=useTransform(scrollYProgress,[.08,.28],[70,0]);
+  const titleOpacity=useTransform(scrollYProgress,[.08,.24],[0,1]);
+  const copyY=useTransform(scrollYProgress,[.18,.4],[50,0]);
+  const copyOpacity=useTransform(scrollYProgress,[.2,.42],[0,1]);
+  return <section ref={sectionRef} id="skills" className="relative h-[185vh] bg-[#f8f8f6] text-[#0C0C0C]">
+    <div className="sticky top-0 h-screen overflow-hidden bg-[#f8f8f6]">
+      <motion.img src="/assets/skill-falling-boy.png" alt="Joji surrounded by creative and AI tools" loading="lazy" style={{y:sceneY,scale:sceneScale,rotate:sceneRotate,opacity:sceneOpacity}} className="absolute inset-y-0 -left-[12.5%] h-full w-[125%] origin-center object-contain object-[center_68%] will-change-transform md:inset-0 md:w-full md:object-cover md:object-[center_58%]"/>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[48%] bg-gradient-to-b from-[#f8f8f6] via-[#f8f8f6]/90 to-transparent md:h-[43%]"/>
+      <div className="relative z-10 mx-auto h-full w-full max-w-[1600px] px-5 sm:px-8 md:px-10 lg:px-16">
+        <motion.h2 style={{y:titleY,opacity:titleOpacity}} className="absolute inset-x-5 top-[6%] text-center text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight sm:inset-x-8 md:inset-x-10 lg:inset-x-16">Skills</motion.h2>
+        <div className="absolute inset-x-5 top-[21%] flex justify-center sm:inset-x-8 md:inset-x-10 md:top-[22%] lg:inset-x-16">
+          <motion.p style={{y:copyY,opacity:copyOpacity}} className="w-full max-w-[860px] text-center text-[clamp(.88rem,1.35vw,1.18rem)] font-medium leading-[1.75]">{skillCopy}</motion.p>
+        </div>
+      </div>
+    </div>
+  </section>
+}
+
 const services=[['3D Modeling','Creation of detailed objects, characters, or environments tailored to specific client needs, ideal for games, products, and visualizations.'],['Rendering','High-quality, photorealistic renders that showcase designs with custom lighting, textures, and materials to bring concepts to life.'],['Motion Design','Dynamic animations and motion graphics that add energy and storytelling to brands, products, and digital experiences.'],['Branding','Crafting cohesive visual identities — from logos to full brand systems — that communicate a clear and memorable presence.'],['Web Design','Designing clean, modern, and conversion-focused websites with attention to layout, typography, and user experience.']];
 function ServicesSection(){return <section id="services" className="relative rounded-t-[40px] bg-white px-5 py-20 text-[#0C0C0C] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32"><FadeIn as="h2" className="mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-28">Services</FadeIn><div className="mx-auto max-w-5xl border-t border-black/15">{services.map(([name,description],i)=><FadeIn key={name} delay={i*.1} className="grid grid-cols-[70px_1fr] gap-4 border-b border-black/15 py-8 sm:grid-cols-[150px_1fr] sm:gap-8 sm:py-10 md:grid-cols-[230px_1fr] md:py-12"><div className="text-[clamp(3rem,10vw,140px)] font-black leading-[.8]">{String(i+1).padStart(2,'0')}</div><div className="pt-1 sm:pt-3"><h3 className="text-[clamp(1rem,2.2vw,2.1rem)] font-medium uppercase">{name}</h3><p className="mt-3 max-w-2xl text-[clamp(.85rem,1.6vw,1.25rem)] font-light leading-relaxed opacity-60">{description}</p></div></FadeIn>)}</div></section>}
 
@@ -263,4 +290,4 @@ const projects=[
 function ProjectCard({project,index}:{project:typeof projects[number];index:number}){const ref=useRef<HTMLDivElement>(null);const {scrollYProgress}=useScroll({target:ref,offset:['start end','end start']});const scale=useTransform(scrollYProgress,[0,.8],[1,1-(projects.length-1-index)*.03]);return <div ref={ref} className="relative h-[85vh] min-h-[640px]"><motion.article style={{scale,top:`calc(6rem + ${index*28}px)`}} className="sticky flex max-h-[760px] min-h-[600px] flex-col rounded-[40px] border-2 border-[#D7E2EA] bg-[#0C0C0C] p-4 sm:rounded-[50px] sm:p-6 md:top-32 md:rounded-[60px] md:p-8"><div className="mb-5 grid grid-cols-[auto_1fr_auto] items-center gap-4 sm:mb-7 md:grid-cols-[auto_1fr_1.5fr_auto]"><span className="text-[clamp(3rem,8vw,110px)] font-black leading-none">{String(index+1).padStart(2,'0')}</span><span className="text-xs font-light uppercase tracking-widest opacity-60 sm:text-sm">{project.category}</span><h3 className="col-span-2 text-xl font-medium uppercase sm:col-span-1 sm:text-3xl md:text-4xl">{project.name}</h3><LiveProjectButton/></div><div className="grid min-h-0 flex-1 grid-cols-[40%_60%] gap-2 sm:gap-3"><div className="grid min-h-0 grid-rows-[42%_58%] gap-2 sm:gap-3"><img src={project.images[0]} alt={`${project.name} detail one`} loading="lazy" className="h-full min-h-0 w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[50px]"/><img src={project.images[1]} alt={`${project.name} detail two`} loading="lazy" className="h-full min-h-0 w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[50px]"/></div><img src={project.images[2]} alt={`${project.name} hero`} loading="lazy" className="h-full min-h-0 w-full rounded-[26px] object-cover sm:rounded-[40px] md:rounded-[50px]"/></div></motion.article></div>}
 function ProjectsSection(){return <section id="projects" className="relative z-10 -mt-10 rounded-t-[40px] bg-[#0C0C0C] px-3 pb-16 pt-20 sm:-mt-12 sm:rounded-t-[50px] sm:px-6 sm:pt-24 md:-mt-14 md:rounded-t-[60px] md:px-10 md:pb-24 md:pt-32"><FadeIn as="h2" className="hero-heading mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-28">Project</FadeIn><div className="mx-auto max-w-[1500px]">{projects.map((p,i)=><ProjectCard key={p.name} project={p} index={i}/>)}</div><footer id="contact" className="flex flex-col items-center gap-8 pt-16 text-center"><p className="hero-heading text-[clamp(2.5rem,8vw,110px)] font-black uppercase leading-none">Have a wild idea?</p><ContactButton/><p className="mt-10 text-xs font-light uppercase tracking-[.3em] opacity-50">© 2026 Pengxiang studio</p></footer></section>}
 
-export default function App(){return <main className="overflow-x-clip bg-[#0C0C0C]"><HeroSection/><AboutSection/><ServicesSection/><ProjectsSection/></main>}
+export default function App(){return <main className="overflow-x-clip bg-[#0C0C0C]"><HeroSection/><AboutSection/><SkillsSection/><ServicesSection/><ProjectsSection/></main>}
