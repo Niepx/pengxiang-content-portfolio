@@ -3,3 +3,4 @@ dist/
 work/
 *.tsbuildinfo
 .DS_Store
+.vercel
