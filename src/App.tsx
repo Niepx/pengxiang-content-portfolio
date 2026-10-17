@@ -3,6 +3,8 @@ import { ArrowUpRight } from 'lucide-react';
 import { motion, MotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import ProjectsSection from './projects/ProjectsSection';
 
+const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+
 type FadeProps = { children: ReactNode; delay?: number; duration?: number; x?: number; y?: number; as?: ElementType; className?: string; id?: string };
 function FadeIn({ children, delay=0, duration=.7, x=0, y=30, as='div', className, id }: FadeProps) {
   const El = motion.create(as);
@@ -210,7 +212,7 @@ function InteractiveCharacter(){
 
   return <div ref={hostRef} data-direction={direction} className={`hero-character relative aspect-[5/6] w-full transition-[opacity,filter] duration-700 ${ready?'opacity-100 blur-0':'opacity-0 blur-md'}`} role="img" aria-label={`Joji IP character looking ${direction}`}>
     <canvas ref={canvasRef} width="480" height="576" className="relative h-full w-full select-none object-contain"/>
-    <video ref={videoRef} src="/assets/joji-ip-expression-v2.mp4" muted playsInline preload="auto" className="hidden" aria-hidden="true"/>
+    <video ref={videoRef} src={publicAsset('assets/joji-ip-expression-v2.mp4')} muted playsInline preload="auto" className="hidden" aria-hidden="true"/>
   </div>
 }
 
@@ -241,7 +243,7 @@ const skillCopyLines = [
   'ChatGPT、Gemini、Canva、剪映、Codex 等工具，提高内容制作效率，并持续尝试将 AI 应用到新媒体、产品内容和个人创作中。',
 ];
 
-const skillFramePaths=Array.from({length:54},(_,index)=>`/assets/skill-sequence/frame-${String(index).padStart(3,'0')}.jpg`);
+const skillFramePaths=Array.from({length:54},(_,index)=>publicAsset(`assets/skill-sequence/frame-${String(index).padStart(3,'0')}.jpg`));
 
 function AboutSkillsScene(){
   const sectionRef=useRef<HTMLElement>(null);
@@ -341,12 +343,12 @@ function AboutSkillsScene(){
   return <section ref={sectionRef} id="about" className="relative h-[500vh] bg-[#0C0C0C] text-[#0C0C0C]">
     <div id="skills" className="pointer-events-none absolute left-0 top-[72%] h-px w-px"/>
     <motion.div style={{scale:sceneScale,y:sceneY,borderRadius:sceneRadius}} className="sticky top-0 h-[100svh] overflow-hidden bg-[#F3F3F0] will-change-transform">
-      <motion.img src="/assets/about-angry-laptop-boy.png" alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity,x:aboutImageX,y:aboutImageY,scale:aboutImageScale,filter:aboutImageFilter,transformOrigin:'72% 68%'}} className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] w-full object-contain object-bottom will-change-[transform,opacity,filter] md:inset-0 md:h-full md:object-cover md:object-center"/>
+      <motion.img src={publicAsset('assets/about-angry-laptop-boy.png')} alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity,x:aboutImageX,y:aboutImageY,scale:aboutImageScale,filter:aboutImageFilter,transformOrigin:'72% 68%'}} className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] w-full object-contain object-bottom will-change-[transform,opacity,filter] md:inset-0 md:h-full md:object-cover md:object-center"/>
       <motion.div aria-hidden="true" style={{opacity:canvasOpacity,scale:canvasScale,y:canvasY,borderRadius:canvasRadius}} className="absolute inset-0 origin-center overflow-hidden bg-white will-change-transform">
         <canvas ref={canvasRef} role="img" aria-label="Joji moves from his About workspace into the Skills scene" className={`h-full w-full transition-opacity duration-500 ${framesReady?'opacity-100':'opacity-0'}`}/>
       </motion.div>
       <motion.div aria-hidden="true" style={{opacity:skillsImageOpacity,top:skillsImageTop,bottom:skillsImageBottom,left:skillsImageInset,right:skillsImageInset,borderRadius:skillsImageRadius}} className="pointer-events-none absolute z-[1] overflow-hidden bg-white shadow-[0_28px_90px_rgba(25,20,14,0.08)] will-change-[top,bottom,left,right,border-radius]">
-        <img src="/assets/skill-falling-boy.png" alt="" loading="eager" className="h-full w-full object-contain"/>
+        <img src={publicAsset('assets/skill-falling-boy.png')} alt="" loading="eager" className="h-full w-full object-contain"/>
       </motion.div>
       <motion.div style={{opacity:aboutOpacity,x:aboutX}} className="absolute inset-0 z-10 mx-auto hidden w-full max-w-[1600px] items-start px-10 py-[6vh] md:flex lg:px-16">
         <div className="w-[49%] max-w-[700px]">
