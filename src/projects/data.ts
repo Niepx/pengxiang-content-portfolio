@@ -81,6 +81,8 @@ export const projects: PortfolioProject[] = [
       { id: 'ppt', title: '演示 PPT', type: '商务展示', kind: 'image' },
       { id: 'leaflet', title: '宣传折页', type: '平面物料', kind: 'image' },
       { id: 'feature-video', title: '产品功能展示', type: 'FEATURE', kind: 'video' },
+      { id: 'concept-exploded-view', title: '产品结构视觉化示意', type: 'CONCEPT EXPLODED VIEW', kind: 'image' },
+      { id: 'visual-reconstruction-long', title: '小喜财 Pro 产品内容视觉重构', type: 'PORTFOLIO RECONSTRUCTION · 2026', kind: 'image' },
       { id: 'how-to-video', title: '激活 / 配网 / 终端配置', type: 'HOW TO', kind: 'video' },
       { id: 'maker-design', title: '机器人的外观设计', type: 'MAKER', kind: 'video' },
       { id: 'maker-print', title: '怎么 3D 打印机器人', type: 'MAKER', kind: 'video' },

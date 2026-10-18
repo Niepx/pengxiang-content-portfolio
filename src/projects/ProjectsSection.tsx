@@ -10,13 +10,21 @@ import './case-variants.css';
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-function placeholder() {
+function placeholder(item?: MediaItem) {
+  if (item?.id === 'concept-exploded-view') {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900"><rect width="1600" height="900" fill="#f4f7f8"/><rect x="28" y="28" width="1544" height="844" rx="22" fill="none" stroke="#c5cfd5" stroke-width="2" stroke-dasharray="14 12"/><path d="M260 450h250m580 0h250M800 130v180m0 280v180" stroke="#b8c5cc" stroke-width="2"/><circle cx="800" cy="450" r="142" fill="#e3eaee" stroke="#9cacb5" stroke-width="2"/><circle cx="800" cy="450" r="70" fill="none" stroke="#9cacb5" stroke-width="2"/><text x="800" y="422" text-anchor="middle" fill="#223039" font-family="Arial,sans-serif" font-size="34" font-weight="700">CONCEPT EXPLODED VIEW</text><text x="800" y="474" text-anchor="middle" fill="#647680" font-family="Arial,sans-serif" font-size="24" letter-spacing="4">IMAGE PLACEHOLDER</text><text x="800" y="520" text-anchor="middle" fill="#8999a2" font-family="Arial,sans-serif" font-size="20">1672 × 941</text></svg>`;
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  }
+  if (item?.id === 'visual-reconstruction-long') {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 2000"><rect width="800" height="2000" fill="#f8fafb"/><rect x="26" y="26" width="748" height="1948" rx="18" fill="none" stroke="#c8d1d6" stroke-width="2" stroke-dasharray="14 12"/><text x="70" y="116" fill="#1d2930" font-family="Arial,sans-serif" font-size="34" font-weight="700">VISUAL RECONSTRUCTION</text><text x="70" y="164" fill="#71818a" font-family="Arial,sans-serif" font-size="22" letter-spacing="4">LONG IMAGE PLACEHOLDER</text><g fill="#e5ecef" stroke="#bdc9cf" stroke-width="2"><rect x="70" y="250" width="660" height="360" rx="14"/><rect x="70" y="680" width="660" height="260" rx="14"/><rect x="70" y="1010" width="660" height="360" rx="14"/><rect x="70" y="1440" width="660" height="400" rx="14"/></g><g fill="#71818a" font-family="Arial,sans-serif" font-size="24" font-weight="700"><text x="100" y="310">PRODUCT HERO</text><text x="100" y="740">FEATURES</text><text x="100" y="1070">STRUCTURE</text><text x="100" y="1500">USE CASES</text></g><text x="400" y="1918" text-anchor="middle" fill="#8999a2" font-family="Arial,sans-serif" font-size="20">793 × 1983 · ASSET TO BE REPLACED</text></svg>`;
+    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+  }
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760"><rect width="1200" height="760" fill="#171b1f"/><path d="M0 190H1200M0 570H1200M220 0V760M980 0V760" stroke="#63707a" stroke-opacity=".22"/><circle cx="600" cy="380" r="190" fill="#283139"/><circle cx="600" cy="380" r="146" fill="none" stroke="#98a7b1" stroke-opacity=".3"/><circle cx="600" cy="380" r="54" fill="none" stroke="#98a7b1" stroke-opacity=".22"/><path d="M525 380h150M600 305v150" stroke="#98a7b1" stroke-opacity=".38"/></svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
 const getMedia = (project: PortfolioProject, id: string) => project.media.find(item => item.id === id)!;
-const mediaPoster = (item: MediaItem) => item.poster || item.src && item.kind === 'image' && item.src || placeholder();
+const mediaPoster = (item: MediaItem) => item.poster || item.src && item.kind === 'image' && item.src || placeholder(item);
 
 function useScrollLock(active: boolean) {
   useEffect(() => {
@@ -93,6 +101,7 @@ function Lightbox({ items, activeId, setActiveId, onClose }: { items: MediaItem[
   const reduceMotion = useReducedMotion();
   const index = items.findIndex(item => item.id === activeId);
   const current = items[index];
+  const isLongImage = current?.id === 'visual-reconstruction-long';
   const navigate = (step: number) => { if (items.length) setActiveId(items[(index + step + items.length) % items.length].id); };
   useEffect(() => {
     if (!activeId) return;
@@ -105,14 +114,14 @@ function Lightbox({ items, activeId, setActiveId, onClose }: { items: MediaItem[
     return () => window.removeEventListener('keydown', keydown);
   }, [activeId, index, items]);
   if (!activeId || !current) return null;
-  return createPortal(<div className="project-lightbox" role="dialog" aria-modal="true" aria-label="作品查看器" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
-    <div className="project-lightbox__top"><span>{String(index + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}</span><button type="button" onClick={onClose} aria-label="关闭作品查看器"><X /></button></div>
-    <button type="button" className="project-lightbox__arrow" onClick={() => navigate(-1)} aria-label="上一张"><ArrowLeft /></button>
+  return createPortal(<div className={`project-lightbox ${isLongImage ? 'project-lightbox--long' : ''}`} role="dialog" aria-modal="true" aria-label={isLongImage ? 'VISUAL RECONSTRUCTION 完整长图' : '作品查看器'} onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
+    <div className="project-lightbox__top"><span>{isLongImage ? 'VISUAL RECONSTRUCTION' : `${String(index + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`}</span><button type="button" onClick={onClose} aria-label="关闭作品查看器"><X /></button></div>
+    {!isLongImage && <button type="button" className="project-lightbox__arrow" onClick={() => navigate(-1)} aria-label="上一张"><ArrowLeft /></button>}
     <AnimatePresence mode="wait"><motion.div key={current.id} className="project-lightbox__content" initial={reduceMotion ? false : { opacity: 0, scale: .985 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduceMotion ? 0 : .36, ease }}>
       {current.kind === 'video' && current.src ? <video src={current.src} poster={current.poster} controls autoPlay playsInline /> : <img src={mediaPoster(current)} alt={current.title} />}
       <div><strong>{current.title}</strong><span>{current.type}{current.src ? '' : ' · 素材待替换'}</span></div>
     </motion.div></AnimatePresence>
-    <button type="button" className="project-lightbox__arrow" onClick={() => navigate(1)} aria-label="下一张"><ArrowRight /></button>
+    {!isLongImage && <button type="button" className="project-lightbox__arrow" onClick={() => navigate(1)} aria-label="下一张"><ArrowRight /></button>}
   </div>, document.body);
 }
 
@@ -177,7 +186,7 @@ function CaseStudyOverlay({ project, onClose, onOpenMedia }: { project: Portfoli
   const renderMedia = (id: string, className = '', autoPreview = false) => <MediaTile item={getMedia(project, id)} onOpen={onOpenMedia} className={className} autoPreview={autoPreview} />;
   return createPortal(<div ref={overlayRef} tabIndex={-1} className={`case-overlay ${project.caseType === 'personal' ? 'case-overlay--personal' : ''}`} role="dialog" aria-modal="true" aria-label={`${project.title} 项目详情`}>
     <header className="case-overlay__bar"><button type="button" onClick={onClose}><ArrowLeft size={19} /> BACK TO PROJECTS</button><button type="button" onClick={onClose} aria-label="关闭项目详情"><X size={24} /></button></header>
-    {project.caseType === 'robot' ? <RobotCase project={project} renderMedia={renderMedia} /> : project.caseType === 'hardware' ? <HardwareCase project={project} renderMedia={renderMedia} /> : <PersonalCase project={project} renderMedia={renderMedia} />}
+    {project.caseType === 'robot' ? <RobotCase project={project} renderMedia={renderMedia} openMedia={(id, trigger) => onOpenMedia(getMedia(project, id), trigger)} /> : project.caseType === 'hardware' ? <HardwareCase project={project} renderMedia={renderMedia} /> : <PersonalCase project={project} renderMedia={renderMedia} />}
     <footer className="case-overlay__footer">{project.title} <span>{project.company ? `${project.company} · ` : ''}{project.year}</span></footer>
   </div>, document.body);
 }

@@ -4,7 +4,7 @@ import { PortfolioProject } from './data';
 import './robot-case.css';
 
 type RenderMedia = (id: string, className?: string, autoPreview?: boolean) => ReactNode;
-type RobotCaseProps = { project: PortfolioProject; renderMedia: RenderMedia };
+type RobotCaseProps = { project: PortfolioProject; renderMedia: RenderMedia; openMedia: (id: string, trigger: HTMLElement) => void };
 
 const ease = [0.16, 1, 0.3, 1] as const;
 const chapters = [
@@ -13,8 +13,17 @@ const chapters = [
   ['robot-system', 'CONTENT SYSTEM'],
   ['robot-maker', 'MAKER SERIES'],
   ['robot-launch', 'LAUNCH FILM'],
+  ['robot-visual', 'VISUAL RECONSTRUCTION'],
   ['robot-other', 'OTHER CONTENT'],
 ] as const;
+
+function RobotOutline({ className = '' }: { className?: string }) {
+  return <svg className={className} viewBox="0 0 260 260" fill="none" aria-hidden="true">
+    <path d="M78 42h104l25 24v59l-25 22H78l-25-22V66L78 42Z" />
+    <path d="M91 42V20m78 22V20M79 81h102v43H79zM107 101h.1m46 0h.1" />
+    <path d="M88 147h84l20 24v45H68v-45l20-24Zm-9 69-19 25m121-25 19 25M86 216v24m88-24v24" />
+  </svg>;
+}
 
 function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   const reduceMotion = useReducedMotion();
@@ -47,11 +56,15 @@ function ProductSection({ project, renderMedia, onEnter }: RobotCaseProps & { on
   return <motion.section id="robot-product" className="robot-section robot-product case-container" onViewportEnter={onEnter} viewport={{ amount: .18 }}>
     <RobotHeading index="01" title="THE PRODUCT" statement={<>XIAOXICAI PRO</>} />
     <div className="robot-product__layout">
-      <div className="robot-product__visual">{renderMedia('product')}</div>
       <div className="robot-product__capabilities">
         {data.productCapabilities.map((item, index) => <button key={item.title} type="button" className={active === index ? 'is-active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)} aria-pressed={active === index}>
           <span>{item.number}</span><strong>{item.title}</strong><small>{item.chinese}</small><p>{item.description}</p>
         </button>)}
+      </div>
+      <div className={`robot-product__visual robot-product__visual--${active}`}>
+        <div className="robot-product__visual-head"><span>PORTFOLIO RECONSTRUCTION · 2026</span><strong>CONCEPT EXPLODED VIEW</strong><small>产品结构视觉化示意</small></div>
+        {renderMedia('concept-exploded-view', 'robot-product__board')}
+        <RobotOutline className="robot-outline robot-outline--product" />
       </div>
     </div>
   </motion.section>;
@@ -109,24 +122,50 @@ function LaunchFilm({ project, renderMedia, onEnter }: RobotCaseProps & { onEnte
   </motion.section>;
 }
 
+function VisualReconstruction({ project, renderMedia, openMedia, onEnter }: RobotCaseProps & { onEnter: () => void }) {
+  return <motion.section id="robot-visual" className="robot-section robot-visual" onViewportEnter={onEnter} viewport={{ amount: .16 }}>
+    <div className="case-container">
+      <RobotHeading index="06" title="VISUAL RECONSTRUCTION" statement={<>PRODUCT CONTENT<br />REIMAGINED.</>} />
+      <div className="robot-visual__copy">
+        <h3>产品内容视觉重构</h3>
+        <p>基于过往产品内容经验，重新整理小喜财 Pro 的产品卖点、功能结构与应用场景，并尝试以更适合当前作品集的视觉方式重新呈现。</p>
+        <p>该部分为作品集重新整理与视觉重构，不是当年公司的原始详情页物料。</p>
+      </div>
+      <div className="robot-visual__layout">
+        <div className="robot-visual__lead">
+          {renderMedia('visual-reconstruction-long', 'robot-visual__preview')}
+          <p>PORTFOLIO RECONSTRUCTION · 2026</p>
+          <small>基于过往工作内容重新整理与视觉呈现。</small>
+        </div>
+        <div className="robot-visual__details">
+          {['FEATURES', 'STRUCTURE', 'USE CASES'].map((label, index) => <div className={`robot-visual__detail robot-visual__detail--${index + 1}`} key={label}>{renderMedia('visual-reconstruction-long', `robot-visual__crop robot-visual__crop--${index + 1}`)}<span>{label}</span></div>)}
+          <button type="button" className="robot-visual__full" onClick={event => openMedia('visual-reconstruction-long', event.currentTarget)}>VIEW FULL IMAGE <span aria-hidden="true">+</span></button>
+        </div>
+      </div>
+      <RobotOutline className="robot-outline robot-outline--visual" />
+    </div>
+  </motion.section>;
+}
+
 function OtherContent({ project, renderMedia, onEnter }: RobotCaseProps & { onEnter: () => void }) {
   return <motion.section id="robot-other" className="robot-section robot-other case-container" onViewportEnter={onEnter} viewport={{ amount: .18 }}>
-    <RobotHeading index="06" title="OTHER CONTENT" />
+    <RobotHeading index="07" title="OTHER CONTENT" />
     <div className="robot-other__gallery">{project.robot!.otherVideos.map((item, index) => <article key={`${item.mediaId}-${index}`} className={`robot-other__item robot-other__item--${index}`}><div>{renderMedia(item.mediaId)}</div><span>{item.category}</span><h3>{item.title}</h3></article>)}</div>
   </motion.section>;
 }
 
-export function RobotCase({ project, renderMedia }: RobotCaseProps) {
+export function RobotCase({ project, renderMedia, openMedia }: RobotCaseProps) {
   const [activeChapter, setActiveChapter] = useState(0);
   const jumpTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   return <div className="robot-case">
-    <RobotHero project={project} renderMedia={renderMedia} />
-    <ProductSection project={project} renderMedia={renderMedia} onEnter={() => setActiveChapter(0)} />
+    <RobotHero project={project} renderMedia={renderMedia} openMedia={openMedia} />
+    <ProductSection project={project} renderMedia={renderMedia} openMedia={openMedia} onEnter={() => setActiveChapter(0)} />
     <RoleSection project={project} onEnter={() => setActiveChapter(1)} />
-    <ContentSystem project={project} renderMedia={renderMedia} onEnter={() => setActiveChapter(2)} />
-    <MakerSeries project={project} renderMedia={renderMedia} onEnter={() => setActiveChapter(3)} />
-    <LaunchFilm project={project} renderMedia={renderMedia} onEnter={() => setActiveChapter(4)} />
-    <OtherContent project={project} renderMedia={renderMedia} onEnter={() => setActiveChapter(5)} />
+    <ContentSystem project={project} renderMedia={renderMedia} openMedia={openMedia} onEnter={() => setActiveChapter(2)} />
+    <MakerSeries project={project} renderMedia={renderMedia} openMedia={openMedia} onEnter={() => setActiveChapter(3)} />
+    <LaunchFilm project={project} renderMedia={renderMedia} openMedia={openMedia} onEnter={() => setActiveChapter(4)} />
+    <VisualReconstruction project={project} renderMedia={renderMedia} openMedia={openMedia} onEnter={() => setActiveChapter(5)} />
+    <OtherContent project={project} renderMedia={renderMedia} openMedia={openMedia} onEnter={() => setActiveChapter(6)} />
     <nav className="robot-progress" aria-label="AI ROBOT 项目章节">{chapters.map(([id, title], index) => <button key={id} type="button" className={activeChapter === index ? 'is-active' : ''} onClick={() => jumpTo(id)} aria-label={`跳转到 ${title}`}><span>{String(index + 1).padStart(2, '0')}</span><strong>{title}</strong></button>)}</nav>
   </div>;
 }
