@@ -72,7 +72,7 @@ export const projects: PortfolioProject[] = [
     company: '四川意外科技有限公司',
     year: '2025.06 — 2025.12',
     period: '2025.06 — 2025.12',
-    tags: ['产品内容', '视频', '创客内容', '新品发布'],
+    tags: ['产品内容', '短视频制作', '电商物料', '创客教程', '新品发布'],
     coverIds: ['product', 'launch', 'hero'],
     media: [
       { id: 'product', title: '小喜财 Pro 全息交互展示', type: '产品图', kind: 'image', src: projectAsset('ai-robot-product.jpg'), hideMeta: true },
@@ -102,7 +102,7 @@ export const projects: PortfolioProject[] = [
       { id: 'maker-chip', title: '主板与芯片的了解', type: 'MAKER', kind: 'video', src: projectAsset('ai-robot-maker-chip-board.mp4'), poster: projectAsset('ai-robot-maker-chip-board-cover.jpg') },
       { id: 'maker-assembly', title: '小喜财机器人组装', type: 'MAKER', kind: 'video', src: projectAsset('ai-robot-maker-assembly.mp4'), poster: projectAsset('ai-robot-maker-assembly-cover.jpg') },
       { id: 'maker-code', title: '代码与烧录过程', type: 'MAKER', kind: 'video', src: projectAsset('ai-robot-maker-code-flash.mp4'), poster: projectAsset('ai-robot-maker-code-flash-cover.jpg') },
-      { id: 'launch-film', title: '小喜财 Pro 新品宣传片', type: 'PRODUCT LAUNCH', kind: 'video' },
+      { id: 'launch-film', title: '小喜财 Pro 新品宣传片', type: 'PRODUCT LAUNCH', kind: 'video', src: projectAsset('ai-robot-launch-film.mp4') },
       { id: 'family-video', title: '小喜财家族机器人功能介绍', type: 'FEATURE', kind: 'video', src: projectAsset('ai-robot-other-family.mp4') },
       { id: 'open-source-video', title: '小喜财开源版功能介绍', type: 'OPEN SOURCE', kind: 'video', src: projectAsset('ai-robot-other-open-source.mp4') },
       { id: 'cctv-video', title: '小喜财上央视相关内容', type: 'BRAND CONTENT', kind: 'video' },
