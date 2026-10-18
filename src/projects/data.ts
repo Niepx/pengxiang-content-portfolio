@@ -5,6 +5,8 @@ export type MediaItem = {
   kind: 'image' | 'video';
   src?: string;
   poster?: string;
+  mirrored?: boolean;
+  hideMeta?: boolean;
 };
 
 export type PortfolioProject = {
@@ -70,12 +72,12 @@ export const projects: PortfolioProject[] = [
     company: '四川意外科技有限公司',
     year: '2025.06 — 2025.12',
     period: '2025.06 — 2025.12',
-    tags: ['PRODUCT CONTENT', 'VIDEO', 'MAKER CONTENT', 'PRODUCT LAUNCH'],
+    tags: ['产品内容', '视频', '创客内容', '新品发布'],
     coverIds: ['product', 'launch', 'hero'],
     media: [
       { id: 'product', title: 'AI 桌面机器人 · 产品主视觉', type: '产品图', kind: 'image' },
       { id: 'launch', title: '新品发布 · 现场与场景', type: '发布会', kind: 'image' },
-      { id: 'hero', title: 'AI ROBOT · 项目主视觉', type: '主视觉', kind: 'image', src: projectAsset('ai-robot-hero.png') },
+      { id: 'hero', title: '小喜财Pro', type: '主视觉', kind: 'image', src: projectAsset('ai-robot-hero.png'), mirrored: true, hideMeta: true },
       { id: 'video', title: '产品宣传视频', type: '视频', kind: 'video' },
       { id: 'feature', title: '功能长图', type: '产品内容', kind: 'image' },
       { id: 'commerce', title: '电商与众筹物料', type: '电商物料', kind: 'image' },

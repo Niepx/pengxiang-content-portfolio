@@ -60,9 +60,9 @@ function MediaTile({ item, onOpen, className = '', priority = false, autoPreview
   const preview = () => { if (window.matchMedia('(hover: hover)').matches) { hoverRef.current = true; setNearViewport(true); videoRef.current?.play().catch(() => {}); } };
   const stopPreview = () => { hoverRef.current = false; if (videoRef.current && !autoVisibleRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
   return <button ref={tileRef} type="button" className={`project-media group/media ${className}`} onClick={event => onOpen(item, event.currentTarget)} onMouseEnter={preview} onMouseLeave={stopPreview} aria-label={`${item.title}，打开作品查看器`}>
-    {hasVideo ? <video ref={videoRef} src={nearViewport ? item.src : undefined} poster={mediaPoster(item)} muted loop playsInline preload="metadata" onCanPlay={() => { if (hoverRef.current || autoVisibleRef.current) videoRef.current?.play().catch(() => {}); }} aria-hidden="true" /> : <img src={mediaPoster(item)} alt="" loading={priority ? 'eager' : 'lazy'} />}
+    {hasVideo ? <video ref={videoRef} src={nearViewport ? item.src : undefined} poster={mediaPoster(item)} muted loop playsInline preload="metadata" onCanPlay={() => { if (hoverRef.current || autoVisibleRef.current) videoRef.current?.play().catch(() => {}); }} aria-hidden="true" /> : <img className={item.mirrored ? 'is-mirrored' : undefined} src={mediaPoster(item)} alt="" loading={priority ? 'eager' : 'lazy'} />}
     <span className="project-media__shade" />
-    <span className="project-media__meta"><span>{item.type}</span><span>{item.src ? item.title : '素材待替换'}</span></span>
+    {!item.hideMeta && <span className="project-media__meta"><span>{item.type}</span><span>{item.src ? item.title : '素材待替换'}</span></span>}
     <span className="project-media__view" aria-hidden="true">VIEW <Plus size={14} strokeWidth={2} /></span>
     <span className="project-media__plus" aria-hidden="true"><Plus size={20} strokeWidth={1.5} /></span>
   </button>;
@@ -110,7 +110,7 @@ function Lightbox({ items, activeId, setActiveId, onClose }: { items: MediaItem[
     <div className="project-lightbox__top"><span>{String(index + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}</span><button type="button" onClick={onClose} aria-label="关闭作品查看器"><X /></button></div>
     <button type="button" className="project-lightbox__arrow" onClick={() => navigate(-1)} aria-label="上一张"><ArrowLeft /></button>
     <AnimatePresence mode="wait"><motion.div key={current.id} className="project-lightbox__content" initial={reduceMotion ? false : { opacity: 0, scale: .985 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduceMotion ? 0 : .36, ease }}>
-      {current.kind === 'video' && current.src ? <video src={current.src} poster={current.poster} controls autoPlay playsInline /> : <img src={mediaPoster(current)} alt={current.title} />}
+      {current.kind === 'video' && current.src ? <video src={current.src} poster={current.poster} controls autoPlay playsInline /> : <img className={current.mirrored ? 'is-mirrored' : undefined} src={mediaPoster(current)} alt={current.title} />}
       <div><strong>{current.title}</strong><span>{current.type}{current.src ? '' : ' · 素材待替换'}</span></div>
     </motion.div></AnimatePresence>
     <button type="button" className="project-lightbox__arrow" onClick={() => navigate(1)} aria-label="下一张"><ArrowRight /></button>
