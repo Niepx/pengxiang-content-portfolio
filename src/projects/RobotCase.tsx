@@ -7,6 +7,8 @@ type RenderMedia = (id: string, className?: string, autoPreview?: boolean) => Re
 type RobotCaseProps = { project: PortfolioProject; renderMedia: RenderMedia };
 
 const ease = [0.16, 1, 0.3, 1] as const;
+const lineArtEase = [0.22, 1, 0.36, 1] as const;
+const lineArtAsset = (name: string) => `${import.meta.env.BASE_URL}assets/robot-lineart/${name}.svg`;
 const chapters = [
   ['robot-product', 'THE PRODUCT'],
   ['robot-role', 'MY ROLE'],
@@ -19,6 +21,46 @@ const chapters = [
 function Reveal({ children, className = '', delay = 0, distance = 24 }: { children: ReactNode; className?: string; delay?: number; distance?: number }) {
   const reduceMotion = useReducedMotion();
   return <motion.div className={className} initial={reduceMotion ? false : { opacity: 0, y: distance }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .18 }} transition={{ duration: reduceMotion ? 0 : .58, delay: reduceMotion ? 0 : delay, ease }}>{children}</motion.div>;
+}
+
+function LineArtDecoration({ src, className = '', opacity, delay = 0, interactive = false }: { src: string; className?: string; opacity: number; delay?: number; interactive?: boolean }) {
+  const reduceMotion = useReducedMotion();
+  return <motion.div
+    className={`robot-lineart ${interactive ? 'is-interactive' : ''} ${className}`}
+    initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+    whileInView={{ opacity, y: 0 }}
+    whileHover={interactive && !reduceMotion ? { opacity: Math.min(opacity + .1, .28), y: -3, scale: 1.02 } : undefined}
+    viewport={{ once: true, amount: .2 }}
+    transition={{ duration: reduceMotion ? 0 : .8, delay: reduceMotion ? 0 : delay, ease: lineArtEase }}
+    aria-hidden="true"
+  ><img src={lineArtAsset(src)} alt="" /></motion.div>;
+}
+
+function RobotSketchCluster() {
+  const reduceMotion = useReducedMotion();
+  const updateParallax = (element: HTMLDivElement, x: number, y: number) => {
+    element.style.setProperty('--robot-px-deep', `${x * 8}px`);
+    element.style.setProperty('--robot-py-deep', `${y * 8}px`);
+    element.style.setProperty('--robot-px-mid', `${x * -5}px`);
+    element.style.setProperty('--robot-py-mid', `${y * -5}px`);
+    element.style.setProperty('--robot-px-soft', `${x * 3}px`);
+    element.style.setProperty('--robot-py-soft', `${y * 3}px`);
+  };
+
+  return <div
+    className="robot-sketch-cluster"
+    onPointerMove={event => {
+      if (reduceMotion || event.pointerType === 'touch') return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      updateParallax(event.currentTarget, (event.clientX - rect.left) / rect.width - .5, (event.clientY - rect.top) / rect.height - .5);
+    }}
+    onPointerLeave={event => updateParallax(event.currentTarget, 0, 0)}
+    aria-hidden="true"
+  >
+    <LineArtDecoration src="body-perspective" className="robot-sketch-cluster__perspective" opacity={.12} interactive />
+    <LineArtDecoration src="body-front" className="robot-sketch-cluster__front" opacity={.09} delay={.08} />
+    <LineArtDecoration src="head-front" className="robot-sketch-cluster__head" opacity={.08} delay={.16} />
+  </div>;
 }
 
 function RobotHeading({ index, title, statement }: { index: string; title: string; statement?: ReactNode }) {
@@ -45,6 +87,7 @@ function ProductSection({ project, renderMedia, onEnter }: RobotCaseProps & { on
   const data = project.robot!;
   const [active, setActive] = useState(0);
   return <motion.section id="robot-product" className="robot-section robot-product case-container" onViewportEnter={onEnter} viewport={{ amount: .18 }}>
+    <LineArtDecoration src="head-front" className="robot-product__sketch" opacity={.14} interactive />
     <RobotHeading index="01" title="THE PRODUCT" statement={<>XIAOXICAI PRO</>} />
     <div className="robot-product__layout">
       <div className="robot-product__visual">{renderMedia('product')}</div>
@@ -69,7 +112,7 @@ function ContentSystem({ project, renderMedia, onEnter }: RobotCaseProps & { onE
   const stages = project.robot!.contentStages;
   const [active, setActive] = useState(0);
   return <motion.section id="robot-system" className={`robot-system case-container ${reduceMotion ? 'is-reduced' : ''}`} onViewportEnter={onEnter} viewport={{ amount: .08 }}>
-    <div className="robot-system__intro"><RobotHeading index="03" title="CONTENT SYSTEM" statement={<>HOW THE CONTENT<br />EVOLVED.</>} /><p>内容从回答“它有什么”，逐渐延伸到“怎么使用、怎么玩、怎么开发，以及为什么值得关注”。</p></div>
+    <div className="robot-system__intro"><RobotSketchCluster /><RobotHeading index="03" title="CONTENT SYSTEM" statement={<>HOW THE CONTENT<br />EVOLVED.</>} /><p>内容从回答“它有什么”，逐渐延伸到“怎么使用、怎么玩、怎么开发，以及为什么值得关注”。</p></div>
     <div className="robot-system__layout">
       <div className="robot-system__sticky">
         <span>CONTENT SYSTEM</span><h3>FROM PRODUCT<br />TO CONTENT SYSTEM.</h3>
@@ -91,7 +134,7 @@ function MakerSeries({ project, renderMedia, onEnter }: RobotCaseProps & { onEnt
     <RobotHeading index="04" title="MAKER SERIES" statement={<>BUILD A ROBOT<br />FROM ZERO.</>} />
     <p className="robot-maker__intro">将机器人开发过程拆解为系列化教程，面向对 AI、硬件和创客开发感兴趣的用户，同时探索编程教育与线上课程内容方向。</p>
     <div className="robot-maker__layout">
-      <div className="robot-maker__sticky"><h3>BUILD A ROBOT<br />FROM ZERO.</h3><span>MAKER SERIES<br />01 — 05</span></div>
+      <div className="robot-maker__sticky"><h3>BUILD A ROBOT<br />FROM ZERO.</h3><span>MAKER SERIES<br />01 — 05</span><LineArtDecoration src="body-front" className="robot-maker__sketch" opacity={.13} /></div>
       <div className="robot-maker__videos">{videos.map((video, index) => <motion.article key={video.mediaId} className={active === index ? 'is-active' : ''} onViewportEnter={() => setActive(index)} viewport={{ amount: .55 }}><div>{renderMedia(video.mediaId)}</div><span>{video.number} / MAKER</span><h3>{video.title}</h3><p>{video.chinese}</p></motion.article>)}</div>
     </div>
   </motion.section>;
