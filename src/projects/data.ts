@@ -57,6 +57,8 @@ export type PortfolioProject = {
   };
 };
 
+const projectAsset = (name: string) => `${import.meta.env.BASE_URL}assets/projects/${name}`;
+
 // Add real image URLs to `src` and a video URL to the video item's `src`.
 // Gallery layouts derive from selectedIds/outputIds, so their counts can change later.
 export const projects: PortfolioProject[] = [
@@ -73,7 +75,7 @@ export const projects: PortfolioProject[] = [
     media: [
       { id: 'product', title: 'AI 桌面机器人 · 产品主视觉', type: '产品图', kind: 'image' },
       { id: 'launch', title: '新品发布 · 现场与场景', type: '发布会', kind: 'image' },
-      { id: 'hero', title: 'AI ROBOT · 项目主视觉', type: '主视觉', kind: 'image' },
+      { id: 'hero', title: 'AI ROBOT · 项目主视觉', type: '主视觉', kind: 'image', src: projectAsset('ai-robot-hero.png') },
       { id: 'video', title: '产品宣传视频', type: '视频', kind: 'video' },
       { id: 'feature', title: '功能长图', type: '产品内容', kind: 'image' },
       { id: 'commerce', title: '电商与众筹物料', type: '电商物料', kind: 'image' },
