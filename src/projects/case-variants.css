@@ -1,4 +1,4 @@
-.project-stack-item{position:sticky;top:calc(78px + var(--stack-offset));margin-bottom:25vh;background:#0c0c0c;border-radius:clamp(28px,4vw,56px)}
+.project-stack-item{position:sticky;top:calc(clamp(18px,5svh,78px) + var(--stack-offset));margin-bottom:25vh;background:#0c0c0c;border-radius:clamp(28px,4vw,56px)}
 .project-stack-item:last-child{margin-bottom:0}
 .project-card--hardware .project-card__identity h3{font-size:clamp(2.1rem,4.1vw,4.5rem)}
 .project-card--personal .project-card__identity h3{font-size:clamp(2.2rem,4.6vw,4.8rem)}

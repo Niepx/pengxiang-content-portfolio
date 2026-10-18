@@ -71,7 +71,7 @@ function MediaTile({ item, onOpen, className = '', priority = false, autoPreview
 function ProjectGallery({ project, onOpen }: { project: PortfolioProject; onOpen: MediaOpen }) {
   const [top, bottom, hero] = project.coverIds.map(id => getMedia(project, id));
   return <div className="project-cover-gallery">
-    <div className="project-cover-gallery__stack"><MediaTile item={top} onOpen={onOpen} priority /><MediaTile item={bottom} onOpen={onOpen} priority /></div>
+    <div className="project-cover-gallery__stack"><MediaTile item={top} onOpen={onOpen} priority /><MediaTile item={bottom} onOpen={onOpen} /></div>
     <MediaTile item={hero} onOpen={onOpen} priority className="project-cover-gallery__hero" />
   </div>;
 }
