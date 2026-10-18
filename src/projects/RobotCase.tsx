@@ -112,7 +112,7 @@ function XiaoxicaiCursor() {
     };
   }, []);
 
-  return <div ref={cursorRef} className="xiaoxicai-cursor" aria-hidden="true"><img src={lineArtAsset('head-front')} alt="" /></div>;
+  return <div ref={cursorRef} className="xiaoxicai-cursor" aria-hidden="true"><img src={lineArtAsset('cursor')} alt="" /></div>;
 }
 
 function RobotSketchCluster() {
