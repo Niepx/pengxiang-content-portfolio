@@ -69,22 +69,23 @@ function MediaTile({ item, onOpen, className = '', priority = false, autoPreview
 }
 
 function ProjectGallery({ project, onOpen }: { project: PortfolioProject; onOpen: MediaOpen }) {
-  const [top, bottom, hero] = project.coverIds.map(id => getMedia(project, id));
+  const hero = getMedia(project, project.coverIds[project.coverIds.length - 1]);
   return <div className="project-cover-gallery">
-    <div className="project-cover-gallery__stack"><MediaTile item={top} onOpen={onOpen} priority /><MediaTile item={bottom} onOpen={onOpen} /></div>
     <MediaTile item={hero} onOpen={onOpen} priority className="project-cover-gallery__hero" />
   </div>;
 }
 
 function ProjectCard({ project, onOpenMedia, onOpenCase }: { project: PortfolioProject; onOpenMedia: MediaOpen; onOpenCase: (trigger: HTMLElement) => void }) {
   return <article className={`project-card project-card--${project.caseType}`}>
-    <div className="project-card__head">
-      <div className="project-card__index"><strong>{project.number}</strong><span>{project.label || 'PROJECT'}</span></div>
-      <div className="project-card__identity"><h3>{project.title}</h3><p>{project.company ? <>{project.company} <span aria-hidden="true">·</span> </> : null}{project.year}</p></div>
-      <button type="button" className="project-case-button" onClick={event => onOpenCase(event.currentTarget)}>VIEW CASE <ArrowUpRight size={19} strokeWidth={1.7} /></button>
+    <div className="project-card__content">
+      <div className="project-card__head">
+        <div className="project-card__index"><strong>{project.number}</strong><span>{project.label || 'PROJECT'}</span></div>
+        <div className="project-card__identity"><h3>{project.title}</h3><p>{project.company ? <>{project.company} <span aria-hidden="true">·</span> </> : null}{project.year}</p></div>
+        <button type="button" className="project-case-button" onClick={event => onOpenCase(event.currentTarget)}>VIEW CASE <ArrowUpRight size={19} strokeWidth={1.7} /></button>
+      </div>
+      {project.summary && <p className="project-card__summary">{project.summary}</p>}
+      <div className="project-card__tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
     </div>
-    {project.summary && <p className="project-card__summary">{project.summary}</p>}
-    <div className="project-card__tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
     <ProjectGallery project={project} onOpen={onOpenMedia} />
   </article>;
 }
