@@ -321,10 +321,79 @@ function LaunchFilm({ project, renderMedia, onEnter }: RobotCaseProps & { onEnte
 }
 
 function OtherContent({ project, renderMedia, onEnter }: RobotCaseProps & { onEnter: () => void }) {
-  return <motion.section id="robot-other" className="robot-section robot-other case-container" onViewportEnter={onEnter} viewport={{ amount: .18 }}>
+  const reduceMotion = useReducedMotion();
+  const videos = project.robot!.otherVideos;
+  const [selected, setSelected] = useState<number | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const otherMedia = videos.map(video => ({ ...video, media: project.media.find(item => item.id === video.mediaId) as MediaItem }));
+
+  useEffect(() => {
+    if (selected === null) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelected(null);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [selected]);
+
+  const closePlayer = () => {
+    setSelected(null);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  };
+  const selectedVideo = selected === null ? null : otherMedia[selected];
+
+  return <><motion.section id="robot-other" className="robot-section robot-other case-container" onViewportEnter={onEnter} viewport={{ amount: .18 }}>
     <RobotHeading index="06" title="OTHER CONTENT" />
-    <div className="robot-other__gallery">{project.robot!.otherVideos.map((item, index) => <article key={`${item.mediaId}-${index}`} className={`robot-other__item robot-other__item--${index}`}><div>{renderMedia(item.mediaId)}</div><span>{item.category}</span><h3>{item.title}</h3></article>)}</div>
-  </motion.section>;
+    <div className="robot-other__gallery">{otherMedia.map((item, index) => <motion.article
+      key={`${item.mediaId}-${index}`}
+      className={`robot-other__item robot-other__item--${index}`}
+      initial={reduceMotion ? false : { opacity: .45, y: 32, clipPath: 'inset(0 0 14% 0 round 16px)' }}
+      whileInView={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0 round 16px)' }}
+      viewport={{ once: true, amount: .22 }}
+      transition={{ duration: reduceMotion ? 0 : .62, delay: reduceMotion ? 0 : index * .09, ease }}
+      onPointerMove={event => {
+        if (reduceMotion || event.pointerType === 'touch') return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        event.currentTarget.style.setProperty('--other-x', `${((event.clientX - rect.left) / rect.width) * 100}%`);
+        event.currentTarget.style.setProperty('--other-y', `${((event.clientY - rect.top) / rect.height) * 100}%`);
+      }}
+    >
+      <button
+        type="button"
+        className="robot-other__visual"
+        onClick={event => {
+          triggerRef.current = event.currentTarget;
+          setSelected(index);
+        }}
+        aria-label={`播放 ${item.title}`}
+      >
+        <div>{renderMedia(item.mediaId)}</div>
+        <span className="robot-other__number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+        <span className="robot-other__play" aria-hidden="true"><Play size={20} fill="currentColor" /><span>播放视频</span></span>
+      </button>
+      <span>{item.category}</span><h3>{item.title}</h3>
+    </motion.article>)}</div>
+  </motion.section>
+    {selectedVideo && createPortal(<div className="maker-player" role="dialog" aria-modal="true" aria-labelledby="other-player-title">
+      <button type="button" className="maker-player__backdrop" onClick={closePlayer} aria-label="点击遮罩关闭视频播放器" />
+      <div className="maker-player__panel">
+        <header className="maker-player__header">
+          <div><span>{selectedVideo.category} / OTHER CONTENT</span><h2 id="other-player-title">{selectedVideo.title}</h2></div>
+          <button ref={closeButtonRef} type="button" className="maker-player__close" onClick={closePlayer} aria-label="关闭视频播放器"><X size={26} /></button>
+        </header>
+        <div className="maker-player__stage">
+          <video key={selectedVideo.media.src} src={selectedVideo.media.src} controls autoPlay playsInline preload="metadata" />
+        </div>
+      </div>
+    </div>, document.body)}
+  </>;
 }
 
 export function RobotCase({ project, renderMedia }: RobotCaseProps) {

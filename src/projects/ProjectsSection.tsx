@@ -16,7 +16,7 @@ function placeholder() {
 }
 
 const getMedia = (project: PortfolioProject, id: string) => project.media.find(item => item.id === id)!;
-const mediaPoster = (item: MediaItem) => item.poster || item.src && item.kind === 'image' && item.src || placeholder();
+const mediaPoster = (item: MediaItem) => item.poster || item.src && item.kind === 'image' && item.src || (item.src ? undefined : placeholder());
 
 function useScrollLock(active: boolean) {
   useEffect(() => {
@@ -58,7 +58,7 @@ function MediaTile({ item, className = '', priority = false, autoPreview = false
   const preview = () => { if (window.matchMedia('(hover: hover)').matches) { hoverRef.current = true; setNearViewport(true); videoRef.current?.play().catch(() => {}); } };
   const stopPreview = () => { hoverRef.current = false; if (videoRef.current && !autoVisibleRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
   return <div ref={tileRef} className={`project-media group/media ${className}`} onMouseEnter={preview} onMouseLeave={stopPreview}>
-    {hasVideo ? <video ref={videoRef} src={nearViewport ? item.src : undefined} poster={mediaPoster(item)} muted loop playsInline preload="metadata" onCanPlay={() => { if (hoverRef.current || autoVisibleRef.current) videoRef.current?.play().catch(() => {}); }} aria-hidden="true" /> : <img className={item.mirrored ? 'is-mirrored' : undefined} src={mediaPoster(item)} alt={item.src ? item.title : ''} loading={priority ? 'eager' : 'lazy'} />}
+    {hasVideo ? <video ref={videoRef} src={nearViewport ? item.src : undefined} poster={mediaPoster(item)} muted loop playsInline preload={item.poster ? 'metadata' : 'auto'} onCanPlay={() => { if (hoverRef.current || autoVisibleRef.current) videoRef.current?.play().catch(() => {}); }} aria-hidden="true" /> : <img className={item.mirrored ? 'is-mirrored' : undefined} src={mediaPoster(item)} alt={item.src ? item.title : ''} loading={priority ? 'eager' : 'lazy'} />}
     <span className="project-media__shade" />
     {!item.hideMeta && <span className="project-media__meta"><span>{item.type}</span><span>{item.src ? item.title : '素材待替换'}</span></span>}
   </div>;
