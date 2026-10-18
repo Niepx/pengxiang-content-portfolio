@@ -36,6 +36,42 @@ function LineArtDecoration({ src, className = '', opacity, delay = 0, interactiv
   ><img src={lineArtAsset(src)} alt="" /></motion.div>;
 }
 
+function RobotPowerState() {
+  const reduceMotion = useReducedMotion();
+  const [isPoweredOn, setIsPoweredOn] = useState(false);
+  const powerOn = () => setIsPoweredOn(true);
+
+  return <motion.div
+    className={`robot-lineart robot-product__sketch robot-power-state ${isPoweredOn ? 'is-powered-on' : ''}`}
+    role="button"
+    tabIndex={0}
+    aria-label={isPoweredOn ? '小喜财 Pro，已唤醒' : '小喜财 Pro，聚焦后唤醒'}
+    initial={reduceMotion ? false : { opacity: 0, y: 8, scale: 1 }}
+    animate={isPoweredOn && !reduceMotion
+      ? { opacity: 1, y: [0, -2, 0], scale: [1, 1.015, 1] }
+      : { opacity: 1, y: 0, scale: 1 }}
+    transition={{ duration: reduceMotion ? 0 : isPoweredOn ? .52 : .72, ease: lineArtEase }}
+    onPointerEnter={powerOn}
+    onFocus={powerOn}
+    onClick={powerOn}
+  >
+    <motion.img
+      className="robot-head-off"
+      src={lineArtAsset('head-front-off')}
+      alt=""
+      animate={{ opacity: isPoweredOn ? 0 : .24 }}
+      transition={{ duration: reduceMotion ? 0 : .52, ease: lineArtEase }}
+    />
+    <motion.img
+      className="robot-head-on"
+      src={lineArtAsset('head-front')}
+      alt=""
+      animate={{ opacity: isPoweredOn ? 1 : 0 }}
+      transition={{ duration: reduceMotion ? 0 : .52, delay: reduceMotion || !isPoweredOn ? 0 : .08, ease: lineArtEase }}
+    />
+  </motion.div>;
+}
+
 function RobotSketchCluster() {
   const reduceMotion = useReducedMotion();
   const updateParallax = (element: HTMLDivElement, x: number, y: number) => {
@@ -81,7 +117,7 @@ function ProductSection({ project, renderMedia, onEnter }: RobotCaseProps & { on
   const data = project.robot!;
   const [active, setActive] = useState(0);
   return <motion.section id="robot-product" className="robot-section robot-product case-container" onViewportEnter={onEnter} viewport={{ amount: .18 }}>
-    <LineArtDecoration src="head-front" className="robot-product__sketch" opacity={.14} interactive />
+    <RobotPowerState />
     <RobotHeading index="01" title="THE PRODUCT" statement={<>XIAOXICAI PRO</>} />
     <div className="robot-product__layout">
       <div className="robot-product__visual">{renderMedia('product')}</div>
