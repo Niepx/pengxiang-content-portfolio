@@ -75,7 +75,7 @@ export const projects: PortfolioProject[] = [
     tags: ['产品内容', '视频', '创客内容', '新品发布'],
     coverIds: ['product', 'launch', 'hero'],
     media: [
-      { id: 'product', title: 'AI 桌面机器人 · 产品主视觉', type: '产品图', kind: 'image' },
+      { id: 'product', title: '小喜财 Pro 全息交互展示', type: '产品图', kind: 'image', src: projectAsset('ai-robot-product.jpg'), hideMeta: true },
       { id: 'launch', title: '新品发布 · 现场与场景', type: '发布会', kind: 'image' },
       { id: 'hero', title: '小喜财Pro', type: '主视觉', kind: 'image', src: projectAsset('ai-robot-hero.png'), mirrored: true, hideMeta: true },
       { id: 'video', title: '产品宣传视频', type: '视频', kind: 'video' },

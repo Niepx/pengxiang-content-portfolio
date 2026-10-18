@@ -111,7 +111,7 @@ function Lightbox({ items, activeId, setActiveId, onClose }: { items: MediaItem[
     <button type="button" className="project-lightbox__arrow" onClick={() => navigate(-1)} aria-label="上一张"><ArrowLeft /></button>
     <AnimatePresence mode="wait"><motion.div key={current.id} className="project-lightbox__content" initial={reduceMotion ? false : { opacity: 0, scale: .985 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduceMotion ? 0 : .36, ease }}>
       {current.kind === 'video' && current.src ? <video src={current.src} poster={current.poster} controls autoPlay playsInline /> : <img className={current.mirrored ? 'is-mirrored' : undefined} src={mediaPoster(current)} alt={current.title} />}
-      <div><strong>{current.title}</strong><span>{current.type}{current.src ? '' : ' · 素材待替换'}</span></div>
+      {!current.hideMeta && <div><strong>{current.title}</strong><span>{current.type}{current.src ? '' : ' · 素材待替换'}</span></div>}
     </motion.div></AnimatePresence>
     <button type="button" className="project-lightbox__arrow" onClick={() => navigate(1)} aria-label="下一张"><ArrowRight /></button>
   </div>, document.body);
