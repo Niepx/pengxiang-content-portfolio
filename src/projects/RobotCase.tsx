@@ -178,9 +178,9 @@ function MakerSeries({ project, renderMedia, onEnter }: RobotCaseProps & { onEnt
   const videos = project.robot!.makerVideos;
   const [active, setActive] = useState(0);
   const makerProgress = useMotionValue(0);
-  const robotScale = useTransform(makerProgress, isMobile ? [0, .12, 1] : [0, .25, .5, .75, 1], isMobile ? [.85, 1.05, 1.05] : [.78, .95, 1.18, 1.48, 1.95]);
-  const robotX = useTransform(makerProgress, [0, 1], [0, isMobile ? 0 : 24]);
-  const robotY = useTransform(makerProgress, [0, 1], [0, isMobile ? 0 : -38]);
+  const robotScale = useTransform(makerProgress, isMobile ? [0, .12, 1] : [0, .25, .5, .75, 1], isMobile ? [.85, 1.05, 1.05] : [.78, .84, .9, .96, 1]);
+  const robotX = useTransform(makerProgress, [0, 1], [0, isMobile ? 0 : 8]);
+  const robotY = useTransform(makerProgress, [0, 1], [0, 0]);
   const robotOpacity = useTransform(makerProgress, isMobile ? [0, .12, 1] : [0, .5, 1], isMobile ? [.18, .25, .25] : [.18, .29, .48]);
 
   useEffect(() => {
