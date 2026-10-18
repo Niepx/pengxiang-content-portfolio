@@ -309,12 +309,22 @@ function MakerSeries({ project, onEnter }: RobotCaseProps & { onEnter: () => voi
   </>;
 }
 
-function LaunchFilm({ project, renderMedia, onEnter }: RobotCaseProps & { onEnter: () => void }) {
+function LaunchFilm({ project, onEnter }: RobotCaseProps & { onEnter: () => void }) {
   const launch = project.robot!.launch;
+  const launchMedia = project.media.find(item => item.id === launch.mediaId) as MediaItem;
   return <motion.section id="robot-launch" className="robot-section robot-launch case-container" onViewportEnter={onEnter} viewport={{ amount: .18 }}>
     <RobotHeading index="05" title="XIAOXICAI PRO LAUNCH FILM." />
     <p className="robot-launch__label">PRODUCT LAUNCH</p>
-    <div className="robot-launch__video">{renderMedia(launch.mediaId, 'robot-launch-preview', true)}</div>
+    <figure className="robot-launch__video">
+      <video
+        src={launchMedia.src}
+        controls
+        playsInline
+        preload="auto"
+        aria-label={`${launchMedia.title}视频播放器`}
+      />
+      <figcaption><span>PRODUCT LAUNCH</span>{launchMedia.title}</figcaption>
+    </figure>
     <div className="robot-launch__facts"><div><h3>CONTEXT</h3>{launch.context.map(item => <p key={item}>{item}</p>)}</div><div><h3>MY ROLE</h3>{launch.roles.map(item => <p key={item}>{item}</p>)}</div></div>
     <p className="robot-launch__description">{launch.description}</p>
   </motion.section>;
