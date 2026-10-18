@@ -109,7 +109,8 @@ export const projects: PortfolioProject[] = [
         { title: 'CONTENT', items: ['产品卖点梳理', '内容方向', '系列选题', '转化 SOP'] },
         { title: 'VIDEO', items: ['脚本', '分镜', '拍摄', '剪辑', '发布'] },
         { title: 'EDUCATION', items: ['产品教程', '创客 DIY', '开发内容', '系列课程内容'] },
-        { title: 'VISUAL', items: ['电商物料', '众筹物料', '产品宣传图文'] },
+        { title: 'VISUAL', items: ['电商物料', '众筹物料', '产品宣传图文', '活动视觉'] },
+        { title: 'LIVE SETUP', items: ['直播间搭建', '直播物料', '场景布置', '直播支持'] },
       ],
       contentStages: [
         { number: '01', title: 'PRODUCT', question: '它是什么？', items: ['产品整体介绍', '小喜财家族介绍', '应用场景介绍'], description: '早期内容首先解决产品认知，让用户知道机器人是什么、能做什么。', mediaId: 'product' },

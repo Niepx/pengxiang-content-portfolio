@@ -16,9 +16,9 @@ const chapters = [
   ['robot-other', 'OTHER CONTENT'],
 ] as const;
 
-function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+function Reveal({ children, className = '', delay = 0, distance = 24 }: { children: ReactNode; className?: string; delay?: number; distance?: number }) {
   const reduceMotion = useReducedMotion();
-  return <motion.div className={className} initial={reduceMotion ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .18 }} transition={{ duration: reduceMotion ? 0 : .58, delay: reduceMotion ? 0 : delay, ease }}>{children}</motion.div>;
+  return <motion.div className={className} initial={reduceMotion ? false : { opacity: 0, y: distance }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .18 }} transition={{ duration: reduceMotion ? 0 : .58, delay: reduceMotion ? 0 : delay, ease }}>{children}</motion.div>;
 }
 
 function RobotHeading({ index, title, statement }: { index: string; title: string; statement?: ReactNode }) {
@@ -59,9 +59,8 @@ function ProductSection({ project, renderMedia, onEnter }: RobotCaseProps & { on
 
 function RoleSection({ project, onEnter }: { project: PortfolioProject; onEnter: () => void }) {
   return <motion.section id="robot-role" className="robot-section robot-role case-container" onViewportEnter={onEnter} viewport={{ amount: .22 }}>
-    <RobotHeading index="02" title="MY ROLE" statement={<>这段工作中，我从早期以拍摄剪辑和物料执行为主，逐渐承担更多产品内容策划、卖点梳理和完整内容制作。</>} />
-    <div className="robot-role__grid">{project.robot!.roles.map((role, index) => <Reveal key={role.title} delay={index * .08}><h3>{role.title}</h3>{role.items.map(item => <p key={item}>{item}</p>)}</Reveal>)}</div>
-    <p className="robot-role__note">VISUAL 为真实工作职责；因历史作品未留存，本项目不展示虚构案例。</p>
+    <RobotHeading index="02" title="MY ROLE" statement={<>这段工作中，我从早期以拍摄剪辑和物料执行为主，逐渐参与到产品卖点梳理、内容策划和完整内容制作中。</>} />
+    <div className="robot-role__grid">{project.robot!.roles.map((role, index) => <Reveal key={role.title} delay={index * .08} distance={16}><h3><span>{String(index + 1).padStart(2, '0')}</span>{role.title}</h3>{role.items.map(item => <p key={item}>{item}</p>)}</Reveal>)}</div>
   </motion.section>;
 }
 
