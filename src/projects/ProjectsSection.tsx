@@ -64,7 +64,6 @@ function MediaTile({ item, onOpen, className = '', priority = false, autoPreview
     <span className="project-media__shade" />
     {!item.hideMeta && <span className="project-media__meta"><span>{item.type}</span><span>{item.src ? item.title : '素材待替换'}</span></span>}
     <span className="project-media__view" aria-hidden="true">VIEW <Plus size={14} strokeWidth={2} /></span>
-    <span className="project-media__plus" aria-hidden="true"><Plus size={20} strokeWidth={1.5} /></span>
   </button>;
 }
 
