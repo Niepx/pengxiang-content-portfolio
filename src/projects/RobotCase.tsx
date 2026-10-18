@@ -41,10 +41,6 @@ function RobotSketchCluster() {
   const updateParallax = (element: HTMLDivElement, x: number, y: number) => {
     element.style.setProperty('--robot-px-deep', `${x * 8}px`);
     element.style.setProperty('--robot-py-deep', `${y * 8}px`);
-    element.style.setProperty('--robot-px-mid', `${x * -5}px`);
-    element.style.setProperty('--robot-py-mid', `${y * -5}px`);
-    element.style.setProperty('--robot-px-soft', `${x * 3}px`);
-    element.style.setProperty('--robot-py-soft', `${y * 3}px`);
   };
 
   return <div
@@ -58,8 +54,6 @@ function RobotSketchCluster() {
     aria-hidden="true"
   >
     <LineArtDecoration src="body-perspective" className="robot-sketch-cluster__perspective" opacity={.12} interactive />
-    <LineArtDecoration src="body-front" className="robot-sketch-cluster__front" opacity={.09} delay={.08} />
-    <LineArtDecoration src="head-front" className="robot-sketch-cluster__head" opacity={.08} delay={.16} />
   </div>;
 }
 
@@ -134,7 +128,7 @@ function MakerSeries({ project, renderMedia, onEnter }: RobotCaseProps & { onEnt
     <RobotHeading index="04" title="MAKER SERIES" statement={<>BUILD A ROBOT<br />FROM ZERO.</>} />
     <p className="robot-maker__intro">将机器人开发过程拆解为系列化教程，面向对 AI、硬件和创客开发感兴趣的用户，同时探索编程教育与线上课程内容方向。</p>
     <div className="robot-maker__layout">
-      <div className="robot-maker__sticky"><h3>BUILD A ROBOT<br />FROM ZERO.</h3><span>MAKER SERIES<br />01 — 05</span><LineArtDecoration src="body-front" className="robot-maker__sketch" opacity={.13} /></div>
+      <div className="robot-maker__sticky"><h3>BUILD A ROBOT<br />FROM ZERO.</h3><span>MAKER SERIES<br />01 — 05</span><LineArtDecoration src="body-front" className="robot-maker__sketch" opacity={.13} interactive /></div>
       <div className="robot-maker__videos">{videos.map((video, index) => <motion.article key={video.mediaId} className={active === index ? 'is-active' : ''} onViewportEnter={() => setActive(index)} viewport={{ amount: .55 }}><div>{renderMedia(video.mediaId)}</div><span>{video.number} / MAKER</span><h3>{video.title}</h3><p>{video.chinese}</p></motion.article>)}</div>
     </div>
   </motion.section>;
