@@ -26,7 +26,7 @@ export type PortfolioProject = {
   overview: string;
   summary?: string;
   robot?: {
-    productCapabilities: { number: string; title: string; chinese: string; description: string }[];
+    productCapabilities: { number: string; title: string; chinese: string; description: string; mediaId: string }[];
     roles: { title: string; items: string[] }[];
     contentStages: { number: string; title: string; question: string; items: string[]; description: string; mediaId: string }[];
     makerVideos: { number: string; title: string; chinese: string; mediaId: string }[];
@@ -77,6 +77,11 @@ export const projects: PortfolioProject[] = [
     media: [
       { id: 'product', title: '小喜财 Pro 全息交互展示', type: '产品图', kind: 'image', src: projectAsset('ai-robot-product.jpg'), hideMeta: true },
       { id: 'product-system', title: '小喜财 Pro 四彩产品展示', type: '产品图', kind: 'image', src: projectAsset('ai-robot-system.jpg'), hideMeta: true },
+      { id: 'capability-vision', title: '视觉识别', type: '产品能力', kind: 'image', src: projectAsset('ai-robot-capability-vision.jpg'), hideMeta: true },
+      { id: 'capability-memory', title: '长期记忆', type: '产品能力', kind: 'image', src: projectAsset('ai-robot-capability-memory.jpg'), hideMeta: true },
+      { id: 'capability-motion', title: '动作表达', type: '产品能力', kind: 'image', src: projectAsset('ai-robot-capability-motion.jpg'), hideMeta: true },
+      { id: 'capability-customization', title: '自定义', type: '产品能力', kind: 'image', src: projectAsset('ai-robot-capability-customization.jpg'), hideMeta: true },
+      { id: 'capability-open-development', title: '开放开发', type: '产品能力', kind: 'image', src: projectAsset('ai-robot-capability-open-development.jpg'), hideMeta: true },
       { id: 'launch', title: '新品发布 · 现场与场景', type: '发布会', kind: 'image' },
       { id: 'hero', title: '小喜财Pro', type: '主视觉', kind: 'image', src: projectAsset('ai-robot-hero.png'), mirrored: true, hideMeta: true },
       { id: 'video', title: '产品宣传视频', type: '视频', kind: 'video' },
@@ -104,11 +109,11 @@ export const projects: PortfolioProject[] = [
     summary: '从产品功能展示，到教程、创客内容与新品传播，围绕一款 AI 机器人逐步建立持续的内容表达。',
     robot: {
       productCapabilities: [
-        { number: '01', title: 'VISION', chinese: '视觉识别', description: '具备摄像头和视觉识别能力，相比大量仅依赖语音交互的陪伴产品，拥有更多视觉交互空间。' },
-        { number: '02', title: 'MEMORY', chinese: '长期记忆', description: '具备持续记忆能力，让机器人不只是单次问答。' },
-        { number: '03', title: 'MOTION', chinese: '动作表达', description: '多个舵机与电机，可以通过点头、摇头、耳朵等动作表达状态和情绪。' },
-        { number: '04', title: 'CUSTOMIZATION', chinese: '自定义', description: '支持表情和部分功能自定义，用户可以根据自己的需求进行扩展。' },
-        { number: '05', title: 'OPEN DEVELOPMENT', chinese: '开放开发', description: '支持 SDK、开源代码以及进一步的硬件开发，具备创客与编程教育延展空间。' },
+        { number: '01', title: 'VISION', chinese: '视觉识别', description: '具备摄像头和视觉识别能力，相比大量仅依赖语音交互的陪伴产品，拥有更多视觉交互空间。', mediaId: 'capability-vision' },
+        { number: '02', title: 'MEMORY', chinese: '长期记忆', description: '具备持续记忆能力，让机器人不只是单次问答。', mediaId: 'capability-memory' },
+        { number: '03', title: 'MOTION', chinese: '动作表达', description: '多个舵机与电机，可以通过点头、摇头、耳朵等动作表达状态和情绪。', mediaId: 'capability-motion' },
+        { number: '04', title: 'CUSTOMIZATION', chinese: '自定义', description: '支持表情和部分功能自定义，用户可以根据自己的需求进行扩展。', mediaId: 'capability-customization' },
+        { number: '05', title: 'OPEN DEVELOPMENT', chinese: '开放开发', description: '支持 SDK、开源代码以及进一步的硬件开发，具备创客与编程教育延展空间。', mediaId: 'capability-open-development' },
       ],
       roles: [
         { title: 'CONTENT', items: ['产品卖点梳理', '内容方向', '系列选题', '转化 SOP'] },

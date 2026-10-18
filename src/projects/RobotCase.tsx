@@ -130,11 +130,23 @@ function RobotHero({ project, renderMedia }: RobotCaseProps) {
 function ProductSection({ project, renderMedia, onEnter }: RobotCaseProps & { onEnter: () => void }) {
   const data = project.robot!;
   const [active, setActive] = useState(0);
+  const reduceMotion = useReducedMotion();
+  const activeCapability = data.productCapabilities[active];
   return <motion.section id="robot-product" className="robot-section robot-product case-container" onViewportEnter={onEnter} viewport={{ amount: .18 }}>
     <RobotPowerState />
     <RobotHeading index="01" title="THE PRODUCT" statement={<>XIAOXICAI PRO</>} />
     <div className="robot-product__layout">
-      <div className="robot-product__visual">{renderMedia('product')}</div>
+      <div className="robot-product__visual" aria-live="polite">
+        <motion.div
+          className="robot-product__media"
+          key={activeCapability.mediaId}
+          initial={reduceMotion ? false : { opacity: 0, scale: .985 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: reduceMotion ? 0 : .38, ease }}
+        >
+          {renderMedia(activeCapability.mediaId)}
+        </motion.div>
+      </div>
       <div className="robot-product__capabilities">
         {data.productCapabilities.map((item, index) => <button key={item.title} type="button" className={active === index ? 'is-active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)} aria-pressed={active === index}>
           <span>{item.number}</span><strong>{item.title}</strong><small>{item.chinese}</small><p>{item.description}</p>
