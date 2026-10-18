@@ -75,7 +75,8 @@ export const projects: PortfolioProject[] = [
     tags: ['产品内容', '视频', '创客内容', '新品发布'],
     coverIds: ['product', 'launch', 'hero'],
     media: [
-      { id: 'product', title: '小喜财 Pro 四彩产品展示', type: '产品图', kind: 'image', src: projectAsset('ai-robot-product.jpg'), hideMeta: true },
+      { id: 'product', title: '小喜财 Pro 全息交互展示', type: '产品图', kind: 'image', src: projectAsset('ai-robot-product.jpg'), hideMeta: true },
+      { id: 'product-system', title: '小喜财 Pro 四彩产品展示', type: '产品图', kind: 'image', src: projectAsset('ai-robot-system.jpg'), hideMeta: true },
       { id: 'launch', title: '新品发布 · 现场与场景', type: '发布会', kind: 'image' },
       { id: 'hero', title: '小喜财Pro', type: '主视觉', kind: 'image', src: projectAsset('ai-robot-hero.png'), mirrored: true, hideMeta: true },
       { id: 'video', title: '产品宣传视频', type: '视频', kind: 'video' },
@@ -117,7 +118,7 @@ export const projects: PortfolioProject[] = [
         { title: 'LIVE SETUP', items: ['直播间搭建', '直播物料', '场景布置', '直播支持'] },
       ],
       contentStages: [
-        { number: '01', title: 'PRODUCT', question: '它是什么？', items: ['产品整体介绍', '小喜财家族介绍', '应用场景介绍'], description: '早期内容首先解决产品认知，让用户知道机器人是什么、能做什么。', mediaId: 'product' },
+        { number: '01', title: 'PRODUCT', question: '它是什么？', items: ['产品整体介绍', '小喜财家族介绍', '应用场景介绍'], description: '早期内容首先解决产品认知，让用户知道机器人是什么、能做什么。', mediaId: 'product-system' },
         { number: '02', title: 'FEATURE', question: '它能做什么？', items: ['功能展示', '产品测评', '功能测试', '场景演示'], description: '通过更直接的视频展示视觉、记忆、动作等产品能力。', mediaId: 'feature-video' },
         { number: '03', title: 'HOW TO', question: '怎么用？', items: ['设备激活', '配网', '终端配置', '基础使用'], description: '随着产品进入实际使用，内容逐渐从“展示产品”延伸到“帮助用户使用产品”。', mediaId: 'how-to-video' },
         { number: '04', title: 'MAKER', question: '怎么玩 / 怎么开发？', items: ['外观设计', '3D 打印', '主板芯片', '机器人组装', '代码烧录', '功能开发'], description: '围绕产品开放能力，进一步制作面向创客和开发兴趣用户的系列教程。', mediaId: 'maker-design' },
