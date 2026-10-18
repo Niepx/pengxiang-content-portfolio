@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { PortfolioProject } from './data';
 import './robot-case.css';
@@ -30,10 +30,89 @@ function LineArtDecoration({ src, className = '', opacity, delay = 0, interactiv
     initial={reduceMotion ? false : { opacity: 0, y: 18 }}
     whileInView={{ opacity, y: 0 }}
     whileHover={interactive && !reduceMotion ? { opacity: Math.min(opacity + .1, .28), y: -3, scale: 1.02 } : undefined}
-    viewport={{ once: true, amount: .2 }}
+    viewport={{ once: true, amount: className.includes('robot-sketch-cluster') ? .05 : .2 }}
     transition={{ duration: reduceMotion ? 0 : .8, delay: reduceMotion ? 0 : delay, ease: lineArtEase }}
     aria-hidden="true"
   ><img src={lineArtAsset(src)} alt="" /></motion.div>;
+}
+
+function XiaoxicaiCursor() {
+  const cursorRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    if (!finePointer.matches) return;
+
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let currentX = targetX;
+    let currentY = targetY;
+    let rotation = 0;
+    let targetRotation = 0;
+    let scale = 1;
+    let pressed = false;
+    let frame = 0;
+
+    document.body.classList.add('has-xiaoxicai-cursor');
+
+    const render = () => {
+      const previousX = currentX;
+      if (reducedMotion) {
+        currentX = targetX;
+        currentY = targetY;
+        rotation = 0;
+      } else {
+        currentX += (targetX - currentX) * .22;
+        currentY += (targetY - currentY) * .22;
+        targetRotation = Math.max(-3, Math.min(3, (targetX - previousX) * .09));
+        rotation += (targetRotation - rotation) * .2;
+      }
+      cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%) scale(${pressed && !reducedMotion ? .88 : scale}) rotate(${rotation}deg)`;
+      frame = requestAnimationFrame(render);
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (event.pointerType === 'touch') return;
+      targetX = event.clientX;
+      targetY = event.clientY;
+      cursor.classList.add('is-visible');
+      const target = event.target instanceof Element ? event.target : null;
+      const isCloseControl = Boolean(target?.closest('.case-overlay__bar button'));
+      const isMedia = Boolean(target?.closest('.project-media, .robot-maker__videos article, .robot-launch__video, .robot-other__item'));
+      const isInteractive = Boolean(target?.closest('a, button, [role="button"], [tabindex]:not([tabindex="-1"])'));
+      scale = isCloseControl ? .9 : isMedia ? 1.17 : isInteractive ? 1.15 : 1;
+      cursor.classList.toggle('is-interactive', isInteractive || isMedia);
+    };
+    const onPointerDown = (event: PointerEvent) => { if (event.pointerType !== 'touch') pressed = true; };
+    const onPointerUp = () => { pressed = false; };
+    const onPointerLeave = () => cursor.classList.remove('is-visible');
+    const onPointerEnter = (event: PointerEvent) => {
+      if (event.pointerType !== 'touch') cursor.classList.add('is-visible');
+    };
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('pointerdown', onPointerDown, { passive: true });
+    window.addEventListener('pointerup', onPointerUp, { passive: true });
+    document.documentElement.addEventListener('pointerleave', onPointerLeave);
+    document.documentElement.addEventListener('pointerenter', onPointerEnter);
+    frame = requestAnimationFrame(render);
+
+    return () => {
+      document.body.classList.remove('has-xiaoxicai-cursor');
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('pointerup', onPointerUp);
+      document.documentElement.removeEventListener('pointerleave', onPointerLeave);
+      document.documentElement.removeEventListener('pointerenter', onPointerEnter);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return <div ref={cursorRef} className="xiaoxicai-cursor" aria-hidden="true"><img src={lineArtAsset('head-front')} alt="" /></div>;
 }
 
 function RobotSketchCluster() {
@@ -156,6 +235,7 @@ export function RobotCase({ project, renderMedia }: RobotCaseProps) {
   const [activeChapter, setActiveChapter] = useState(0);
   const jumpTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   return <div className="robot-case">
+    <XiaoxicaiCursor />
     <RobotHero project={project} renderMedia={renderMedia} />
     <ProductSection project={project} renderMedia={renderMedia} onEnter={() => setActiveChapter(0)} />
     <RoleSection project={project} onEnter={() => setActiveChapter(1)} />
