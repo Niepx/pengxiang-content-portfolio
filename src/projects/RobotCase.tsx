@@ -1,6 +1,8 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
-import { PortfolioProject } from './data';
+import { Play, X } from 'lucide-react';
+import { MediaItem, PortfolioProject } from './data';
 import './robot-case.css';
 
 type RenderMedia = (id: string, className?: string, autoPreview?: boolean) => ReactNode;
@@ -182,13 +184,17 @@ function ContentSystem({ project, renderMedia, onEnter }: RobotCaseProps & { onE
   </motion.section>;
 }
 
-function MakerSeries({ project, renderMedia, onEnter }: RobotCaseProps & { onEnter: () => void }) {
+function MakerSeries({ project, onEnter }: RobotCaseProps & { onEnter: () => void }) {
   const reduceMotion = useReducedMotion();
   const sectionRef = useRef<HTMLElement | null>(null);
   const videosRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery('(max-width: 700px)');
   const videos = project.robot!.makerVideos;
   const [active, setActive] = useState(0);
+  const [selected, setSelected] = useState<number | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const makerMedia = videos.map(video => ({ ...video, media: project.media.find(item => item.id === video.mediaId) as MediaItem }));
   const makerProgress = useMotionValue(0);
   const robotScale = useTransform(makerProgress, isMobile ? [0, .12, 1] : [0, .25, .5, .75, 1], isMobile ? [.85, 1.05, 1.05] : [.78, .84, .9, .96, 1]);
   const robotX = useTransform(makerProgress, [0, 1], [0, isMobile ? 0 : 8]);
@@ -223,7 +229,33 @@ function MakerSeries({ project, renderMedia, onEnter }: RobotCaseProps & { onEnt
     };
   }, [makerProgress, reduceMotion]);
 
-  return <motion.section ref={sectionRef} id="robot-maker" className={`robot-section robot-maker case-container ${reduceMotion ? 'is-reduced' : ''}`} onViewportEnter={onEnter} viewport={{ amount: .12 }}>
+  useEffect(() => {
+    if (selected === null) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeButtonRef.current?.focus();
+    const close = () => {
+      setSelected(null);
+      requestAnimationFrame(() => triggerRef.current?.focus());
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') close();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [selected]);
+
+  const closePlayer = () => {
+    setSelected(null);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  };
+
+  const selectedVideo = selected === null ? null : makerMedia[selected];
+
+  return <><motion.section ref={sectionRef} id="robot-maker" className={`robot-section robot-maker case-container ${reduceMotion ? 'is-reduced' : ''}`} onViewportEnter={onEnter} viewport={{ amount: .12 }}>
     <RobotHeading index="04" title="MAKER SERIES" statement={<>BUILD A ROBOT<br />FROM ZERO.</>} />
     <p className="robot-maker__intro">将机器人开发过程拆解为系列化教程，面向对 AI、硬件和创客开发感兴趣的用户，同时探索编程教育与线上课程内容方向。</p>
     <div className="robot-maker__layout">
@@ -245,9 +277,36 @@ function MakerSeries({ project, renderMedia, onEnter }: RobotCaseProps & { onEnt
           </motion.div>
         </div>
       </div>
-      <div ref={videosRef} className="robot-maker__videos">{videos.map((video, index) => <motion.article key={video.mediaId} className={active === index ? 'is-active' : ''} onViewportEnter={() => setActive(index)} viewport={{ amount: .55 }}><div>{renderMedia(video.mediaId)}</div><span>{video.number} / MAKER</span><h3>{video.title}</h3><p>{video.chinese}</p></motion.article>)}</div>
+      <div ref={videosRef} className="robot-maker__videos">{makerMedia.map((video, index) => <motion.article key={video.mediaId} className={active === index ? 'is-active' : ''} onViewportEnter={() => setActive(index)} viewport={{ amount: .55 }}>
+        <button
+          type="button"
+          className="robot-maker__cover"
+          onClick={event => {
+            triggerRef.current = event.currentTarget;
+            setSelected(index);
+          }}
+          aria-label={`播放 ${video.title}：${video.chinese}`}
+        >
+          <img src={video.media.poster} alt="" loading="lazy" />
+          <span className="robot-maker__play" aria-hidden="true"><Play size={22} fill="currentColor" /><span>播放视频</span></span>
+        </button>
+        <span>{video.number} / MAKER</span><h3>{video.title}</h3><p>{video.chinese}</p>
+      </motion.article>)}</div>
     </div>
-  </motion.section>;
+  </motion.section>
+    {selectedVideo && createPortal(<div className="maker-player" role="dialog" aria-modal="true" aria-labelledby="maker-player-title">
+      <button type="button" className="maker-player__backdrop" onClick={closePlayer} aria-label="点击遮罩关闭视频播放器" />
+      <div className="maker-player__panel">
+        <header className="maker-player__header">
+          <div><span>{selectedVideo.number} / MAKER SERIES</span><h2 id="maker-player-title">{selectedVideo.title}</h2><p>{selectedVideo.chinese}</p></div>
+          <button ref={closeButtonRef} type="button" className="maker-player__close" onClick={closePlayer} aria-label="关闭视频播放器"><X size={26} /></button>
+        </header>
+        <div className="maker-player__stage">
+          <video key={selectedVideo.media.src} src={selectedVideo.media.src} poster={selectedVideo.media.poster} controls autoPlay playsInline preload="metadata" />
+        </div>
+      </div>
+    </div>, document.body)}
+  </>;
 }
 
 function LaunchFilm({ project, renderMedia, onEnter }: RobotCaseProps & { onEnter: () => void }) {
