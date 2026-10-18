@@ -81,7 +81,7 @@ function ProjectCard({ project, onOpenMedia, onOpenCase }: { project: PortfolioP
       <div className="project-card__head">
         <div className="project-card__index"><strong>{project.number}</strong><span>{project.label || 'PROJECT'}</span></div>
         <div className="project-card__identity"><h3>{project.title}</h3><p>{project.company ? <>{project.company} <span aria-hidden="true">·</span> </> : null}{project.year}</p></div>
-        <button type="button" className="project-case-button" onClick={event => onOpenCase(event.currentTarget)}>VIEW CASE <ArrowUpRight size={19} strokeWidth={1.7} /></button>
+        <button type="button" className="project-case-button" onClick={event => onOpenCase(event.currentTarget)}>查看项目 <ArrowUpRight size={19} strokeWidth={1.7} /></button>
       </div>
       {project.summary && <p className="project-card__summary">{project.summary}</p>}
       <div className="project-card__tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
@@ -184,6 +184,7 @@ function CaseStudyOverlay({ project, onClose, onOpenMedia }: { project: Portfoli
 }
 
 export default function ProjectsSection({ footer }: { footer: React.ReactNode }) {
+  const reduceMotion = useReducedMotion();
   const [activeCase, setActiveCase] = useState<PortfolioProject | null>(null);
   const [activeMediaId, setActiveMediaId] = useState<string | null>(null);
   const [previewProject, setPreviewProject] = useState<PortfolioProject | null>(null);
@@ -197,8 +198,11 @@ export default function ProjectsSection({ footer }: { footer: React.ReactNode })
   const openMedia: MediaOpen = (item, trigger) => { document.querySelectorAll('video').forEach(video => video.pause()); mediaTriggerRef.current = trigger; setPreviewProject(projects.find(project => project.media.includes(item)) || activeCase || projects[0]); setActiveMediaId(item.id); };
   const closeMedia = () => { setActiveMediaId(null); requestAnimationFrame(() => mediaTriggerRef.current?.focus()); };
   return <section id="projects" className="projects-section">
-    <div className="projects-section__intro"><h2>SELECTED PROJECTS</h2><p>一些我真正参与过的产品项目与个人内容实践。</p></div>
-    <div className="projects-section__list">{projects.map((project, index) => <div key={project.id} className="project-stack-item" style={{ '--stack-offset': `${index * 32}px`, zIndex: index + 1 } as CSSProperties}><ProjectCard project={project} onOpenMedia={openMedia} onOpenCase={trigger => openCase(project, trigger)} /></div>)}</div>
+    <div className="projects-section__intro">
+      <motion.h2 initial={reduceMotion ? false : { opacity: 0, y: 34, clipPath: 'inset(0 0 22% 0)', filter: 'blur(8px)' }} whileInView={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', filter: 'blur(0px)' }} viewport={{ once: true, amount: .35 }} transition={{ duration: reduceMotion ? 0 : .72, ease }}>SELECTED PROJECTS</motion.h2>
+      <motion.p initial={reduceMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }} transition={{ duration: reduceMotion ? 0 : .55, delay: reduceMotion ? 0 : .12, ease }}>一些我真正参与过的产品项目与个人内容实践。</motion.p>
+    </div>
+    <div className="projects-section__list">{projects.map((project, index) => <motion.div key={project.id} className="project-stack-item" style={{ '--stack-offset': `${index * 32}px`, zIndex: index + 1 } as CSSProperties} initial={reduceMotion ? false : { opacity: 0, y: 38, scale: .992, filter: 'blur(8px)' }} whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }} viewport={{ once: true, amount: .14 }} transition={{ duration: reduceMotion ? 0 : .68, delay: reduceMotion ? 0 : index * .05, ease }}><ProjectCard project={project} onOpenMedia={openMedia} onOpenCase={trigger => openCase(project, trigger)} /></motion.div>)}</div>
     {footer}
     <CaseStudyOverlay project={activeCase} onClose={closeCase} onOpenMedia={openMedia} />
     <Lightbox items={currentProject.media} activeId={activeMediaId} setActiveId={setActiveMediaId} onClose={closeMedia} />
