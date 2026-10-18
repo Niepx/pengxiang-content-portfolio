@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ArrowUpRight, Plus, X } from 'lucide-react';
 import { MediaItem, PortfolioProject, projects } from './data';
 import { HardwareCase, PersonalCase } from './CaseVariants';
+import { RobotCase } from './RobotCase';
 import './projects.css';
 import './case-variants.css';
 
@@ -28,13 +29,38 @@ function useScrollLock(active: boolean) {
 
 type MediaOpen = (item: MediaItem, trigger: HTMLElement) => void;
 
-function MediaTile({ item, onOpen, className = '', priority = false }: { item: MediaItem; onOpen: MediaOpen; className?: string; priority?: boolean }) {
+function MediaTile({ item, onOpen, className = '', priority = false, autoPreview = false }: { item: MediaItem; onOpen: MediaOpen; className?: string; priority?: boolean; autoPreview?: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const hoverRef = useRef(false);
+  const autoVisibleRef = useRef(false);
   const hasVideo = item.kind === 'video' && Boolean(item.src);
-  const preview = () => { if (window.matchMedia('(hover: hover)').matches) videoRef.current?.play().catch(() => {}); };
-  const stopPreview = () => { if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
-  return <button type="button" className={`project-media group/media ${className}`} onClick={event => onOpen(item, event.currentTarget)} onMouseEnter={preview} onMouseLeave={stopPreview} aria-label={`${item.title}，打开作品查看器`}>
-    {hasVideo ? <video ref={videoRef} src={item.src} poster={mediaPoster(item)} muted loop playsInline preload="metadata" aria-hidden="true" /> : <img src={mediaPoster(item)} alt="" loading={priority ? 'eager' : 'lazy'} />}
+  const [nearViewport, setNearViewport] = useState(!hasVideo);
+  const tileRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!hasVideo || nearViewport || !tileRef.current) return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { setNearViewport(true); observer.disconnect(); }
+    }, { rootMargin: '420px 0px' });
+    observer.observe(tileRef.current);
+    return () => observer.disconnect();
+  }, [hasVideo, nearViewport]);
+  useEffect(() => {
+    if (!autoPreview || !hasVideo || !tileRef.current) return;
+    const canAutoPlay = window.matchMedia('(hover: hover) and (pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!canAutoPlay) return;
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= .55);
+      autoVisibleRef.current = visible;
+      if (visible) { setNearViewport(true); videoRef.current?.play().catch(() => {}); }
+      else videoRef.current?.pause();
+    }, { threshold: [.1, .55, .9] });
+    observer.observe(tileRef.current);
+    return () => { observer.disconnect(); autoVisibleRef.current = false; videoRef.current?.pause(); };
+  }, [autoPreview, hasVideo]);
+  const preview = () => { if (window.matchMedia('(hover: hover)').matches) { hoverRef.current = true; setNearViewport(true); videoRef.current?.play().catch(() => {}); } };
+  const stopPreview = () => { hoverRef.current = false; if (videoRef.current && !autoVisibleRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
+  return <button ref={tileRef} type="button" className={`project-media group/media ${className}`} onClick={event => onOpen(item, event.currentTarget)} onMouseEnter={preview} onMouseLeave={stopPreview} aria-label={`${item.title}，打开作品查看器`}>
+    {hasVideo ? <video ref={videoRef} src={nearViewport ? item.src : undefined} poster={mediaPoster(item)} muted loop playsInline preload="metadata" onCanPlay={() => { if (hoverRef.current || autoVisibleRef.current) videoRef.current?.play().catch(() => {}); }} aria-hidden="true" /> : <img src={mediaPoster(item)} alt="" loading={priority ? 'eager' : 'lazy'} />}
     <span className="project-media__shade" />
     <span className="project-media__meta"><span>{item.type}</span><span>{item.src ? item.title : '素材待替换'}</span></span>
     <span className="project-media__view" aria-hidden="true">VIEW <Plus size={14} strokeWidth={2} /></span>
@@ -57,6 +83,7 @@ function ProjectCard({ project, onOpenMedia, onOpenCase }: { project: PortfolioP
       <div className="project-card__identity"><h3>{project.title}</h3><p>{project.company ? <>{project.company} <span aria-hidden="true">·</span> </> : null}{project.year}</p></div>
       <button type="button" className="project-case-button" onClick={event => onOpenCase(event.currentTarget)}>VIEW CASE <ArrowUpRight size={19} strokeWidth={1.7} /></button>
     </div>
+    {project.summary && <p className="project-card__summary">{project.summary}</p>}
     <div className="project-card__tags">{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
     <ProjectGallery project={project} onOpen={onOpenMedia} />
   </article>;
@@ -147,10 +174,10 @@ function CaseStudyOverlay({ project, onClose, onOpenMedia }: { project: Portfoli
     return () => window.removeEventListener('keydown', keydown);
   }, [project]);
   if (!project) return null;
-  const renderMedia = (id: string, className = '') => <MediaTile item={getMedia(project, id)} onOpen={onOpenMedia} className={className} />;
+  const renderMedia = (id: string, className = '', autoPreview = false) => <MediaTile item={getMedia(project, id)} onOpen={onOpenMedia} className={className} autoPreview={autoPreview} />;
   return createPortal(<div ref={overlayRef} tabIndex={-1} className={`case-overlay ${project.caseType === 'personal' ? 'case-overlay--personal' : ''}`} role="dialog" aria-modal="true" aria-label={`${project.title} 项目详情`}>
     <header className="case-overlay__bar"><button type="button" onClick={onClose}><ArrowLeft size={19} /> BACK TO PROJECTS</button><button type="button" onClick={onClose} aria-label="关闭项目详情"><X size={24} /></button></header>
-    {project.caseType === 'robot' ? <><CaseOverview project={project} /><SelectedWork project={project} onOpen={onOpenMedia} /><HighlightCase project={project} onOpen={onOpenMedia} /><ExecutionGrid /><OutputGallery project={project} onOpen={onOpenMedia} /></> : project.caseType === 'hardware' ? <HardwareCase project={project} renderMedia={renderMedia} /> : <PersonalCase project={project} renderMedia={renderMedia} />}
+    {project.caseType === 'robot' ? <RobotCase project={project} renderMedia={renderMedia} /> : project.caseType === 'hardware' ? <HardwareCase project={project} renderMedia={renderMedia} /> : <PersonalCase project={project} renderMedia={renderMedia} />}
     <footer className="case-overlay__footer">{project.title} <span>{project.company ? `${project.company} · ` : ''}{project.year}</span></footer>
   </div>, document.body);
 }
@@ -166,7 +193,7 @@ export default function ProjectsSection({ footer }: { footer: React.ReactNode })
   useScrollLock(Boolean(activeCase || activeMediaId));
   const openCase = (project: PortfolioProject, trigger: HTMLElement) => { caseTriggerRef.current = trigger; scrollRef.current = window.scrollY; setActiveCase(project); };
   const closeCase = () => { setActiveCase(null); requestAnimationFrame(() => { window.scrollTo({ top: scrollRef.current, behavior: 'instant' }); caseTriggerRef.current?.focus(); }); };
-  const openMedia: MediaOpen = (item, trigger) => { mediaTriggerRef.current = trigger; setPreviewProject(projects.find(project => project.media.includes(item)) || activeCase || projects[0]); setActiveMediaId(item.id); };
+  const openMedia: MediaOpen = (item, trigger) => { document.querySelectorAll('video').forEach(video => video.pause()); mediaTriggerRef.current = trigger; setPreviewProject(projects.find(project => project.media.includes(item)) || activeCase || projects[0]); setActiveMediaId(item.id); };
   const closeMedia = () => { setActiveMediaId(null); requestAnimationFrame(() => mediaTriggerRef.current?.focus()); };
   return <section id="projects" className="projects-section">
     <div className="projects-section__intro"><h2>SELECTED PROJECTS</h2><p>一些我真正参与过的产品项目与个人内容实践。</p></div>

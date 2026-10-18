@@ -22,6 +22,15 @@ export type PortfolioProject = {
   selectedIds: string[];
   outputIds: string[];
   overview: string;
+  summary?: string;
+  robot?: {
+    productCapabilities: { number: string; title: string; chinese: string; description: string }[];
+    roles: { title: string; items: string[] }[];
+    contentStages: { number: string; title: string; question: string; items: string[]; description: string; mediaId: string }[];
+    makerVideos: { number: string; title: string; chinese: string; mediaId: string }[];
+    launch: { mediaId: string; context: string[]; roles: string[]; description: string };
+    otherVideos: { category: string; title: string; mediaId: string }[];
+  };
   highlight?: {
     title: string;
     subtitle: string;
@@ -57,9 +66,9 @@ export const projects: PortfolioProject[] = [
     caseType: 'robot',
     title: 'AI ROBOT',
     company: '四川意外科技有限公司',
-    year: '2025',
+    year: '2025.06 — 2025.12',
     period: '2025.06 — 2025.12',
-    tags: ['产品内容', '短视频', '新品发布', '多平台运营'],
+    tags: ['PRODUCT CONTENT', 'VIDEO', 'MAKER CONTENT', 'PRODUCT LAUNCH'],
     coverIds: ['product', 'launch', 'hero'],
     media: [
       { id: 'product', title: 'AI 桌面机器人 · 产品主视觉', type: '产品图', kind: 'image' },
@@ -71,10 +80,66 @@ export const projects: PortfolioProject[] = [
       { id: 'social', title: '多平台社媒内容', type: '社媒内容', kind: 'image' },
       { id: 'ppt', title: '演示 PPT', type: '商务展示', kind: 'image' },
       { id: 'leaflet', title: '宣传折页', type: '平面物料', kind: 'image' },
+      { id: 'feature-video', title: '产品功能展示', type: 'FEATURE', kind: 'video' },
+      { id: 'how-to-video', title: '激活 / 配网 / 终端配置', type: 'HOW TO', kind: 'video' },
+      { id: 'maker-design', title: '机器人的外观设计', type: 'MAKER', kind: 'video' },
+      { id: 'maker-print', title: '怎么 3D 打印机器人', type: 'MAKER', kind: 'video' },
+      { id: 'maker-chip', title: '主板与芯片的了解', type: 'MAKER', kind: 'video' },
+      { id: 'maker-assembly', title: '小喜财机器人组装', type: 'MAKER', kind: 'video' },
+      { id: 'maker-code', title: '代码与烧录过程', type: 'MAKER', kind: 'video' },
+      { id: 'launch-film', title: '小喜财 Pro 新品宣传片', type: 'PRODUCT LAUNCH', kind: 'video' },
+      { id: 'family-video', title: '小喜财家族机器人功能介绍', type: 'FEATURE', kind: 'video' },
+      { id: 'open-source-video', title: '小喜财开源版功能介绍', type: 'OPEN SOURCE', kind: 'video' },
+      { id: 'cctv-video', title: '小喜财上央视相关内容', type: 'BRAND CONTENT', kind: 'video' },
+      { id: 'review-video', title: '产品功能展示 / 测评', type: 'FEATURE', kind: 'video' },
     ],
     selectedIds: ['hero', 'product', 'launch', 'video', 'feature', 'commerce', 'social'],
     outputIds: ['video', 'launch', 'feature', 'ppt', 'leaflet', 'product'],
-    overview: '围绕 AI 桌面机器人进行产品内容、新媒体传播及新品发布相关内容制作，参与从产品信息梳理、内容策划到视频、视觉和平台发布的完整执行流程。',
+    overview: '围绕小喜财 Pro 进行产品内容策划与制作，从功能展示、用户教程到创客内容和新品传播，逐步探索一套更完整的产品内容表达。',
+    summary: '从产品功能展示，到教程、创客内容与新品传播，围绕一款 AI 机器人逐步建立持续的内容表达。',
+    robot: {
+      productCapabilities: [
+        { number: '01', title: 'VISION', chinese: '视觉识别', description: '具备摄像头和视觉识别能力，相比大量仅依赖语音交互的陪伴产品，拥有更多视觉交互空间。' },
+        { number: '02', title: 'MEMORY', chinese: '长期记忆', description: '具备持续记忆能力，让机器人不只是单次问答。' },
+        { number: '03', title: 'MOTION', chinese: '动作表达', description: '多个舵机与电机，可以通过点头、摇头、耳朵等动作表达状态和情绪。' },
+        { number: '04', title: 'CUSTOMIZATION', chinese: '自定义', description: '支持表情和部分功能自定义，用户可以根据自己的需求进行扩展。' },
+        { number: '05', title: 'OPEN DEVELOPMENT', chinese: '开放开发', description: '支持 SDK、开源代码以及进一步的硬件开发，具备创客与编程教育延展空间。' },
+      ],
+      roles: [
+        { title: 'CONTENT', items: ['产品卖点梳理', '内容方向', '系列选题', '转化 SOP'] },
+        { title: 'VIDEO', items: ['脚本', '分镜', '拍摄', '剪辑', '发布'] },
+        { title: 'EDUCATION', items: ['产品教程', '创客 DIY', '开发内容', '系列课程内容'] },
+        { title: 'VISUAL', items: ['电商物料', '众筹物料', '产品宣传图文'] },
+      ],
+      contentStages: [
+        { number: '01', title: 'PRODUCT', question: '它是什么？', items: ['产品整体介绍', '小喜财家族介绍', '应用场景介绍'], description: '早期内容首先解决产品认知，让用户知道机器人是什么、能做什么。', mediaId: 'product' },
+        { number: '02', title: 'FEATURE', question: '它能做什么？', items: ['功能展示', '产品测评', '功能测试', '场景演示'], description: '通过更直接的视频展示视觉、记忆、动作等产品能力。', mediaId: 'feature-video' },
+        { number: '03', title: 'HOW TO', question: '怎么用？', items: ['设备激活', '配网', '终端配置', '基础使用'], description: '随着产品进入实际使用，内容逐渐从“展示产品”延伸到“帮助用户使用产品”。', mediaId: 'how-to-video' },
+        { number: '04', title: 'MAKER', question: '怎么玩 / 怎么开发？', items: ['外观设计', '3D 打印', '主板芯片', '机器人组装', '代码烧录', '功能开发'], description: '围绕产品开放能力，进一步制作面向创客和开发兴趣用户的系列教程。', mediaId: 'maker-design' },
+        { number: '05', title: 'LAUNCH', question: '为什么值得关注？', items: ['新品宣传', '路演', '新品发布', '现场展示'], description: '内容进一步进入新品传播和线下展示阶段。', mediaId: 'launch-film' },
+      ],
+      makerVideos: [
+        { number: '01', title: 'ROBOT DESIGN', chinese: '机器人的外观设计', mediaId: 'maker-design' },
+        { number: '02', title: '3D PRINT', chinese: '怎么 3D 打印机器人', mediaId: 'maker-print' },
+        { number: '03', title: 'CHIP & BOARD', chinese: '主板与芯片的了解', mediaId: 'maker-chip' },
+        { number: '04', title: 'ASSEMBLY', chinese: '小喜财机器人组装', mediaId: 'maker-assembly' },
+        { number: '05', title: 'CODE & FLASH', chinese: '代码与烧录过程', mediaId: 'maker-code' },
+      ],
+      launch: {
+        mediaId: 'launch-film',
+        context: ['重阳节', '成都世纪城', '智慧康养机器人展演', '新品发布 / 路演 / 现场展示'],
+        roles: ['内容策划', '路演流程设计', '路演脚本', '新品宣传片策划', '拍摄', '剪辑', '现场展示讲解'],
+        description: '围绕新品发布，将机器人的陪伴、提醒、视觉等产品能力放入家庭生活场景，通过人物关系和真实使用场景完成产品表达。',
+      },
+      otherVideos: [
+        { category: 'FEATURE', title: '小喜财家族机器人功能介绍', mediaId: 'family-video' },
+        { category: 'FEATURE', title: '小喜财功能详解', mediaId: 'feature-video' },
+        { category: 'HOW TO', title: '激活教程 / 配网和终端配置', mediaId: 'how-to-video' },
+        { category: 'OPEN SOURCE', title: '小喜财开源版功能介绍', mediaId: 'open-source-video' },
+        { category: 'BRAND CONTENT', title: '小喜财上央视相关内容', mediaId: 'cctv-video' },
+        { category: 'FEATURE', title: '产品功能展示 / 测评', mediaId: 'review-video' },
+      ],
+    },
     highlight: {
       title: 'XIAOXICAI PRO',
       subtitle: '一款有记忆的跨代机器人',
