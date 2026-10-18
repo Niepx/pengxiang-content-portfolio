@@ -1,5 +1,5 @@
-import { ReactNode, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { ReactNode, useEffect, useRef, useState } from 'react';
+import { motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
 import { PortfolioProject } from './data';
 import './robot-case.css';
 
@@ -101,6 +101,20 @@ function RobotHeading({ index, title, statement }: { index: string; title: strin
   </div>;
 }
 
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() => typeof window !== 'undefined' && window.matchMedia(query).matches);
+
+  useEffect(() => {
+    const media = window.matchMedia(query);
+    const update = () => setMatches(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, [query]);
+
+  return matches;
+}
+
 function RobotHero({ project, renderMedia }: RobotCaseProps) {
   return <section className="robot-hero case-container">
     <div className="robot-hero__copy">
@@ -158,14 +172,68 @@ function ContentSystem({ project, renderMedia, onEnter }: RobotCaseProps & { onE
 
 function MakerSeries({ project, renderMedia, onEnter }: RobotCaseProps & { onEnter: () => void }) {
   const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const videosRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery('(max-width: 700px)');
   const videos = project.robot!.makerVideos;
   const [active, setActive] = useState(0);
-  return <motion.section id="robot-maker" className={`robot-section robot-maker case-container ${reduceMotion ? 'is-reduced' : ''}`} onViewportEnter={onEnter} viewport={{ amount: .12 }}>
+  const makerProgress = useMotionValue(0);
+  const robotScale = useTransform(makerProgress, isMobile ? [0, .12, 1] : [0, .25, .5, .75, 1], isMobile ? [.85, 1.05, 1.05] : [.78, .95, 1.18, 1.48, 1.95]);
+  const robotX = useTransform(makerProgress, [0, 1], [0, isMobile ? 0 : 24]);
+  const robotY = useTransform(makerProgress, [0, 1], [0, isMobile ? 0 : -38]);
+  const robotOpacity = useTransform(makerProgress, isMobile ? [0, .12, 1] : [0, .5, 1], isMobile ? [.18, .25, .25] : [.18, .29, .48]);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const videoList = videosRef.current;
+    const scroller = section?.closest<HTMLElement>('.case-overlay');
+    if (!section || !videoList || !scroller || reduceMotion) return;
+
+    const update = () => {
+      const sectionRect = section.getBoundingClientRect();
+      const scrollerRect = scroller.getBoundingClientRect();
+      if (sectionRect.bottom < scrollerRect.top - scroller.clientHeight || sectionRect.top > scrollerRect.bottom + scroller.clientHeight) return;
+      const firstItem = videoList.firstElementChild?.getBoundingClientRect();
+      const lastItem = videoList.lastElementChild?.getBoundingClientRect();
+      if (!firstItem || !lastItem) return;
+      const viewportCenter = scroller.clientHeight / 2;
+      const start = scroller.scrollTop + firstItem.top + firstItem.height / 2 - scrollerRect.top - viewportCenter;
+      const end = scroller.scrollTop + lastItem.top + lastItem.height / 2 - scrollerRect.top - viewportCenter;
+      makerProgress.set(Math.min(1, Math.max(0, (scroller.scrollTop - start) / Math.max(1, end - start))));
+    };
+    scroller.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+
+    return () => {
+      scroller.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, [makerProgress, reduceMotion]);
+
+  return <motion.section ref={sectionRef} id="robot-maker" className={`robot-section robot-maker case-container ${reduceMotion ? 'is-reduced' : ''}`} onViewportEnter={onEnter} viewport={{ amount: .12 }}>
     <RobotHeading index="04" title="MAKER SERIES" statement={<>BUILD A ROBOT<br />FROM ZERO.</>} />
     <p className="robot-maker__intro">将机器人开发过程拆解为系列化教程，面向对 AI、硬件和创客开发感兴趣的用户，同时探索编程教育与线上课程内容方向。</p>
     <div className="robot-maker__layout">
-      <div className="robot-maker__sticky"><h3>BUILD A ROBOT<br />FROM ZERO.</h3><span>MAKER SERIES<br />01 — 05</span><LineArtDecoration src="body-front" className="robot-maker__sketch" opacity={.13} interactive /></div>
-      <div className="robot-maker__videos">{videos.map((video, index) => <motion.article key={video.mediaId} className={active === index ? 'is-active' : ''} onViewportEnter={() => setActive(index)} viewport={{ amount: .55 }}><div>{renderMedia(video.mediaId)}</div><span>{video.number} / MAKER</span><h3>{video.title}</h3><p>{video.chinese}</p></motion.article>)}</div>
+      <div className="robot-maker__sticky">
+        <h3>BUILD A ROBOT<br />FROM ZERO.</h3><span>MAKER SERIES<br />01 — 05</span>
+        <div className="robot-maker__visual" aria-hidden="true">
+          <motion.div
+            className="robot-maker__approach"
+            initial={reduceMotion ? false : { opacity: 0, scale: isMobile ? 1 : .923 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: .2 }}
+            transition={{ duration: reduceMotion ? 0 : .5, ease: lineArtEase }}
+          >
+            <motion.img
+              src={lineArtAsset('body-front')}
+              alt=""
+              style={reduceMotion ? { scale: 1, x: 0, y: 0, opacity: .25 } : { scale: robotScale, x: robotX, y: robotY, opacity: robotOpacity }}
+            />
+          </motion.div>
+        </div>
+      </div>
+      <div ref={videosRef} className="robot-maker__videos">{videos.map((video, index) => <motion.article key={video.mediaId} className={active === index ? 'is-active' : ''} onViewportEnter={() => setActive(index)} viewport={{ amount: .55 }}><div>{renderMedia(video.mediaId)}</div><span>{video.number} / MAKER</span><h3>{video.title}</h3><p>{video.chinese}</p></motion.article>)}</div>
     </div>
   </motion.section>;
 }
