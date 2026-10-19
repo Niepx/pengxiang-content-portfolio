@@ -2,6 +2,7 @@ import { CSSProperties, ReactNode, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { PortfolioProject } from './data';
+import Project02Case from './Project02Case';
 
 type RenderMedia = (id: string, className?: string) => ReactNode;
 type CaseProps = { project: PortfolioProject; renderMedia: RenderMedia };
@@ -188,7 +189,7 @@ function HardwareSelectedWork({ project, renderMedia }: CaseProps) {
 }
 
 export function HardwareCase({ project, renderMedia }: CaseProps) {
-  return <><HardwareOverview project={project} /><AiWorkflow project={project} renderMedia={renderMedia} /><AiPanda project={project} renderMedia={renderMedia} /><WaiWai project={project} renderMedia={renderMedia} /><TourGuide project={project} renderMedia={renderMedia} /><FiveElementsHorse project={project} renderMedia={renderMedia} /><BrandWork project={project} renderMedia={renderMedia} /><SelectedProductVideos project={project} renderMedia={renderMedia} /></>;
+  return <Project02Case project={project} renderMedia={renderMedia} />;
 }
 
 function PersonalOverview({ project }: { project: PortfolioProject }) {
