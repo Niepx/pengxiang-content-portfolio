@@ -139,14 +139,16 @@ function CaseStudyOverlay({ project, onClose }: { project: PortfolioProject | nu
   useEffect(() => {
     if (!project) return;
     overlayRef.current?.focus();
-    const keydown = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    const keydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && project.caseType !== 'hardware') onClose();
+    };
     window.addEventListener('keydown', keydown);
     return () => window.removeEventListener('keydown', keydown);
-  }, [project]);
+  }, [project, onClose]);
   if (!project) return null;
   const renderMedia = (id: string, className = '', autoPreview = false) => <MediaTile item={getMedia(project, id)} className={className} autoPreview={autoPreview} />;
-  return createPortal(<div ref={overlayRef} tabIndex={-1} className={`case-overlay ${project.caseType === 'personal' ? 'case-overlay--personal' : ''}`} role="dialog" aria-modal="true" aria-label={`${project.title} 项目详情`}>
-    <header className="case-overlay__bar"><button type="button" onClick={onClose}><ArrowLeft size={19} /> BACK TO PROJECTS</button><button type="button" onClick={onClose} aria-label="关闭项目详情"><X size={24} /></button></header>
+  return createPortal(<div ref={overlayRef} tabIndex={-1} className={`case-overlay ${project.caseType === 'personal' ? 'case-overlay--personal' : ''} ${project.caseType === 'hardware' ? 'case-overlay--hardware' : ''}`} role="dialog" aria-modal="true" aria-label={`${project.title} 项目详情`}>
+    <header className="case-overlay__bar"><button type="button" onClick={onClose}><ArrowLeft size={19} /> BACK TO PROJECTS</button>{project.caseType !== 'hardware' && <button type="button" onClick={onClose} aria-label="关闭项目详情"><X size={24} /></button>}</header>
     {project.caseType === 'robot' ? <RobotCase project={project} renderMedia={renderMedia} /> : project.caseType === 'hardware' ? <HardwareCase project={project} renderMedia={renderMedia} /> : <PersonalCase project={project} renderMedia={renderMedia} />}
     <footer className="case-overlay__footer">{project.title} <span>{project.company ? `${project.company} · ` : ''}{project.year}</span></footer>
   </div>, document.body);

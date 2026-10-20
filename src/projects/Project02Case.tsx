@@ -1,203 +1,180 @@
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
+import { CSSProperties, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Maximize2, Play, X } from 'lucide-react';
-import { MediaItem, PortfolioProject } from './data';
+import { PortfolioProject } from './data';
 import './project-02-case.css';
 
-type RenderMedia = (id: string, className?: string) => ReactNode;
+type RenderMedia = (id: string, className?: string, autoPreview?: boolean) => ReactNode;
 type Project02Props = { project: PortfolioProject; renderMedia: RenderMedia };
+type Meta = { eyebrow?: string; title?: string; description?: string; keywords?: string };
+type OpenMedia = (ids: string[], index?: number, meta?: Meta[]) => void;
+type Gallery = { mode: 'circular' | 'accordion'; ids: string[]; title: string } | null;
 const ease = [0.16, 1, 0.3, 1] as const;
 
-function FadeContent({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
-  const reduceMotion = useReducedMotion();
-  return <motion.div className={className} initial={reduceMotion ? false : { opacity: .58, y: 22, clipPath: 'inset(0 0 7% 0)' }} whileInView={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)' }} viewport={{ once: true, amount: .14 }} transition={{ duration: reduceMotion ? 0 : .62, delay: reduceMotion ? 0 : delay, ease }}>{children}</motion.div>;
+function Reveal({ children }: { children: ReactNode }) {
+  const reduce = useReducedMotion();
+  return <motion.div initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .08 }} transition={{ duration: reduce ? 0 : .65, ease }}>{children}</motion.div>;
 }
 
-function SectionHeader({ number, label, title, intro, tech = false }: { number: string; label: string; title: ReactNode; intro: string; tech?: boolean }) {
-  return <header className="p02-header">
-    <div className="p02-header__index"><span>{number}</span><span>{label}</span></div>
-    <h2 className={tech ? 'p02-tech-text' : undefined}>{title}</h2>
-    <p>{intro}</p>
-  </header>;
+function Header({ number, label, chinese, title, intro }: { number: string; label: string; chinese: string; title: ReactNode; intro: string }) {
+  return <header className="p02-header"><div className="p02-header__index"><b>{number}</b><span>{label}</span><small>{chinese}</small></div><div className="p02-header__copy"><h2>{title}</h2><p>{intro}</p></div></header>;
 }
 
-function MediaCaption({ label, title }: { label: string; title: string }) {
-  return <div className="p02-media-caption"><span>{label}</span><strong>{title}</strong></div>;
+function Caption({ eyebrow, title }: { eyebrow: string; title: string }) {
+  return <span className="p02-caption"><small>{eyebrow}</small><strong>{title}</strong></span>;
 }
 
-function MediaLightbox({ item, renderMedia, onClose }: { item: MediaItem; renderMedia: RenderMedia; onClose: () => void }) {
-  useEffect(() => {
-    const close = (event: KeyboardEvent) => event.key === 'Escape' && onClose();
-    window.addEventListener('keydown', close);
-    return () => window.removeEventListener('keydown', close);
-  }, [onClose]);
-  return <motion.div className="p02-lightbox" role="dialog" aria-modal="true" aria-label={item.title} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
-    <button className="p02-lightbox__close" type="button" onClick={onClose} aria-label="关闭预览"><X /></button>
-    <div className="p02-lightbox__body" onClick={event => event.stopPropagation()}>
-      {item.kind === 'video' && item.src ? <video src={item.src} poster={item.poster} controls autoPlay playsInline /> : item.kind === 'image' && item.src ? <img src={item.src} alt={item.title} /> : <div className="p02-lightbox__placeholder">{renderMedia(item.id)}<span>真实素材待替换</span></div>}
-      <MediaCaption label={item.type} title={item.title} />
-    </div>
+function MediaButton({ id, renderMedia, eyebrow, title, onOpen, video = false, className = '' }: { id: string; renderMedia: RenderMedia; eyebrow: string; title: string; onOpen: () => void; video?: boolean; className?: string }) {
+  const ref = useRef<HTMLButtonElement>(null);
+  const timer = useRef<number | null>(null);
+  const resetPreview = () => { if (timer.current) window.clearTimeout(timer.current); const player = ref.current?.querySelector('video'); if (player) { player.pause(); player.currentTime = 0; } };
+  useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); }, []);
+  return <button ref={ref} type="button" className={`p02-media ${video ? 'is-video' : ''} ${className}`} onClick={onOpen} onMouseEnter={() => { if (video && window.matchMedia('(hover:hover) and (pointer:fine)').matches) { if (timer.current) window.clearTimeout(timer.current); timer.current = window.setTimeout(resetPreview, 3200); } }} onMouseLeave={() => video && resetPreview()} aria-label={`${video ? '播放' : '查看'} ${title}`}>{renderMedia(id)}<span className="p02-media__action">{video ? <><Play size={16} fill="currentColor" /> PLAY ↗</> : <><Maximize2 size={16} /> VIEW</>}</span><Caption eyebrow={eyebrow} title={title} /></button>;
+}
+
+function Lightbox({ project, renderMedia, state, onIndex, onClose }: Project02Props & { state: { ids: string[]; index: number; meta: Meta[] }; onIndex: (index: number) => void; onClose: () => void }) {
+  const item = project.media.find(media => media.id === state.ids[state.index])!;
+  const copy = state.meta[state.index] || {};
+  return <motion.div className="p02-lightbox" role="dialog" aria-modal="true" aria-label={copy.title || item.title} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
+    <button className="p02-overlay-close" type="button" onClick={onClose} aria-label="关闭预览"><X /></button>
+    {state.ids.length > 1 && <button className="p02-overlay-arrow is-left" type="button" onClick={e => { e.stopPropagation(); onIndex((state.index - 1 + state.ids.length) % state.ids.length); }} aria-label="上一项"><ArrowLeft /></button>}
+    <div className="p02-lightbox__body" onClick={e => e.stopPropagation()}><div className="p02-lightbox__media">{item.kind === 'video' && item.src ? <video key={item.src} src={item.src} poster={item.poster} controls autoPlay playsInline /> : item.kind === 'image' && item.src ? <img src={item.src} alt={copy.title || item.title} /> : renderMedia(item.id)}</div><div className="p02-lightbox__copy"><span>{copy.eyebrow || item.type}</span><h3>{copy.title || item.title}</h3>{copy.description && <p>{copy.description}</p>}{copy.keywords && <small>{copy.keywords}</small>}</div></div>
+    {state.ids.length > 1 && <button className="p02-overlay-arrow is-right" type="button" onClick={e => { e.stopPropagation(); onIndex((state.index + 1) % state.ids.length); }} aria-label="下一项"><ArrowRight /></button>}
   </motion.div>;
 }
 
-function MediaPreview({ project, id, renderMedia, label, title, className = '', video = false }: Project02Props & { id: string; label?: string; title?: string; className?: string; video?: boolean }) {
-  const [open, setOpen] = useState(false);
-  const item = project.media.find(media => media.id === id)!;
-  return <>
-    <button type="button" className={`p02-media-preview ${video ? 'is-video' : ''} ${className}`} onClick={() => setOpen(true)} aria-label={`查看 ${title || item.title}`}>
-      {renderMedia(id)}
-      <span className="p02-media-preview__action">{video ? <><Play size={18} fill="currentColor" /> PLAY FILM</> : <><Maximize2 size={17} /> VIEW</>}</span>
-      <MediaCaption label={label || item.type} title={title || item.title} />
-    </button>
-    <AnimatePresence>{open && <MediaLightbox item={item} renderMedia={renderMedia} onClose={() => setOpen(false)} />}</AnimatePresence>
-  </>;
-}
-
-function ScrollExpand({ children, className = '' }: { children: ReactNode; className?: string }) {
-  const reduceMotion = useReducedMotion();
-  return <motion.div className={`p02-scroll-expand ${className}`} initial={reduceMotion ? false : { scale: .94, borderRadius: 24 }} whileInView={{ scale: 1, borderRadius: 4 }} viewport={{ once: true, amount: .32 }} transition={{ duration: reduceMotion ? 0 : .72, ease }}>{children}</motion.div>;
-}
-
-function CardSwap({ project, renderMedia }: Project02Props) {
-  const cards = [
-    { id: 'panda-package-v1', version: 'V1', title: '定位与信息框架', note: '先建立产品定位、核心卖点和基础信息层级。' },
-    { id: 'panda-package-v2', version: 'V2', title: '视觉语言推进', note: '进一步统一角色气质、包装视觉和沟通语气。' },
-    { id: 'panda-package-v3', version: 'V3', title: '交付版本', note: '整合信息、视觉与生产约束，形成最终交付方向。' },
-  ];
+function GalleryOverlay({ gallery, renderMedia, onOpen, onClose }: { gallery: NonNullable<Gallery>; renderMedia: RenderMedia; onOpen: OpenMedia; onClose: () => void }) {
   const [active, setActive] = useState(0);
-  return <div className="p02-card-swap">
-    <div className="p02-card-swap__stage">{cards.map((card, index) => {
-      const offset = (index - active + cards.length) % cards.length;
-      return <button type="button" key={card.version} className={`p02-card-swap__card offset-${offset}`} onClick={() => setActive(index)} aria-label={`查看包装迭代 ${card.version}`} aria-pressed={active === index}>
-        {renderMedia(card.id)}<span>{card.version}</span>
-      </button>;
-    })}</div>
-    <div className="p02-card-swap__copy"><span>PACKAGING ITERATION / {cards[active].version}</span><h4>{cards[active].title}</h4><p>{cards[active].note}</p><div>{cards.map((card, index) => <button key={card.version} type="button" aria-label={`切换到 ${card.version}`} aria-pressed={active === index} onClick={() => setActive(index)}>{card.version}</button>)}</div></div>
-  </div>;
-}
-
-function TrueFocus() {
-  const words = ['UNDERSTAND', 'ANALYZE', 'POSITION', 'COMMUNICATE'];
-  const [active, setActive] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const visible = useInView(ref, { amount: .5 });
-  const reduceMotion = useReducedMotion();
+  const stageRef = useRef<HTMLDivElement>(null);
+  const drag = useRef({ active: false, x: 0, left: 0 });
+  const move = (next: number) => {
+    const index = (next + gallery.ids.length) % gallery.ids.length;
+    setActive(index);
+    stageRef.current?.children[index]?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  };
   useEffect(() => {
-    if (!visible || reduceMotion) return;
-    const timer = window.setInterval(() => setActive(value => (value + 1) % words.length), 1800);
-    return () => window.clearInterval(timer);
-  }, [visible, reduceMotion]);
-  return <div ref={ref} className="p02-true-focus" aria-label="理解、分析、定位、表达">{words.map((word, index) => <button key={word} type="button" className={active === index ? 'is-active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)}>{word}<span>{index < words.length - 1 ? '→' : ''}</span></button>)}</div>;
+    const keys = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowRight') move(active + 1);
+      if (event.key === 'ArrowLeft') move(active - 1);
+    };
+    window.addEventListener('keydown', keys);
+    return () => window.removeEventListener('keydown', keys);
+  }, [active]);
+  return <motion.div className={`p02-gallery-overlay is-${gallery.mode}`} role="dialog" aria-modal="true" aria-label={gallery.title} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><header><span>{gallery.mode === 'circular' ? 'CIRCULAR GALLERY' : 'ACCORDION GALLERY'}</span><h3>{gallery.title}</h3><button type="button" onClick={onClose} aria-label="关闭画廊"><X /></button></header><div ref={stageRef} className="p02-gallery-overlay__stage" onWheel={event => { if (gallery.mode === 'circular' && stageRef.current) { stageRef.current.scrollLeft += event.deltaY; } }} onPointerDown={event => { if (gallery.mode === 'circular' && stageRef.current) drag.current = { active: true, x: event.clientX, left: stageRef.current.scrollLeft }; }} onPointerMove={event => { if (drag.current.active && stageRef.current) stageRef.current.scrollLeft = drag.current.left - (event.clientX - drag.current.x); }} onPointerUp={() => { drag.current.active = false; }} onPointerLeave={() => { drag.current.active = false; }}>{gallery.ids.map((id, index) => <button type="button" key={`${id}-${index}`} className={active === index ? 'is-active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => gallery.mode === 'accordion' && active !== index ? setActive(index) : onOpen(gallery.ids, index)} style={{ '--i': index } as CSSProperties}>{renderMedia(id)}<span>{String(index + 1).padStart(2, '0')}</span></button>)}</div></motion.div>;
 }
 
-function AiWorkflow({ project, renderMedia }: Project02Props) {
-  const workflows = [
-    { number: '01', title: 'PRODUCT VISUAL → VIDEO', text: '从基础产品素材出发，让 AI 进入图像处理、视觉确定、关键帧和视频后期，而不是把生成结果当成终点。', steps: ['Original', 'AI Processing', 'Product Visual', 'Key Frames', 'AI Video', 'Post', 'Final'], media: [['workflow-original', 'BEFORE'], ['workflow-result', 'PRODUCT VISUAL'], ['workflow-frames', 'KEY FRAMES'], ['workflow-video', 'FINAL VIDEO']] },
-    { number: '02', title: 'CONCEPT → PRESENTATION', text: '以五行灵骥为例，从文化概念和人格方向出发，逐步建立视觉、原型页面与最终展示。', steps: ['Concept', 'AI Persona', 'Visual Direction', 'Product Visual', 'Prototype', 'Presentation'], media: [['workflow-concept', 'CONCEPT'], ['horse-hero', 'VISUAL DIRECTION'], ['workflow-prototype', 'PROTOTYPE'], ['workflow-result', 'PRESENTATION']] },
-  ];
-  return <FadeContent><section className="p02-section p02-workflow">
-    <SectionHeader number="01" label="AI WORKFLOW" title={<>AI IS A TOOL,<br />NOT THE RESULT.</>} intro="AI 被放进真实内容生产流程中，最终服务于产品表达与可交付成果。" tech />
-    {workflows.map(flow => <article className="p02-workflow__case" key={flow.number}>
-      <div className="p02-workflow__summary"><span>WORKFLOW {flow.number}</span><h3>{flow.title}</h3><p>{flow.text}</p></div>
-      <ol className="p02-workflow__line">{flow.steps.map((step, index) => <li key={step}><span>{String(index + 1).padStart(2, '0')}</span><strong>{step}</strong></li>)}</ol>
-      <div className="p02-workflow__media">{flow.media.map(([id, label], index) => <MediaPreview key={id + label} project={project} renderMedia={renderMedia} id={id} label={label} className={index === 0 || index === 3 ? 'is-wide' : ''} video={id === 'workflow-video'} />)}</div>
-    </article>)}
-  </section></FadeContent>;
+const workflows = [
+  { number: '01', title: 'PRODUCT VISUAL → VIDEO', text: '从基础产品素材出发，把 AI 嵌入图像处理、视觉确定、关键帧与视频后期。', steps: ['Original', 'AI Processing', 'Product Visual', 'Key Frames', 'AI Video', 'Post', 'Final'], media: ['workflow-original', 'workflow-process', 'workflow-result', 'workflow-frames', 'workflow-video', 'workflow-video', 'workflow-result'] },
+  { number: '02', title: 'REAL PRODUCT → AI FILM', text: '以 AI 机芯盒为例，将真实产品画面推进为有节奏、有叙事的 AI 产品影片。', steps: ['Brief', 'Product Shoot', 'Visual Frame', 'AI Motion', 'Edit', 'Delivery'], media: ['hero', 'workflow-original', 'workflow-result', 'workflow-video', 'video-ai-product', 'workflow-video'] },
+  { number: '03', title: 'CONCEPT → PRESENTATION', text: '从文化概念和人格方向出发，建立视觉、原型页面与最终展示。', steps: ['Concept', 'AI Persona', 'Visual Direction', 'Product Visual', 'Prototype', 'Presentation'], media: ['workflow-concept', 'horse-metal', 'horse-hero', 'workflow-result', 'workflow-prototype', 'horse-presentation'] },
+];
+
+function Workflow({ flow, renderMedia, onOpen }: { flow: typeof workflows[number]; renderMedia: RenderMedia; onOpen: OpenMedia }) {
+  const [hover, setHover] = useState<number | null>(null);
+  const [locked, setLocked] = useState(0);
+  const active = hover ?? locked;
+  return <article className="p02-workflow"><div className="p02-workflow__intro"><span>WORKFLOW {flow.number}</span><h3>{flow.title}</h3><p>{flow.text}</p></div><div className="p02-workflow__steps">{flow.steps.map((step, index) => <button type="button" key={step} className={active === index ? 'is-active' : ''} onMouseEnter={() => setHover(index)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(index)} onBlur={() => setHover(null)} onClick={() => setLocked(index)} aria-pressed={locked === index}><small>{String(index + 1).padStart(2, '0')}</small><strong>{step}</strong></button>)}</div><div className="p02-media-rail">{flow.media.map((id, index) => <button type="button" key={`${id}-${index}`} className={active === index ? 'is-active' : ''} onMouseEnter={() => setHover(index)} onMouseLeave={() => setHover(null)} onClick={() => { setLocked(index); onOpen(flow.media, index); }}>{renderMedia(id, '', id.includes('video'))}<span>{String(index + 1).padStart(2, '0')}</span></button>)}</div></article>;
 }
 
-function AiPanda({ project, renderMedia }: Project02Props) {
-  const [uiPage, setUiPage] = useState(0);
-  const ui = ['panda-mini-program', 'panda-prototype', 'panda-ui-flow', 'panda-ui-device'];
-  return <FadeContent><section className="p02-section p02-panda">
-    <SectionHeader number="02" label="AI PANDA" title={<>FROM DIRECTION<br />TO DELIVERY.</>} intro="在约 20 天的窗口中，参与方向梳理、视觉与传播内容的快速推进，让产品从想法进入可沟通、可交付的状态。" />
-    <ScrollExpand className="p02-panda__hero"><MediaPreview project={project} renderMedia={renderMedia} id="panda-hero" label="20 DAYS / 0 → 1" title="AI PANDA / 快速交付窗口" /></ScrollExpand>
-    <div className="p02-panda__narrative"><p>工作从内容执行继续向前：参与产品方向、陪伴逻辑和传播表达的梳理，并在紧凑周期中完成多类视觉与内容输出。</p><dl><div><dt>DIRECTION</dt><dd>定位与陪伴体验理解</dd></div><div><dt>VISUAL</dt><dd>产品视觉与包装迭代</dd></div><div><dt>COMMUNICATION</dt><dd>手册、软件与视频表达</dd></div></dl></div>
-    <div className="p02-panda__swap"><div><span>PACKAGING</span><h3>V1 → V2 → V3</h3><p>以可回看、可比较的方式呈现包装方向如何逐步收敛。</p></div><CardSwap project={project} renderMedia={renderMedia} /></div>
-    <div className="p02-manual"><div><span>PRODUCT MANUAL</span><h3>复杂信息，重新组织为清晰路径。</h3><p>围绕开机、App 下载、设备配对、角色设定、NFC 与参数信息，参与信息结构与版式组织。</p></div><MediaPreview project={project} renderMedia={renderMedia} id="panda-manual" label="EDITORIAL / MANUAL" title="产品说明手册" /></div>
-    <div className="p02-software"><div className="p02-software__intro"><span>SOFTWARE EXPERIENCE</span><h3>安家兔小程序</h3><p>参与功能规划、页面逻辑与交互原型梳理，并参与需求沟通与技术对接。</p></div><div className="p02-software__viewer"><AnimatePresence mode="wait"><motion.div key={ui[uiPage]} initial={{ opacity: .5, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -14 }} transition={{ duration: .3, ease }}>{renderMedia(ui[uiPage])}</motion.div></AnimatePresence><div><button type="button" onClick={() => setUiPage(value => (value - 1 + ui.length) % ui.length)} aria-label="上一页"><ArrowLeft /></button><span>{String(uiPage + 1).padStart(2, '0')} / {String(ui.length).padStart(2, '0')}</span><button type="button" onClick={() => setUiPage(value => (value + 1) % ui.length)} aria-label="下一页"><ArrowRight /></button></div></div></div>
-    <div className="p02-output-film"><div><span>VIDEO / VISUAL OUTPUT</span><h3>PRODUCT DEMO VIDEO</h3><p>内容策划 / 视觉方向 / 图形物料 / 视频规划与制作</p></div><MediaPreview project={project} renderMedia={renderMedia} id="panda-video" label="PRODUCT DEMO VIDEO" title="AI Panda 产品视频" video /></div>
-    <div className="p02-awards"><span>AWARD</span><strong>SICHUAN GOLD AWARD</strong><strong>NATIONAL SILVER AWARD</strong></div>
-  </section></FadeContent>;
+function LogoLoop() {
+  const names = ['MIDJOURNEY', 'RUNWAY', 'KLING', 'CHATGPT', 'PREMIERE', 'PHOTOSHOP'];
+  return <div className="p02-logo-loop"><div>{[...names, ...names].map((name, index) => <span key={`${name}-${index}`}>{name}</span>)}</div></div>;
 }
 
-function WaiWai({ project, renderMedia }: Project02Props) {
-  return <FadeContent><section className="p02-section p02-waiwai">
-    <SectionHeader number="03" label="WAIWAI" title={<>THINK FIRST.<br />THEN COMMUNICATE.</>} intro="基于已有产品能力，参与应用方向与卖点分析，并将产品思考进一步转化为图文与视频表达。" />
-    <div className="p02-waiwai__thinking"><article><span>01 / ENTERPRISE COLLABORATION</span><h3>企业协作自动化</h3><p>围绕企业办公生态，思考接入企业微信、钉钉等协同工具后的自动化工作流价值。</p></article><article><span>02 / EAP · WORKPLACE CARE</span><h3>职场关怀场景探索</h3><p>结合主动提醒与轻量互动能力，延展至压力自评、休息提醒、职场关怀等 EAP 辅助场景。</p></article></div>
-    <TrueFocus />
-    <div className="p02-waiwai__translation"><span>理解已有产品能力</span><span>判断潜在应用方向</span><span>提炼价值与卖点</span><span>转译为内容</span></div>
-    <div className="p02-waiwai__output"><div className="p02-waiwai__visual">{renderMedia('waiwai-campaign')}<MediaCaption label="CONTENT OUTPUT" title="图文物料 / 产品视觉" /></div><MediaPreview project={project} renderMedia={renderMedia} id="waiwai-video" label="PRODUCT DEMO VIDEO" title="WaiWai 产品演示" video /></div>
-    <p className="p02-role">MY ROLE / 场景分析 · 卖点梳理 · 图文制作 · 视频策划 / 拍摄 / 剪辑</p>
-  </section></FadeContent>;
+function AiWorkflow({ renderMedia, onOpen }: { renderMedia: RenderMedia; onOpen: OpenMedia }) {
+  return <Reveal><section className="p02-section"><Header number="01" label="AI WORKFLOW" chinese="AI 工作流" title={<>AI IS A TOOL,<br />NOT THE RESULT.</>} intro="AI 被放进真实内容生产流程，最终服务于产品表达与可交付成果。" />{workflows.map((flow, index) => <div key={flow.number}><Workflow flow={flow} renderMedia={renderMedia} onOpen={onOpen} />{index < workflows.length - 1 && <LogoLoop />}</div>)}</section></Reveal>;
 }
 
-function TourGuide({ project, renderMedia }: Project02Props) {
-  const points = [['01 / POSITION', 'AI 文旅随身导览解决方案'], ['02 / SCENARIO', '景区 / 博物馆 / 文旅街区 / 研学'], ['03 / BUSINESS LOGIC', '设备 + 知识库 + 租赁运营 + 数据反馈']];
-  return <FadeContent><section className="p02-section p02-tour">
-    <SectionHeader number="04" label="AI TOUR GUIDE" title={<>NEED → EXPERIENCE<br />→ BUSINESS.</>} intro="用游客充电刚需作为入口，用 AI 导览问答提升体验，再通过租赁运营和数据反馈形成商业闭环。" />
-    <div className="p02-tour__hero"><MediaPreview project={project} renderMedia={renderMedia} id="tour-guide-hero" label="PRODUCT POSITIONING" title="AI 移动电源导游机" /><div>{points.map(([name, text]) => <div key={name}><span>{name}</span><strong>{text}</strong></div>)}</div></div>
-    <div className="p02-tour__report"><div><span>ANALYSIS OUTPUT</span><h3>从报告中提取关键判断。</h3><p>完整报告保留为可打开的大图预览，页面正文只展示定位、场景与商业逻辑。</p><p className="p02-role">MY ROLE / 产品定位 · 目标客群 · 应用场景 · 可行性分析 · 卖点提炼 · 图片物料 · 宣传手册 · 视频拍摄剪辑</p></div><MediaPreview project={project} renderMedia={renderMedia} id="tour-guide-report" label="VIEW FULL ANALYSIS" title="AI Tour Guide 分析报告" /></div>
-  </section></FadeContent>;
+const packages = [
+  { id: 'panda-package-v1', version: 'V1', title: '定位与信息框架', note: '建立产品定位、核心卖点和基础信息层级。' },
+  { id: 'panda-package-v2', version: 'V2', title: '视觉语言推进', note: '统一角色气质、包装视觉和沟通语气。' },
+  { id: 'panda-package-v3', version: 'V3', title: '交付版本', note: '整合视觉、信息与生产约束，形成最终方向。' },
+];
+
+function Packaging({ renderMedia, onOpen }: { renderMedia: RenderMedia; onOpen: OpenMedia }) {
+  const [active, setActive] = useState(0);
+  const current = packages[active];
+  const ids = Array.from({ length: 4 }, () => current.id);
+  return <div className="p02-packaging"><div className="p02-kicker"><span>PACKAGING ITERATION</span><h3>V1 → V2 → V3</h3><p>三个版本分别保留独立画廊，呈现包装方向如何逐步收敛。</p><nav>{packages.map((item, index) => <button type="button" key={item.version} aria-pressed={active === index} onClick={() => setActive(index)}>{item.version}</button>)}</nav></div><div className="p02-packaging__gallery">{ids.map((id, index) => <button type="button" key={`${id}-${index}`} onClick={() => onOpen(ids, index)}>{renderMedia(id)}<span>{current.version} / {String(index + 1).padStart(2, '0')}</span></button>)}</div><div className="p02-packaging__note"><span>{current.version}</span><strong>{current.title}</strong><p>{current.note}</p></div></div>;
 }
 
-function FlipCard({ project, renderMedia, id, front, back }: Project02Props & { id: string; front: ReactNode; back: ReactNode }) {
-  const [flipped, setFlipped] = useState(false);
-  return <button type="button" className={`p02-flip ${flipped ? 'is-flipped' : ''}`} onClick={() => setFlipped(value => !value)} aria-pressed={flipped} aria-label="翻转角色卡片"><span className="p02-flip__inner"><span className="p02-flip__face p02-flip__front">{renderMedia(id)}{front}</span><span className="p02-flip__face p02-flip__back">{back}</span></span></button>;
+function UiSwap({ renderMedia, onOpen }: { renderMedia: RenderMedia; onOpen: OpenMedia }) {
+  const base = ['panda-mini-program', 'panda-prototype', 'panda-ui-flow', 'panda-ui-device'];
+  const boards = Array.from({ length: 10 }, (_, index) => base[index % base.length]);
+  const [active, setActive] = useState(0);
+  return <div className="p02-ui-swap"><div className="p02-ui-swap__stage">{boards.map((id, index) => { const offset = (index - active + boards.length) % boards.length; return offset < 4 ? <button type="button" key={`${id}-${index}`} className={`offset-${offset}`} onClick={() => offset ? setActive(index) : onOpen(boards, active)}>{renderMedia(id)}<span>{String(index + 1).padStart(2, '0')}</span></button> : null; })}</div><div className="p02-ui-swap__controls"><button type="button" onClick={() => setActive(value => (value - 1 + boards.length) % boards.length)} aria-label="上一页"><ArrowLeft /></button><span>{String(active + 1).padStart(2, '0')} / 10</span><button type="button" onClick={() => setActive(value => (value + 1) % boards.length)} aria-label="下一页"><ArrowRight /></button></div><p>围绕设备连接、角色设定、使用路径和状态反馈，完成 10 个关键界面的逻辑与表达。</p></div>;
 }
 
-function CircularCarousel({ project, renderMedia }: Project02Props) {
+function AiPanda({ renderMedia, onOpen }: { renderMedia: RenderMedia; onOpen: OpenMedia }) {
+  const evidence = ['panda-hero', 'panda-package-v3', 'panda-manual', 'panda-video'];
+  return <Reveal><section className="p02-section"><Header number="02" label="AI PANDA" chinese="AI 熊猫" title={<>AWARD-WINNING<br />AI PANDA.</>} intro="FROM DIRECTION TO DELIVERY — 在约 20 天内，将产品方向推进为可沟通、可交付的视觉与内容系统。" /><div className="p02-panda-hero"><MediaButton id="panda-hero" renderMedia={renderMedia} eyebrow="20 DAYS / 0 → 1" title="AI Panda / 快速交付窗口" onOpen={() => onOpen(['panda-hero'])} /><div><span>MY ROLE</span><h3>20 DAYS.<br />3 ROLES.</h3><dl><div><dt>01</dt><dd>方向与体验理解</dd></div><div><dt>02</dt><dd>视觉与包装迭代</dd></div><div><dt>03</dt><dd>传播内容与交付</dd></div></dl></div></div><Packaging renderMedia={renderMedia} onOpen={onOpen} /><div className="p02-manual"><div className="p02-kicker"><span>PRODUCT MANUAL</span><h3>复杂信息，重新组织为清晰路径。</h3><p>围绕开机、下载、配对、角色设定、NFC 与参数信息，建立清晰的信息结构与版式节奏。</p></div><MediaButton id="panda-manual" renderMedia={renderMedia} eyebrow="EDITORIAL / MANUAL" title="产品说明手册" onOpen={() => onOpen(['panda-manual'])} /></div><div className="p02-software"><div className="p02-kicker"><span>SOFTWARE EXPERIENCE</span><h3>启元陪伴小程序</h3><p>参与功能规划、页面逻辑、交互原型与技术沟通。</p></div><UiSwap renderMedia={renderMedia} onOpen={onOpen} /></div><div className="p02-demo"><div><span>VIDEO / VISUAL OUTPUT</span><h3>PRODUCT DEMO VIDEO</h3><p>内容策划 / 视觉方向 / 图形物料 / 视频规划与制作</p></div><MediaButton id="panda-video" renderMedia={renderMedia} eyebrow="PRODUCT DEMO VIDEO" title="AI Panda 产品演示" video onOpen={() => onOpen(['panda-video'])} /></div><div className="p02-recognition"><div><span>RESULT / RECOGNITION</span><h3>从交付，到被看见。</h3><p>四川省金奖 · 全国银奖</p></div><div>{evidence.map((id, index) => <button type="button" key={id} onClick={() => onOpen(evidence, index)}>{renderMedia(id)}<span>{String(index + 1).padStart(2, '0')}</span></button>)}</div></div></section></Reveal>;
+}
+
+function MethodBar() {
+  const items = [['THINK', '理解能力边界'], ['ANALYZE', '映射真实场景'], ['POSITION', '形成价值判断'], ['COMMUNICATE', '转译为可见内容']];
+  const [active, setActive] = useState(0);
+  return <div className="p02-method">{items.map(([name, detail], index) => <button type="button" key={name} className={active === index ? 'is-active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)}><span>{name}</span><small>{detail}</small></button>)}</div>;
+}
+
+function CapabilityMap() {
+  const rows = [['主动提醒', '协作自动化'], ['自然语言交互', '职场关怀'], ['企业知识库', '信息查询与服务']];
+  const [active, setActive] = useState(0);
+  return <div className="p02-capability-map"><span>CAPABILITY</span><span>SCENARIO</span>{rows.map(([capability, scenario], index) => <button type="button" key={capability} className={active === index ? 'is-active' : ''} onMouseEnter={() => setActive(index)} onFocus={() => setActive(index)} onClick={() => setActive(index)}><strong>{capability}</strong><i>→</i><strong>{scenario}</strong></button>)}</div>;
+}
+
+function WaiWai({ renderMedia, onOpen }: { renderMedia: RenderMedia; onOpen: OpenMedia }) {
+  return <Reveal><section className="p02-section"><Header number="03" label="WAIWAI" chinese="歪歪企业智能体" title={<>THINK FIRST.<br />THEN COMMUNICATE.</>} intro="基于已有产品能力，探索应用方向与卖点，再把判断转译为清晰的产品表达。" /><div className="p02-directions"><article><span>01 / EXPLORATORY DIRECTION</span><h3>企业协作自动化</h3><p>探索接入企业微信、钉钉等协同工具后的自动化工作流价值，并非已落地功能。</p></article><article><span>02 / EXPLORATORY DIRECTION</span><h3>EAP · 职场关怀</h3><p>探索压力自评、休息提醒与轻量互动等辅助场景，并非已落地功能。</p></article></div><MethodBar /><CapabilityMap /><div className="p02-position"><span>POSITION</span><h3>不是功能堆叠，<br />而是把能力放进有意义的场景。</h3></div><div className="p02-demo"><div><span>COMMUNICATE</span><h3>PRODUCT DEMO VIDEO</h3><p>MY ROLE / 场景分析 · 卖点梳理 · 视频策划 · 拍摄 · 剪辑</p></div><MediaButton id="waiwai-video" renderMedia={renderMedia} eyebrow="PRODUCT DEMO VIDEO" title="WaiWai 产品演示" video onOpen={() => onOpen(['waiwai-video'])} /></div></section></Reveal>;
+}
+
+function TourGuide({ renderMedia, onOpen }: { renderMedia: RenderMedia; onOpen: OpenMedia }) {
+  const cards = ['tour-guide-hero', 'tour-guide-scene', 'tour-guide-video', 'tour-guide-scene', 'tour-guide-hero'];
+  const [active, setActive] = useState(0);
+  const dragX = useRef<number | null>(null);
+  const move = (next: number) => setActive((next + cards.length) % cards.length);
+  return <Reveal><section className="p02-section"><Header number="04" label="AI TOUR GUIDE" chinese="AI 移动电源导游机" title={<span className="p02-stagger-title"><i>NEED ↘</i><i>EXPERIENCE ↘</i><i>BUSINESS.</i></span>} intro="从游客刚需进入体验，再以租赁运营与数据反馈形成可持续的商业闭环。" /><div className="p02-tour-position"><MediaButton id="tour-guide-hero" renderMedia={renderMedia} eyebrow="PRODUCT POSITIONING" title="AI 移动电源导游机" onOpen={() => onOpen(['tour-guide-hero'])} /><div>{[['POSITION', 'AI 文旅随身导览解决方案'], ['SCENARIO', '景区 / 博物馆 / 文旅街区 / 研学'], ['BUSINESS', '设备 + 知识库 + 租赁运营 + 数据反馈']].map(([name, value], index) => <div key={name}><span>0{index + 1} / {name}</span><strong>{value}</strong></div>)}</div></div><div className="p02-tour-role"><div><span>MY ROLE</span><h3>从判断到沟通输出。</h3><ol><li>产品定位与目标客群</li><li>应用场景与可行性</li><li>卖点提炼与内容结构</li><li>宣传物料与视频表达</li></ol><p>COMMUNICATION OUTPUT / 图片物料 · 宣传手册 · 演示视频</p></div><div className="p02-role-swap" onPointerDown={event => { dragX.current = event.clientX; }} onPointerUp={event => { if (dragX.current !== null) { const delta = event.clientX - dragX.current; if (delta < -24) move(active + 1); if (delta > 24) move(active - 1); } dragX.current = null; }}>{cards.map((id, index) => { const offset = (index - active + cards.length) % cards.length; return offset < 3 ? <button type="button" key={`${id}-${index}`} className={`offset-${offset}`} onClick={() => offset ? setActive(index) : onOpen(cards, active)}>{renderMedia(id)}<span>{String(index + 1).padStart(2, '0')}</span></button> : null; })}<nav><button type="button" onClick={() => move(active - 1)}><ArrowLeft /></button><span>{String(active + 1).padStart(2, '0')} / 05</span><button type="button" onClick={() => move(active + 1)}><ArrowRight /></button></nav></div></div></section></Reveal>;
+}
+
+function Personas({ project, renderMedia }: Project02Props) {
   const personas = project.smart!.personas!;
   const [active, setActive] = useState(0);
-  const current = personas[active];
-  const keywords: Record<string, string> = { METAL: 'RATIONALE / DECISION / EXECUTION', WOOD: 'GROWTH / RESILIENCE / LONG-TERM THINKING', WATER: 'EMPATHY / LISTENING / EMOTIONAL SUPPORT', FIRE: 'ENERGY / ACTION / ENCOURAGEMENT', EARTH: 'STABILITY / TRUST / RISK AWARENESS' };
-  const ordered = useMemo(() => personas.map((persona, index) => ({ persona, index, delta: ((index - active + personas.length + 2) % personas.length) - 2 })), [active, personas]);
-  return <div className="p02-carousel">
-    <motion.div className="p02-carousel__orbit" drag="x" dragConstraints={{ left: 0, right: 0 }} dragElastic={.18} onDragEnd={(_, info) => { if (info.offset.x < -50) setActive(value => (value + 1) % personas.length); if (info.offset.x > 50) setActive(value => (value - 1 + personas.length) % personas.length); }}>
-      {ordered.map(({ persona, index, delta }) => <motion.div key={persona.name} className={`p02-carousel__item delta-${delta + 2} ${delta === 0 ? 'is-active' : ''}`} style={{ '--delta': delta } as React.CSSProperties} onClick={() => setActive(index)}>
-        <FlipCard project={project} renderMedia={renderMedia} id={persona.mediaId} front={<span className="p02-flip__label"><small>{persona.element} / {persona.name}</small><strong>{persona.chinese}</strong></span>} back={<><small>{persona.element} / MATERIAL</small><strong>{persona.material}</strong><p>{persona.interaction}</p><span>{keywords[persona.name]}</span></>} />
-      </motion.div>)}
-    </motion.div>
-    <div className="p02-carousel__controls"><button type="button" onClick={() => setActive(value => (value - 1 + personas.length) % personas.length)} aria-label="上一个角色"><ArrowLeft /></button><span>{String(active + 1).padStart(2, '0')} / 05</span><button type="button" onClick={() => setActive(value => (value + 1) % personas.length)} aria-label="下一个角色"><ArrowRight /></button></div>
-    <div className="p02-carousel__persona"><span>{current.element} / {current.name}</span><h3>{current.chinese}</h3><p>{keywords[current.name]}</p><small>{current.personality} · {current.scenario}</small></div>
-  </div>;
+  const [flipped, setFlipped] = useState(false);
+  const [snapping, setSnapping] = useState(false);
+  const dragged = useRef(false);
+  const keywords: Record<string, string> = { METAL: '理性 / 决策 / 执行', WOOD: '成长 / 韧性 / 长期主义', WATER: '共情 / 倾听 / 情绪支持', FIRE: '能量 / 行动 / 鼓励', EARTH: '稳定 / 信任 / 风险意识' };
+  const ordered = useMemo(() => personas.map((persona, index) => ({ persona, delta: ((index - active + personas.length + 2) % personas.length) - 2 })), [active, personas]);
+  const change = (next: number) => { setActive((next + personas.length) % personas.length); setFlipped(false); };
+  return <div className="p02-personas"><header><span>FIVE PERSONAS</span><h3>五种人格，一个可被选择的心理锚点。</h3></header><motion.div className="p02-personas__orbit" drag="x" dragConstraints={{ left: 0, right: 0 }} dragElastic={.12} dragTransition={{ bounceStiffness: 520, bounceDamping: 34 }} onDragStart={() => { dragged.current = false; setSnapping(false); }} onDrag={(_, info) => { if (Math.abs(info.offset.x) >= 7) dragged.current = true; }} onDragEnd={(_, info) => { setSnapping(true); if (info.offset.x < -44) change(active + 1); else if (info.offset.x > 44) change(active - 1); window.setTimeout(() => { dragged.current = false; setSnapping(false); }, 130); }}>{ordered.map(({ persona, delta }) => <div key={persona.name} className={`p02-persona delta-${delta + 2} ${delta === 0 ? 'is-active' : ''}`}><button type="button" className={`p02-persona__card ${delta === 0 && flipped ? 'is-flipped' : ''}`} tabIndex={delta === 0 ? 0 : -1} onClick={() => { if (delta === 0 && !dragged.current && !snapping) setFlipped(value => !value); }}><span className="p02-persona__inner"><span className="p02-persona__front">{renderMedia(persona.mediaId)}<span><small>{persona.element} / {persona.name}</small><strong>{persona.chinese}</strong></span></span><span className="p02-persona__back"><small>{persona.element} / MATERIAL</small><strong>{persona.material}</strong><p>{persona.interaction}</p><span>{keywords[persona.name]}</span></span></span></button></div>)}</motion.div><div className="p02-personas__controls"><button type="button" onClick={() => change(active - 1)}><ArrowLeft /></button><span>{String(active + 1).padStart(2, '0')} / 05 · 点击中心卡翻转</span><button type="button" onClick={() => change(active + 1)}><ArrowRight /></button></div></div>;
 }
 
-function WuxingLingji({ project, renderMedia }: Project02Props) {
-  return <FadeContent><section className="p02-section p02-wuxing">
-    <SectionHeader number="05" label="WUXING LINGJI" title={<>五行灵骥<br />WUXING LINGJI.</>} intro="从马年生肖与五行文化出发，将传统文化意象转译为五种人格、情绪陪伴方向与 AI Persona。" />
-    <div className="p02-wuxing__hero">{renderMedia('horse-hero')}</div>
-    <div className="p02-wuxing__thinking"><p>在高度不确定的时代，人们需要确定的心理锚点。</p><ol><li>马年生肖</li><li>五行文化</li><li>五种人格</li><li>心理锚点</li><li>AI Persona</li></ol></div>
-    <CircularCarousel project={project} renderMedia={renderMedia} />
-    <div className="p02-wuxing__funding"><div><span>CROWDFUNDING PREPARATION</span><h3>众筹前期筹备</h3><p>展示众筹详情页、PPT、AI 产品视觉与 Persona 方向的部分页面。项目停留在众筹前期筹备阶段。</p></div><div className="p02-wuxing__strip">{['horse-crowdfunding', 'horse-presentation', 'horse-hero'].map((id, index) => <MediaPreview key={id} project={project} renderMedia={renderMedia} id={id} label={['SELECTED PAGE', 'PRESENTATION', 'VISUAL DIRECTION'][index]} />)}</div></div>
-  </section></FadeContent>;
+function Wuxing({ project, renderMedia, onOpen, onGallery }: Project02Props & { onOpen: OpenMedia; onGallery: (gallery: NonNullable<Gallery>) => void }) {
+  const [concept, setConcept] = useState(0);
+  const nodes = [['马年生肖', '文化起点'], ['五行文化', '视觉与人格框架'], ['五种人格', '不同陪伴方式'], ['心理锚点', '情绪价值'], ['AI Persona', '可持续互动']];
+  return <Reveal><section className="p02-section"><Header number="05" label="WUXING LINGJI" chinese="五行灵骥" title={<>五行灵骥<br />WUXING LINGJI.</>} intro="从马年生肖与五行文化出发，将传统文化意象转译为人格、情绪陪伴与 AI Persona。" /><div className="p02-wuxing-hero"><MediaButton id="horse-hero" renderMedia={renderMedia} eyebrow="PRODUCT CONCEPT" title="五行灵骥整体视觉" onOpen={() => onOpen(['horse-hero'])} /></div><div className="p02-concept"><p>在高度不确定的时代，人们需要确定的心理锚点。</p><div>{nodes.map(([name, detail], index) => <button type="button" key={name} className={concept === index ? 'is-active' : ''} onMouseEnter={() => setConcept(index)} onFocus={() => setConcept(index)} onClick={() => setConcept(index)}><small>0{index + 1}</small><strong>{name}</strong><span>{detail}</span></button>)}</div></div><Personas project={project} renderMedia={renderMedia} /><div className="p02-funding"><div className="p02-kicker"><span>CROWDFUNDING PREPARATION</span><h3>众筹前期筹备</h3><p>项目展示聚焦两类输出：项目 PPT 与众筹详情页长图。</p></div><div><button type="button" onClick={() => onGallery({ mode: 'circular', ids: Array.from({ length: 8 }, () => 'horse-presentation'), title: 'PROJECT PRESENTATION / 项目 PPT' })}>{renderMedia('horse-presentation')}<Caption eyebrow="CIRCULAR GALLERY" title="项目 PPT" /></button><button type="button" onClick={() => onGallery({ mode: 'accordion', ids: Array.from({ length: 10 }, () => 'horse-crowdfunding'), title: 'CROWDFUNDING PAGE / 众筹长图' })}>{renderMedia('horse-crowdfunding')}<Caption eyebrow="ACCORDION / 10 PANELS" title="众筹详情页" /></button></div></div></section></Reveal>;
 }
 
-function Masonry({ project, renderMedia }: Project02Props) {
-  const media = [['brand-logo', 'BRAND IDENTITY'], ['brand-brochure', 'CONTENT PUBLISHING'], ['brand-wall', 'OFFLINE MATERIALS'], ['brand-exhibition', 'EXHIBITION / EVENT'], ['brand-event', 'ON-SITE DOCUMENTATION'], ['brand-visit', 'BRAND ACCOUNT']];
-  return <div className="p02-masonry">{media.map(([id, label], index) => <div className={`p02-masonry__item item-${index}`} key={id}><MediaPreview project={project} renderMedia={renderMedia} id={id} label={label} /></div>)}</div>;
+const brandBase = [['brand-logo', 'BRAND IDENTITY', 'WarmView 品牌识别'], ['brand-brochure', 'EDITORIAL', '公司宣传手册'], ['brand-wall', 'OFFLINE SPACE', '文化墙'], ['brand-exhibition', 'EXHIBITION', '展会与展台'], ['brand-event', 'EVENT', '现场活动'], ['brand-visit', 'DOCUMENTATION', '企业来访']] as const;
+
+function BrandWork({ renderMedia, onOpen }: { renderMedia: RenderMedia; onOpen: OpenMedia }) {
+  const wall = Array.from({ length: 14 }, (_, index) => brandBase[index % brandBase.length]);
+  const ids = wall.map(item => item[0]);
+  const meta = wall.map(([, eyebrow, title]) => ({ eyebrow, title, description: '从屏幕内容延伸到线下场景，覆盖设计、沟通、制作与落地。', keywords: 'DESIGN / PRODUCTION / ON-SITE' }));
+  return <Reveal><section className="p02-section"><Header number="06" label="BRAND WORK" chinese="品牌工作" title={<>FROM SCREEN<br />TO SITE.</>} intro="从品牌识别到线下空间，完成物料设计、制作沟通和现场落地。" /><div className="p02-drift-wall">{wall.map(([id, eyebrow, title], index) => <button type="button" key={`${id}-${index}`} className={`item-${index}`} onClick={() => onOpen(ids, index, meta)}>{renderMedia(id)}<span><small>{eyebrow}</small><strong>{title}</strong></span></button>)}</div></section></Reveal>;
 }
 
-function BrandWork({ project, renderMedia }: Project02Props) {
-  const execution = ['设计', '制作方 / 供应商沟通', '制作跟进', '收货', '现场张贴 / 安装'];
-  return <FadeContent><section className="p02-section p02-brand">
-    <SectionHeader number="06" label="BRAND WORK" title={<>FROM SCREEN<br />TO SITE.</>} intro="从屏幕内容到线下空间，完成品牌物料的设计、制作沟通和落地执行。" />
-    <Masonry project={project} renderMedia={renderMedia} />
-    <div className="p02-brand__before-after"><MediaPreview project={project} renderMedia={renderMedia} id="brand-wall" label="DESIGN" title="设计稿" /><span>→</span><MediaPreview project={project} renderMedia={renderMedia} id="brand-exhibition" label="ON SITE" title="实景落地" /></div>
-    <ol className="p02-brand__execution">{execution.map((item, index) => <li key={item}><span>{String(index + 1).padStart(2, '0')}</span><strong>{item}</strong></li>)}</ol>
-    <div className="p02-brand__account"><span>OWNER IP / BRAND ACCOUNT</span><p>参与老板 IP 与品牌账号内容运营，围绕产品、招聘、合作、测评 / 开箱等主题，参与选题、脚本、拍摄、剪辑和发布。</p><strong>招聘类代表内容单条 10W+ 播放</strong></div>
-  </section></FadeContent>;
+function VideoWork({ renderMedia, onOpen }: { renderMedia: RenderMedia; onOpen: OpenMedia }) {
+  const films = [{ id: 'workflow-video', cn: 'AI 机芯盒', en: 'FROM PRODUCT TO AI FILM', note: '从真实产品画面到 AI 影片表达。' }, { id: 'video-ai-product', cn: 'AI 陪伴毛绒玩偶', en: 'COMPANION DEMO', note: '以陪伴场景组织功能与情绪价值。' }, { id: 'video-intercom', cn: '视频通话对讲机', en: 'PRODUCT DEMO', note: '用清晰演示降低产品理解成本。' }];
+  const ids = films.map(film => film.id);
+  const meta = films.map(film => ({ eyebrow: film.en, title: film.cn, description: film.note }));
+  return <Reveal><section className="p02-section p02-video-work"><Header number="07" label="VIDEO WORK" chinese="视频作品" title={<>MY PRODUCT<br />VIDEOS.</>} intro="我的产品视频。" /><div className="p02-films">{films.map((film, index) => <article key={film.id} className={index % 2 ? 'is-reverse' : ''}><MediaButton id={film.id} renderMedia={renderMedia} eyebrow={`0${index + 1} / VIDEO`} title={`${film.cn} · ${film.en}`} video onOpen={() => onOpen(ids, index, meta)} /><div><span>0{index + 1}</span><h3>{film.en}</h3><strong>{film.cn}</strong><p>{film.note}</p></div></article>)}</div></section></Reveal>;
 }
 
-function SelectedFilms({ project, renderMedia }: Project02Props) {
-  return <FadeContent><section className="p02-section p02-films">
-    <SectionHeader number="07" label="VIDEO WORK" title="SELECTED FILMS" intro="没有独立章节，但完整参与制作的产品影像。" />
-    <div className="p02-films__reel">{project.smart!.selectedVideos!.slice(0, 3).map((video, index) => <article key={video.mediaId} className={`p02-film p02-film--${index}`}>
-      <MediaPreview project={project} renderMedia={renderMedia} id={video.mediaId} label={`VIDEO ${String(index + 1).padStart(2, '0')} / ${video.type}`} title={video.product} video />
-      <div><span>0{index + 1} / FILM</span><h3>{video.product}</h3><p>{video.type}</p><small>{video.role}</small></div>
-    </article>)}</div>
-  </section></FadeContent>;
+export function Project02Case({ project, renderMedia }: Project02Props) {
+  const reduce = useReducedMotion();
+  const [lightbox, setLightbox] = useState<{ ids: string[]; index: number; meta: Meta[] } | null>(null);
+  const [gallery, setGallery] = useState<Gallery>(null);
+  const openMedia: OpenMedia = (ids, index = 0, meta = []) => setLightbox({ ids, index, meta });
+  useEffect(() => { const keydown = (event: KeyboardEvent) => { if (event.key !== 'Escape') return; if (lightbox) setLightbox(null); else if (gallery) setGallery(null); }; window.addEventListener('keydown', keydown); return () => window.removeEventListener('keydown', keydown); }, [lightbox, gallery]);
+  return <main className="project-02-case"><section className="p02-hero" onPointerMove={event => { const box = event.currentTarget.getBoundingClientRect(); event.currentTarget.style.setProperty('--mx', `${event.clientX - box.left}px`); event.currentTarget.style.setProperty('--my', `${event.clientY - box.top}px`); }}><div className="p02-hero__identity"><span>PROJECT 02 / AI SMART HARDWARE</span><motion.h1 className="p02-hero__title" initial={reduce ? false : { opacity: .45 }} animate={{ opacity: 1 }} transition={{ duration: reduce ? 0 : .9, ease }}>CONTENT<br />DIRECTION</motion.h1><motion.p initial={reduce ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduce ? 0 : .3 }}>从产品理解、视觉生成到内容交付，建立跨媒介的产品沟通系统。</motion.p></div><div className="p02-hero__media">{renderMedia('hero')}</div><div className="p02-hero__capabilities">{[['CONTENT', '内容策略'], ['VISUAL', '产品视觉'], ['VIDEO', '影像表达'], ['SYSTEM', '内容系统']].map(([en, cn], index) => <motion.div key={en} initial={reduce ? false : { opacity: .3 }} animate={{ opacity: 1 }} transition={{ delay: reduce ? 0 : .25 + index * .12 }}><span>{en}</span><small>{cn}</small></motion.div>)}</div></section><AiWorkflow renderMedia={renderMedia} onOpen={openMedia} /><AiPanda renderMedia={renderMedia} onOpen={openMedia} /><WaiWai renderMedia={renderMedia} onOpen={openMedia} /><TourGuide renderMedia={renderMedia} onOpen={openMedia} /><Wuxing project={project} renderMedia={renderMedia} onOpen={openMedia} onGallery={setGallery} /><BrandWork renderMedia={renderMedia} onOpen={openMedia} /><VideoWork renderMedia={renderMedia} onOpen={openMedia} /><AnimatePresence>{gallery && <GalleryOverlay gallery={gallery} renderMedia={renderMedia} onOpen={openMedia} onClose={() => setGallery(null)} />}</AnimatePresence><AnimatePresence>{lightbox && <Lightbox project={project} renderMedia={renderMedia} state={lightbox} onIndex={index => setLightbox(current => current && { ...current, index })} onClose={() => setLightbox(null)} />}</AnimatePresence></main>;
 }
 
-export default function Project02Case({ project, renderMedia }: Project02Props) {
-  return <div className="project-02-case"><section className="case-overview case-container p02-overview"><p className="case-section-label">PROJECT / {project.number}</p><h2>AI SMART<br />HARDWARE</h2><div className="case-overview__details"><span>{project.company}</span><span>{project.period}</span></div><p className="case-overview__intro">{project.overview}</p><div className="case-capabilities">{project.smart!.capabilities.map(([name, detail]) => <div key={name}><h3>{name}</h3><p>{detail}</p></div>)}</div></section><div className="case-container"><AiWorkflow project={project} renderMedia={renderMedia} /><AiPanda project={project} renderMedia={renderMedia} /><WaiWai project={project} renderMedia={renderMedia} /><TourGuide project={project} renderMedia={renderMedia} /><WuxingLingji project={project} renderMedia={renderMedia} /><BrandWork project={project} renderMedia={renderMedia} /><SelectedFilms project={project} renderMedia={renderMedia} /></div></div>;
-}
+export default Project02Case;
