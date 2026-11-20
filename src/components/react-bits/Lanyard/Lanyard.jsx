@@ -416,7 +416,7 @@ const Lanyard = ({ frontImage, backImage, imageFit = 'cover', cardColor = '#ffff
     try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' }); }
     catch { callbacksRef.current.onUnavailable?.(); return undefined; }
     renderer.setClearColor(0x000000, 0); renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1;
-    const canvas = renderer.domElement; canvas.className = 'lanyard-canvas'; canvas.setAttribute('aria-hidden', 'true'); container.appendChild(canvas);
+    const canvas = renderer.domElement; canvas.className = 'lanyard-canvas'; canvas.style.visibility = 'hidden'; canvas.setAttribute('aria-hidden', 'true'); container.appendChild(canvas);
     const anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy()), scene = new THREE.Scene(), environment = buildEnvironment(renderer);
     scene.environment = environment.texture;
     const camera = new THREE.PerspectiveCamera(FOV, 1, 0.1, 200), keyLight = new THREE.DirectionalLight(0xffffff, 1.6), fillLight = new THREE.DirectionalLight(0xffffff, 0.35);
@@ -446,7 +446,7 @@ const Lanyard = ({ frontImage, backImage, imageFit = 'cover', cardColor = '#ffff
     const eyelet = new THREE.Mesh(new THREE.TorusGeometry(EYELET_RADIUS, 0.0105, 14, 40), metalMaterial); clampGroup.add(clampMesh, eyelet); scene.add(clampGroup);
     const sim = createSimulation(), controls = [], mouth = new THREE.Vector3(), tuck = new THREE.Vector3(), curve = new THREE.CatmullRomCurve3(controls, false, 'centripetal'), view = { width: 1, height: 1 };
     let layout = cardLayout('portrait', 0.3), applied = {}, strapScale = STRAP_WIDTH, tileRatio = 2, raf = 0, last = performance.now(), time = 0;
-    let visible = false, alive = true, placed = false, hovering = false, press = null, imageToken = 0, rendered = false;
+    let visible = false, alive = true, placed = false, hovering = false, press = null, imageToken = 0, rendered = false, artworkReady = false;
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     let reducedMotion = motionQuery.matches;
     const paintFaces = () => {
@@ -505,9 +505,20 @@ const Lanyard = ({ frontImage, backImage, imageFit = 'cover', cardColor = '#ffff
       const imageKey = `${s.frontImage}|${s.backImage}|${s.strapImage}`;
       if (imageKey !== applied.imageKey) {
         const token = ++imageToken;
+        artworkReady = false;
         Promise.all([loadImage(imageCache, s.frontImage), loadImage(imageCache, s.backImage), loadImage(imageCache, s.strapImage)]).then(([front, back, strap]) => {
           if (!alive || token !== imageToken) return;
-          images.front = front; images.back = back; images.strap = strap; paintFaces(); repaintStrap();
+          if ((s.frontImage && !front) || (s.backImage && !back) || (s.strapImage && !strap)) {
+            callbacksRef.current.onUnavailable?.(); return;
+          }
+          images.front = front; images.back = back; images.strap = strap;
+          artworkReady = true;
+          if (!rendered) {
+            const requestedTurn = sim.turn;
+            placeHanging(sim, layout, s.intro && !reducedMotion);
+            sim.turn = requestedTurn;
+          }
+          paintFaces(); repaintStrap();
         });
       }
       const faceKey = `${layoutKey}|${s.cardColor}|${s.imageFit}`;
@@ -564,8 +575,11 @@ const Lanyard = ({ frontImage, backImage, imageFit = 'cover', cardColor = '#ffff
       clampGroup.quaternion.setFromRotationMatrix(work.basis); clampGroup.position.copy(hang);
     };
     const render = () => {
+      // Resize and initial physics can run before the artwork finishes decoding.
+      // Only a fully textured frame may replace the visible fallback.
+      if (!artworkReady) return;
       cardGroup.position.copy(sim.body.position); cardGroup.quaternion.copy(sim.body.quaternion); updateBand(); renderer.render(scene, camera);
-      if (!rendered) { rendered = true; callbacksRef.current.onReady?.(); }
+      if (!rendered) { rendered = true; canvas.style.visibility = 'visible'; callbacksRef.current.onReady?.(); }
     };
     const physics = () => {
       const s = settingsRef.current, gravity = 40 * clamp(s.gravity, 0, 3), weight = Math.max(gravity, 20), springy = clamp(s.elasticity, 0, 1), settle = clamp(s.damping, 0, 1);
