@@ -136,10 +136,23 @@ function ProductSection({ project, renderMedia, onEnter }: RobotCaseProps & { on
   const [active, setActive] = useState(0);
   const reduceMotion = useReducedMotion();
   const activeCapability = data.productCapabilities[active];
+  const mobile = useMediaQuery('(max-width:700px)');
   return <motion.section id="robot-product" className="robot-section robot-product case-container" onViewportEnter={onEnter} viewport={{ amount: .18 }}>
     <RobotPowerState />
     <RobotHeading index="01" title="THE PRODUCT" statement={<>XIAOXICAI PRO</>} />
-    <div className="robot-product__layout">
+    {mobile ? <div className="robot-product-mobile" aria-label="小喜财产品功能">
+      <div className="robot-product-mobile__visual" id="robot-mobile-capability-image">
+        {renderMedia(activeCapability.mediaId)}
+      </div>
+      <div className="robot-product-mobile__choices" role="group" aria-label="切换产品功能">
+        {data.productCapabilities.map((item, index) => <button key={item.mediaId} type="button" aria-pressed={active === index} aria-controls="robot-mobile-capability-image robot-mobile-capability-copy" onClick={() => setActive(index)}>
+          <span>{item.number}</span><strong>{item.chinese}</strong>
+        </button>)}
+      </div>
+      <div className="robot-product-mobile__copy" id="robot-mobile-capability-copy" aria-live="polite">
+        <h3>{activeCapability.title}</h3><p>{activeCapability.description}</p>
+      </div>
+    </div> : <div className="robot-product__layout">
       <div className="robot-product__visual" aria-live="polite">
         <motion.div
           className="robot-product__media"
@@ -156,7 +169,7 @@ function ProductSection({ project, renderMedia, onEnter }: RobotCaseProps & { on
           <span>{item.number}</span><strong>{item.title}</strong><small>{item.chinese}</small><p>{item.description}</p>
         </button>)}
       </div>
-    </div>
+    </div>}
   </motion.section>;
 }
 

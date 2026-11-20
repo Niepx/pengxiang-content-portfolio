@@ -159,8 +159,36 @@ function CaseStudyOverlay({ project, onClose }: { project: PortfolioProject | nu
   </div>, document.body);
 }
 
+function MobileProjectDeck({ onOpenCase }: { onOpenCase: (project: PortfolioProject, trigger: HTMLElement) => void }) {
+  const [active, setActive] = useState(0);
+  const labels = ['智能硬件', '机器人', '个人创作'];
+  const project = projects[active];
+  return <div className="mobile-project-deck">
+    <nav className="mobile-project-deck__choices" aria-label="选择项目">
+      {projects.map((item, index) => <button type="button" key={item.id} aria-pressed={active === index} aria-controls="mobile-project-card" onClick={() => setActive(index)}><span>{item.number}</span>{labels[index]}</button>)}
+    </nav>
+    <div className="mobile-project-deck__stack">
+      <div className="mobile-project-deck__back is-far" aria-hidden="true" />
+      <div className="mobile-project-deck__back" aria-hidden="true" />
+      <div id="mobile-project-card" aria-live="polite"><ProjectCard project={project} onOpenCase={trigger => onOpenCase(project, trigger)} /></div>
+    </div>
+    <div className="mobile-project-deck__navigation">
+      <button type="button" disabled={active === 0} onClick={() => setActive(index => index - 1)} aria-label="上一个项目"><ArrowLeft size={18} />上一项</button>
+      <span>{String(active + 1).padStart(2, '0')} / 03</span>
+      <button type="button" disabled={active === projects.length - 1} onClick={() => setActive(index => index + 1)} aria-label="下一个项目">下一项<ArrowUpRight size={18} /></button>
+    </div>
+  </div>;
+}
+
 export default function ProjectsSection({ footer }: { footer: React.ReactNode }) {
   const reduceMotion = useReducedMotion();
+  const [mobile, setMobile] = useState(() => window.matchMedia('(max-width:767px)').matches);
+  useEffect(() => {
+    const query = window.matchMedia('(max-width:767px)');
+    const change = () => setMobile(query.matches);
+    query.addEventListener('change', change);
+    return () => query.removeEventListener('change', change);
+  }, []);
   const [activeCase, setActiveCase] = useState<PortfolioProject | null>(null);
   const caseTriggerRef = useRef<HTMLElement | null>(null);
   const scrollRef = useRef(0);
@@ -172,7 +200,7 @@ export default function ProjectsSection({ footer }: { footer: React.ReactNode })
       <motion.h2 initial={reduceMotion ? false : { opacity: 0, y: 34, clipPath: 'inset(0 0 22% 0)', filter: 'blur(8px)' }} whileInView={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', filter: 'blur(0px)' }} viewport={{ once: true, amount: .35 }} transition={{ duration: reduceMotion ? 0 : .72, ease }}>SELECTED PROJECTS</motion.h2>
       <motion.p initial={reduceMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }} transition={{ duration: reduceMotion ? 0 : .55, delay: reduceMotion ? 0 : .12, ease }}>一些我真正参与过的产品项目与个人内容实践。</motion.p>
     </div>
-    <div className="projects-section__list">{projects.map((project, index) => <div key={project.id} className="project-stack-item" style={{ '--stack-offset': `${index * 32}px`, zIndex: index + 1 } as CSSProperties}><ProjectCard project={project} onOpenCase={trigger => openCase(project, trigger)} /></div>)}</div>
+    {mobile ? <MobileProjectDeck onOpenCase={openCase} /> : <div className="projects-section__list">{projects.map((project, index) => <div key={project.id} className="project-stack-item" style={{ '--stack-offset': `${index * 32}px`, zIndex: index + 1 } as CSSProperties}><ProjectCard project={project} onOpenCase={trigger => openCase(project, trigger)} /></div>)}</div>}
     {footer}
     <CaseStudyOverlay project={activeCase} onClose={closeCase} />
   </section>;

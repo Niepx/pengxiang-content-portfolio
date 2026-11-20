@@ -6,6 +6,7 @@ import ProjectsSection from './projects/ProjectsSection';
 import ExpertiseSection from './ExpertiseSection';
 import ContactSection from './contact/ContactSection';
 import MobileAboutSkills from './MobileAboutSkills';
+import StarBorder from './components/react-bits/StarBorder/StarBorder';
 
 const publicAsset = (path: string) => optimizedAsset(`${import.meta.env.BASE_URL}${path}`);
 
@@ -15,7 +16,12 @@ function FadeIn({ children, delay=0, duration=.7, x=0, y=30, as='div', className
   return <El id={id} className={className} initial={{opacity:0,x,y}} whileInView={{opacity:1,x:0,y:0}} viewport={{once:true,margin:'50px',amount:0}} transition={{duration,delay,ease:[.25,.1,.25,1]}}>{children}</El>;
 }
 
-function ContactButton(){return <a href="#contact" className="group inline-flex items-center gap-2 rounded-full px-8 py-3 text-xs font-medium uppercase tracking-widest text-white outline outline-2 outline-offset-[-3px] outline-white transition-transform duration-300 hover:scale-[1.03] sm:px-10 sm:py-3.5 sm:text-sm md:px-12 md:py-4 md:text-base" style={{background:'linear-gradient(123deg,#18011F 7%,#B600A8 37%,#7621B0 72%,#BE4C00 100%)',boxShadow:'0 4px 4px rgba(181,1,167,.25),4px 4px 12px #7721B1 inset'}}>Contact me <ArrowUpRight className="h-4 w-4 transition-transform group-hover:rotate-45"/></a>}
+function ContactButton(){return <StarBorder as="a" href="#contact" className="contact-final__button hero-contact-button"
+  color="#ffffff" trailColor="#ffffff" duration={4} direction="clockwise" stars={1} trailLength={0.3}
+  thickness={1} radius={12} glow={0.6} hover="lap" sparkle={false} clickPulse theme="dark"
+  backgroundColor="transparent" textColor="#D7E2E9" borderColor="#9AA8B3">
+  CONTACT ME <ArrowUpRight aria-hidden="true" />
+</StarBorder>}
 
 const TAU=Math.PI*2;
 const FRONT_TIME=.7;
