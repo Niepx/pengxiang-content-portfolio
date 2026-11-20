@@ -55,20 +55,17 @@
   .projects-section .project-stack-item:last-child{margin-bottom:0}
 }
 
-/* Touch devices show one complete card; no sticky layer can cover its controls. */
-.mobile-project-deck{max-width:720px;margin:auto;padding-bottom:48px}
-.mobile-project-deck__choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:36px}
-.mobile-project-deck__choices button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:48px;border-bottom:1px solid #46535d;color:#9caab4;font-size:.78rem}
-.mobile-project-deck__choices button[aria-pressed=true]{border-color:#d7e2ea;color:#e7eff4}
-.mobile-project-deck__choices button span{font-weight:800;font-size:1rem}
-.mobile-project-deck__stack{position:relative;isolation:isolate}
-.mobile-project-deck__back{position:absolute;inset:-10px 8px 0;border:1px solid #62717b;border-radius:28px;background:#0c0c0c;z-index:-1;pointer-events:none}
-.mobile-project-deck__back.is-far{inset:-20px 16px 0;z-index:-2;opacity:.6}
-.projects-section .mobile-project-deck .project-card{display:flex;flex-direction:column;height:auto;min-height:0;max-height:none;gap:16px;padding:18px;overflow:visible}
-.mobile-project-deck .project-card__content{min-height:280px}
-.mobile-project-deck .project-cover-gallery{flex:none;min-height:0;aspect-ratio:16/10}
-.mobile-project-deck .project-cover-gallery .project-cover-gallery__hero{height:100%;min-height:0}
-.mobile-project-deck__navigation{display:flex;justify-content:space-between;align-items:center;margin-top:16px;color:#aebec8;font-size:.75rem}
-.mobile-project-deck__navigation button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 6px}
-.mobile-project-deck__navigation button:disabled{opacity:.3;cursor:default}
-.mobile-project-deck button:focus-visible{outline:2px solid #d7e2ea;outline-offset:4px}
+/* Equal-height cards and a shared flex gap give both transitions the same travel.
+   Keep space after the third card so all three can settle before releasing. */
+@media(max-width:767px){
+ .projects-section .projects-section__list{display:flex;flex-direction:column;gap:24svh;padding-bottom:0}
+ .projects-section .projects-section__list::after{content:"";display:block;height:24svh;flex:0 0 24svh}
+ .projects-section .project-stack-item,.projects-section .project-stack-item:last-child{margin:0;top:calc(16px + var(--stack-offset))!important}
+ .projects-section .project-card{height:calc(100svh - 112px);min-height:520px;max-height:680px}
+}
+@media(max-width:767px) and (max-height:599px){
+ .projects-section .projects-section__list{gap:32px;padding-bottom:48px}
+ .projects-section .projects-section__list::after{display:none}
+ .projects-section .project-stack-item{position:relative!important;top:auto!important}
+ .projects-section .project-card{height:560px}
+}
