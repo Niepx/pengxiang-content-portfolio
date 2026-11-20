@@ -1,3 +1,4 @@
+import { optimizedAsset } from '../assetDelivery';
 export type FoodCover = { id: string; image: string; title: string };
 export type FoodFilm = {
   id: string;
@@ -8,7 +9,7 @@ export type FoodFilm = {
   videoSrc: string | null;
 };
 
-const foodAsset = (file: string) => `${import.meta.env.BASE_URL}assets/projects/food/${file}`;
+const foodAsset = (file: string) => optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/food/${file}`);
 
 // Sixteen distinct supplied 1080×1920 covers; optimized to 540×960 WebP.
 export const foodJournalCovers: FoodCover[] = [

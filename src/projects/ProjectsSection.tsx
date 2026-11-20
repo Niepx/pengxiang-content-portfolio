@@ -1,4 +1,4 @@
-import { optimizedAsset, posterForVideo } from '../assetDelivery';
+import { isMobileDelivery, optimizedAsset, posterForVideo } from '../assetDelivery';
 import { CSSProperties, lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -34,7 +34,7 @@ function MediaTile({ item, className = '', priority = false, autoPreview = false
   const videoRef = useRef<HTMLVideoElement>(null);
   const hoverRef = useRef(false);
   const autoVisibleRef = useRef(false);
-  const hasVideo = item.kind === 'video' && Boolean(item.src);
+  const hasVideo = item.kind === 'video' && Boolean(item.src) && !isMobileDelivery();
   const [nearViewport, setNearViewport] = useState(!hasVideo);
   const tileRef = useRef<HTMLDivElement>(null);
   useEffect(() => {

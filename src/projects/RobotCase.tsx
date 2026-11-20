@@ -1,3 +1,4 @@
+import VideoPlayer from './VideoPlayer';
 import { posterForVideo } from '../assetDelivery';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -303,7 +304,7 @@ function MakerSeries({ project, onEnter }: RobotCaseProps & { onEnter: () => voi
           <button ref={closeButtonRef} type="button" className="maker-player__close" onClick={closePlayer} aria-label="关闭视频播放器"><X size={26} /></button>
         </header>
         <div className="maker-player__stage">
-          <video key={selectedVideo.media.src} src={selectedVideo.media.src} poster={selectedVideo.media.poster} controls autoPlay playsInline preload="metadata" />
+          <VideoPlayer key={selectedVideo.media.src} src={selectedVideo.media.src} poster={selectedVideo.media.poster} controls autoPlay playsInline preload="metadata" />
         </div>
       </div>
     </div>, document.body)}
@@ -317,7 +318,7 @@ function LaunchFilm({ project, onEnter }: RobotCaseProps & { onEnter: () => void
     <RobotHeading index="05" title="XIAOXICAI PRO LAUNCH FILM." />
     <p className="robot-launch__label">PRODUCT LAUNCH</p>
     <figure className="robot-launch__video">
-      <video
+      <VideoPlayer
         src={launchMedia.src}
         poster={posterForVideo(launchMedia.src)}
         controls
@@ -401,7 +402,7 @@ function OtherContent({ project, renderMedia, onEnter }: RobotCaseProps & { onEn
           <button ref={closeButtonRef} type="button" className="maker-player__close" onClick={closePlayer} aria-label="关闭视频播放器"><X size={26} /></button>
         </header>
         <div className="maker-player__stage">
-          <video key={selectedVideo.media.src} src={selectedVideo.media.src} controls autoPlay playsInline preload="metadata" />
+          <VideoPlayer key={selectedVideo.media.src} src={selectedVideo.media.src} controls autoPlay playsInline preload="metadata" />
         </div>
       </div>
     </div>, document.body)}

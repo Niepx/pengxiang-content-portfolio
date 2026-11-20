@@ -1,0 +1,12 @@
+.portfolio-video{position:relative;width:100%;min-width:0;background:#07090a;color:#e1e9ed;line-height:1.4}
+.portfolio-video>video{display:block;width:100%;height:auto;max-height:inherit;object-fit:contain}
+.portfolio-video__play{position:absolute;left:50%;top:50%;display:flex;align-items:center;gap:.6rem;transform:translate(-50%,-50%);padding:.85rem 1.15rem;border:1px solid #b6c5cd;border-radius:999px;background:#0c1012e8;color:#e1e9ed;font-size:.9rem;white-space:nowrap;min-height:48px}
+.portfolio-video__status{position:absolute;left:8px;right:8px;top:8px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.65rem;padding:.55rem .7rem;background:#0c1012ed;color:#e1e9ed;font-size:.78rem;pointer-events:none}
+.portfolio-video__status button,.portfolio-video__status a{pointer-events:auto;display:inline-flex;gap:.3rem;align-items:center;min-height:36px;text-decoration:underline;text-underline-offset:3px}
+.portfolio-video button:focus-visible,.portfolio-video a:focus-visible{outline:2px solid #fff;outline-offset:4px}
+
+.p02-lightbox__media>.portfolio-video{max-height:calc(100svh - 150px)}
+.maker-player__stage>.portfolio-video{max-height:calc(100svh - 190px)}
+.food-video>.portfolio-video{width:auto;max-width:100%;max-height:calc(100svh - 180px)}
+.food-video>.portfolio-video>video{width:auto;max-width:100%;max-height:calc(100svh - 180px)}
+@media(max-width:700px){.p02-lightbox__media>.portfolio-video{max-height:calc(100svh - 210px)}.maker-player__stage>.portfolio-video{max-height:calc(100svh - 155px)}}

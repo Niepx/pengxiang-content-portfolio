@@ -1,0 +1,1238 @@
+[
+  {
+    "source": "about-angry-laptop-boy.display.webp",
+    "mobile": "about-angry-laptop-boy.display.mobile.webp",
+    "before": 84650,
+    "after": 14076
+  },
+  {
+    "source": "hero-character-poster.webp",
+    "mobile": "hero-character-poster.mobile.webp",
+    "before": 228618,
+    "after": 31902
+  },
+  {
+    "source": "lanyard/portrait.display.webp",
+    "mobile": "lanyard/portrait.display.mobile.webp",
+    "before": 165496,
+    "after": 39426
+  },
+  {
+    "source": "projects/ai-robot-capability-customization.display.webp",
+    "mobile": "projects/ai-robot-capability-customization.display.mobile.webp",
+    "before": 202420,
+    "after": 44108
+  },
+  {
+    "source": "projects/ai-robot-capability-memory.display.webp",
+    "mobile": "projects/ai-robot-capability-memory.display.mobile.webp",
+    "before": 208992,
+    "after": 44404
+  },
+  {
+    "source": "projects/ai-robot-capability-motion.display.webp",
+    "mobile": "projects/ai-robot-capability-motion.display.mobile.webp",
+    "before": 174446,
+    "after": 35194
+  },
+  {
+    "source": "projects/ai-robot-capability-open-development.display.webp",
+    "mobile": "projects/ai-robot-capability-open-development.display.mobile.webp",
+    "before": 243246,
+    "after": 52868
+  },
+  {
+    "source": "projects/ai-robot-capability-vision.display.webp",
+    "mobile": "projects/ai-robot-capability-vision.display.mobile.webp",
+    "before": 141194,
+    "after": 29794
+  },
+  {
+    "source": "projects/ai-robot-content-feature.display.webp",
+    "mobile": "projects/ai-robot-content-feature.display.mobile.webp",
+    "before": 146642,
+    "after": 36306
+  },
+  {
+    "source": "projects/ai-robot-content-how-to.display.webp",
+    "mobile": "projects/ai-robot-content-how-to.display.mobile.webp",
+    "before": 143298,
+    "after": 34902
+  },
+  {
+    "source": "projects/ai-robot-content-launch.display.webp",
+    "mobile": "projects/ai-robot-content-launch.display.mobile.webp",
+    "before": 230966,
+    "after": 47144
+  },
+  {
+    "source": "projects/ai-robot-content-maker.display.webp",
+    "mobile": "projects/ai-robot-content-maker.display.mobile.webp",
+    "before": 214820,
+    "after": 52192
+  },
+  {
+    "source": "projects/ai-robot-content-product.display.webp",
+    "mobile": "projects/ai-robot-content-product.display.mobile.webp",
+    "before": 159200,
+    "after": 34450
+  },
+  {
+    "source": "projects/ai-robot-hero.display.webp",
+    "mobile": "projects/ai-robot-hero.display.mobile.webp",
+    "before": 77196,
+    "after": 16538
+  },
+  {
+    "source": "projects/ai-robot-launch-film.poster.webp",
+    "mobile": "projects/ai-robot-launch-film.poster.mobile.webp",
+    "before": 44408,
+    "after": 24142
+  },
+  {
+    "source": "projects/ai-robot-maker-3d-print-cover.display.webp",
+    "mobile": "projects/ai-robot-maker-3d-print-cover.display.mobile.webp",
+    "before": 358688,
+    "after": 76450
+  },
+  {
+    "source": "projects/ai-robot-maker-3d-print.poster.webp",
+    "mobile": "projects/ai-robot-maker-3d-print.poster.mobile.webp",
+    "before": 43144,
+    "after": 30864
+  },
+  {
+    "source": "projects/ai-robot-maker-assembly-cover.display.webp",
+    "mobile": "projects/ai-robot-maker-assembly-cover.display.mobile.webp",
+    "before": 326212,
+    "after": 71628
+  },
+  {
+    "source": "projects/ai-robot-maker-assembly.poster.webp",
+    "mobile": "projects/ai-robot-maker-assembly.poster.mobile.webp",
+    "before": 30024,
+    "after": 20970
+  },
+  {
+    "source": "projects/ai-robot-maker-chip-board-cover.display.webp",
+    "mobile": "projects/ai-robot-maker-chip-board-cover.display.mobile.webp",
+    "before": 263984,
+    "after": 66532
+  },
+  {
+    "source": "projects/ai-robot-maker-chip-board.poster.webp",
+    "mobile": "projects/ai-robot-maker-chip-board.poster.mobile.webp",
+    "before": 4650,
+    "after": 3336
+  },
+  {
+    "source": "projects/ai-robot-maker-code-flash-cover.display.webp",
+    "mobile": "projects/ai-robot-maker-code-flash-cover.display.mobile.webp",
+    "before": 269398,
+    "after": 63650
+  },
+  {
+    "source": "projects/ai-robot-maker-code-flash.poster.webp",
+    "mobile": "projects/ai-robot-maker-code-flash.poster.mobile.webp",
+    "before": 5588,
+    "after": 4164
+  },
+  {
+    "source": "projects/ai-robot-maker-design-cover.display.webp",
+    "mobile": "projects/ai-robot-maker-design-cover.display.mobile.webp",
+    "before": 239870,
+    "after": 53130
+  },
+  {
+    "source": "projects/ai-robot-maker-design.poster.webp",
+    "mobile": "projects/ai-robot-maker-design.poster.mobile.webp",
+    "before": 20900,
+    "after": 15036
+  },
+  {
+    "source": "projects/ai-robot-other-crowdfunding.poster.webp",
+    "mobile": "projects/ai-robot-other-crowdfunding.poster.mobile.webp",
+    "before": 15242,
+    "after": 11346
+  },
+  {
+    "source": "projects/ai-robot-other-family.poster.webp",
+    "mobile": "projects/ai-robot-other-family.poster.mobile.webp",
+    "before": 22436,
+    "after": 15534
+  },
+  {
+    "source": "projects/ai-robot-other-how-to.poster.webp",
+    "mobile": "projects/ai-robot-other-how-to.poster.mobile.webp",
+    "before": 16122,
+    "after": 11276
+  },
+  {
+    "source": "projects/ai-robot-other-open-source.poster.webp",
+    "mobile": "projects/ai-robot-other-open-source.poster.mobile.webp",
+    "before": 26386,
+    "after": 17890
+  },
+  {
+    "source": "projects/ai-robot-product.display.webp",
+    "mobile": "projects/ai-robot-product.display.mobile.webp",
+    "before": 121964,
+    "after": 27614
+  },
+  {
+    "source": "projects/bilibili-music/cantonese-playlist.display.webp",
+    "mobile": "projects/bilibili-music/cantonese-playlist.display.mobile.webp",
+    "before": 97928,
+    "after": 20346
+  },
+  {
+    "source": "projects/bilibili-music/night-infj.display.webp",
+    "mobile": "projects/bilibili-music/night-infj.display.mobile.webp",
+    "before": 167448,
+    "after": 30750
+  },
+  {
+    "source": "projects/bilibili-music/rnb-playlist.display.webp",
+    "mobile": "projects/bilibili-music/rnb-playlist.display.mobile.webp",
+    "before": 94130,
+    "after": 22088
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-01.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-01.display.mobile.webp",
+    "before": 182744,
+    "after": 62296
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-02.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-02.display.mobile.webp",
+    "before": 117386,
+    "after": 41506
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-03.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-03.display.mobile.webp",
+    "before": 243508,
+    "after": 95984
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-04.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-04.display.mobile.webp",
+    "before": 157290,
+    "after": 57300
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-05.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-05.display.mobile.webp",
+    "before": 201832,
+    "after": 62948
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-06.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-06.display.mobile.webp",
+    "before": 210016,
+    "after": 72146
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-07.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-07.display.mobile.webp",
+    "before": 153530,
+    "after": 53390
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-08.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-08.display.mobile.webp",
+    "before": 140700,
+    "after": 48714
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-09.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-09.display.mobile.webp",
+    "before": 136126,
+    "after": 53026
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-10.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-10.display.mobile.webp",
+    "before": 184972,
+    "after": 73788
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-11.display.webp",
+    "mobile": "projects/brand-work/anjia/detail-11.display.mobile.webp",
+    "before": 157688,
+    "after": 65230
+  },
+  {
+    "source": "projects/brand-work/anjia/head-01.display.webp",
+    "mobile": "projects/brand-work/anjia/head-01.display.mobile.webp",
+    "before": 183452,
+    "after": 67106
+  },
+  {
+    "source": "projects/brand-work/anjia/head-02.display.webp",
+    "mobile": "projects/brand-work/anjia/head-02.display.mobile.webp",
+    "before": 180210,
+    "after": 50600
+  },
+  {
+    "source": "projects/brand-work/anjia/head-03.display.webp",
+    "mobile": "projects/brand-work/anjia/head-03.display.mobile.webp",
+    "before": 169376,
+    "after": 48330
+  },
+  {
+    "source": "projects/brand-work/anjia/head-04.display.webp",
+    "mobile": "projects/brand-work/anjia/head-04.display.mobile.webp",
+    "before": 154230,
+    "after": 45994
+  },
+  {
+    "source": "projects/brand-work/anjia/head-05.display.webp",
+    "mobile": "projects/brand-work/anjia/head-05.display.mobile.webp",
+    "before": 176840,
+    "after": 53182
+  },
+  {
+    "source": "projects/brand-work/anjia/head-06.display.webp",
+    "mobile": "projects/brand-work/anjia/head-06.display.mobile.webp",
+    "before": 135408,
+    "after": 45264
+  },
+  {
+    "source": "projects/brand-work/anjia/head-07.display.webp",
+    "mobile": "projects/brand-work/anjia/head-07.display.mobile.webp",
+    "before": 168724,
+    "after": 53188
+  },
+  {
+    "source": "projects/brand-work/anjia/head-08.display.webp",
+    "mobile": "projects/brand-work/anjia/head-08.display.mobile.webp",
+    "before": 177044,
+    "after": 58196
+  },
+  {
+    "source": "projects/brand-work/anjia/head-09.display.webp",
+    "mobile": "projects/brand-work/anjia/head-09.display.mobile.webp",
+    "before": 113518,
+    "after": 36598
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/kbao-product.display.webp",
+    "mobile": "projects/brand-work/commercial-visuals/kbao-product.display.mobile.webp",
+    "before": 225058,
+    "after": 67244
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/kbao-scenes.display.webp",
+    "mobile": "projects/brand-work/commercial-visuals/kbao-scenes.display.mobile.webp",
+    "before": 194434,
+    "after": 60766
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/tour-functions.display.webp",
+    "mobile": "projects/brand-work/commercial-visuals/tour-functions.display.mobile.webp",
+    "before": 155668,
+    "after": 32482
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/tour-product.display.webp",
+    "mobile": "projects/brand-work/commercial-visuals/tour-product.display.mobile.webp",
+    "before": 184190,
+    "after": 38018
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/tour-scenes.display.webp",
+    "mobile": "projects/brand-work/commercial-visuals/tour-scenes.display.mobile.webp",
+    "before": 199282,
+    "after": 44430
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-01-right.display.webp",
+    "mobile": "projects/brand-work/corporate-brochure/brochure-01-right.display.mobile.webp",
+    "before": 124612,
+    "after": 45970
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-03-left.display.webp",
+    "mobile": "projects/brand-work/corporate-brochure/brochure-03-left.display.mobile.webp",
+    "before": 146632,
+    "after": 49290
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-03-right.display.webp",
+    "mobile": "projects/brand-work/corporate-brochure/brochure-03-right.display.mobile.webp",
+    "before": 158036,
+    "after": 53702
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-04-left.display.webp",
+    "mobile": "projects/brand-work/corporate-brochure/brochure-04-left.display.mobile.webp",
+    "before": 174836,
+    "after": 59260
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-04-right.display.webp",
+    "mobile": "projects/brand-work/corporate-brochure/brochure-04-right.display.mobile.webp",
+    "before": 163322,
+    "after": 55884
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-design-01.display.webp",
+    "mobile": "projects/brand-work/environmental-graphics/wall-design-01.display.mobile.webp",
+    "before": 259074,
+    "after": 43424
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-design-02.display.webp",
+    "mobile": "projects/brand-work/environmental-graphics/wall-design-02.display.mobile.webp",
+    "before": 219696,
+    "after": 39886
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-layout-01.display.webp",
+    "mobile": "projects/brand-work/environmental-graphics/wall-layout-01.display.mobile.webp",
+    "before": 135110,
+    "after": 56004
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-layout-02.display.webp",
+    "mobile": "projects/brand-work/environmental-graphics/wall-layout-02.display.mobile.webp",
+    "before": 127968,
+    "after": 44560
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-layout-03.display.webp",
+    "mobile": "projects/brand-work/environmental-graphics/wall-layout-03.display.mobile.webp",
+    "before": 107678,
+    "after": 34390
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-layout-04.display.webp",
+    "mobile": "projects/brand-work/environmental-graphics/wall-layout-04.display.mobile.webp",
+    "before": 131104,
+    "after": 34836
+  },
+  {
+    "source": "projects/core-workflow/ai-box-quick-edit.poster.webp",
+    "mobile": "projects/core-workflow/ai-box-quick-edit.poster.mobile.webp",
+    "before": 18106,
+    "after": 11956
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-01.poster.webp",
+    "mobile": "projects/core-workflow/ai-motion-01.poster.mobile.webp",
+    "before": 17228,
+    "after": 10198
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-03.poster.webp",
+    "mobile": "projects/core-workflow/ai-motion-03.poster.mobile.webp",
+    "before": 28722,
+    "after": 14648
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-04.poster.webp",
+    "mobile": "projects/core-workflow/ai-motion-04.poster.mobile.webp",
+    "before": 48968,
+    "after": 23066
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-05.poster.webp",
+    "mobile": "projects/core-workflow/ai-motion-05.poster.mobile.webp",
+    "before": 17010,
+    "after": 8902
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-06.poster.webp",
+    "mobile": "projects/core-workflow/ai-motion-06.poster.mobile.webp",
+    "before": 17588,
+    "after": 9178
+  },
+  {
+    "source": "projects/core-workflow/ai-motion.poster.webp",
+    "mobile": "projects/core-workflow/ai-motion.poster.mobile.webp",
+    "before": 18846,
+    "after": 12418
+  },
+  {
+    "source": "projects/core-workflow/ai-scene.display.webp",
+    "mobile": "projects/core-workflow/ai-scene.display.mobile.webp",
+    "before": 89106,
+    "after": 16432
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-01.poster.webp",
+    "mobile": "projects/core-workflow/keyframe-clip-01.poster.mobile.webp",
+    "before": 48504,
+    "after": 26308
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-02.poster.webp",
+    "mobile": "projects/core-workflow/keyframe-clip-02.poster.mobile.webp",
+    "before": 49456,
+    "after": 28324
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-03.poster.webp",
+    "mobile": "projects/core-workflow/keyframe-clip-03.poster.mobile.webp",
+    "before": 31434,
+    "after": 17048
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-04.poster.webp",
+    "mobile": "projects/core-workflow/keyframe-clip-04.poster.mobile.webp",
+    "before": 34746,
+    "after": 18044
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-05.poster.webp",
+    "mobile": "projects/core-workflow/keyframe-clip-05.poster.mobile.webp",
+    "before": 53860,
+    "after": 27922
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-06.poster.webp",
+    "mobile": "projects/core-workflow/keyframe-clip-06.poster.mobile.webp",
+    "before": 68904,
+    "after": 35960
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-01.display.webp",
+    "mobile": "projects/core-workflow/keyframe-visual-01.display.mobile.webp",
+    "before": 110524,
+    "after": 20864
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-02.display.webp",
+    "mobile": "projects/core-workflow/keyframe-visual-02.display.mobile.webp",
+    "before": 105070,
+    "after": 19390
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-03.display.webp",
+    "mobile": "projects/core-workflow/keyframe-visual-03.display.mobile.webp",
+    "before": 95318,
+    "after": 20032
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-04.display.webp",
+    "mobile": "projects/core-workflow/keyframe-visual-04.display.mobile.webp",
+    "before": 82338,
+    "after": 15696
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-05.display.webp",
+    "mobile": "projects/core-workflow/keyframe-visual-05.display.mobile.webp",
+    "before": 112832,
+    "after": 22444
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-06.display.webp",
+    "mobile": "projects/core-workflow/keyframe-visual-06.display.mobile.webp",
+    "before": 104554,
+    "after": 20860
+  },
+  {
+    "source": "projects/core-workflow/product-traits.display.webp",
+    "mobile": "projects/core-workflow/product-traits.display.mobile.webp",
+    "before": 150532,
+    "after": 31100
+  },
+  {
+    "source": "projects/food/beef-soup-rice.poster.webp",
+    "mobile": "projects/food/beef-soup-rice.poster.mobile.webp",
+    "before": 103182,
+    "after": 91498
+  },
+  {
+    "source": "projects/food/beef-soup-rice.webp",
+    "mobile": "projects/food/beef-soup-rice.mobile.webp",
+    "before": 131478,
+    "after": 96714
+  },
+  {
+    "source": "projects/food/chicken-kimchi.poster.webp",
+    "mobile": "projects/food/chicken-kimchi.poster.mobile.webp",
+    "before": 13980,
+    "after": 11948
+  },
+  {
+    "source": "projects/food/chicken-kimchi.webp",
+    "mobile": "projects/food/chicken-kimchi.mobile.webp",
+    "before": 136144,
+    "after": 99300
+  },
+  {
+    "source": "projects/food/chili-ribs.poster.webp",
+    "mobile": "projects/food/chili-ribs.poster.mobile.webp",
+    "before": 55780,
+    "after": 50254
+  },
+  {
+    "source": "projects/food/cooking-creator-cover.display.webp",
+    "mobile": "projects/food/cooking-creator-cover.display.mobile.webp",
+    "before": 191926,
+    "after": 46530
+  },
+  {
+    "source": "projects/food/luosi-potato-noodles.webp",
+    "mobile": "projects/food/luosi-potato-noodles.mobile.webp",
+    "before": 107210,
+    "after": 77732
+  },
+  {
+    "source": "projects/food/potato-pork-bone-soup.webp",
+    "mobile": "projects/food/potato-pork-bone-soup.mobile.webp",
+    "before": 117362,
+    "after": 86194
+  },
+  {
+    "source": "projects/food/sour-spicy-pork.poster.webp",
+    "mobile": "projects/food/sour-spicy-pork.poster.mobile.webp",
+    "before": 49034,
+    "after": 43310
+  },
+  {
+    "source": "projects/panda-awards/award-honors-composite.display.webp",
+    "mobile": "projects/panda-awards/award-honors-composite.display.mobile.webp",
+    "before": 50106,
+    "after": 22136
+  },
+  {
+    "source": "projects/panda-awards/award-honors-transparent.display.webp",
+    "mobile": "projects/panda-awards/award-honors-transparent.display.mobile.webp",
+    "before": 54836,
+    "after": 29966
+  },
+  {
+    "source": "projects/panda-awards/national-silver-preview.display.webp",
+    "mobile": "projects/panda-awards/national-silver-preview.display.mobile.webp",
+    "before": 158874,
+    "after": 34752
+  },
+  {
+    "source": "projects/panda-awards/national-silver.display.webp",
+    "mobile": "projects/panda-awards/national-silver.display.mobile.webp",
+    "before": 160830,
+    "after": 31182
+  },
+  {
+    "source": "projects/panda-awards/official/sichuan-awards-notice.display.webp",
+    "mobile": "projects/panda-awards/official/sichuan-awards-notice.display.mobile.webp",
+    "before": 150402,
+    "after": 58054
+  },
+  {
+    "source": "projects/panda-awards/sichuan-gold-preview.display.webp",
+    "mobile": "projects/panda-awards/sichuan-gold-preview.display.mobile.webp",
+    "before": 107968,
+    "after": 41064
+  },
+  {
+    "source": "projects/panda-awards/sichuan-gold.display.webp",
+    "mobile": "projects/panda-awards/sichuan-gold.display.mobile.webp",
+    "before": 110102,
+    "after": 35290
+  },
+  {
+    "source": "projects/panda-awards/silver-medal-angle.display.webp",
+    "mobile": "projects/panda-awards/silver-medal-angle.display.mobile.webp",
+    "before": 252098,
+    "after": 77992
+  },
+  {
+    "source": "projects/panda-awards/silver-medal.display.webp",
+    "mobile": "projects/panda-awards/silver-medal.display.mobile.webp",
+    "before": 211466,
+    "after": 49496
+  },
+  {
+    "source": "projects/panda-demo.poster.webp",
+    "mobile": "projects/panda-demo.poster.mobile.webp",
+    "before": 30742,
+    "after": 19936
+  },
+  {
+    "source": "projects/panda-line-to-life/01-render.display.webp",
+    "mobile": "projects/panda-line-to-life/01-render.display.mobile.webp",
+    "before": 412028,
+    "after": 99102
+  },
+  {
+    "source": "projects/panda-line-to-life/02-render.display.webp",
+    "mobile": "projects/panda-line-to-life/02-render.display.mobile.webp",
+    "before": 491764,
+    "after": 115372
+  },
+  {
+    "source": "projects/panda-line-to-life/03-render.display.webp",
+    "mobile": "projects/panda-line-to-life/03-render.display.mobile.webp",
+    "before": 328610,
+    "after": 75446
+  },
+  {
+    "source": "projects/panda-line-to-life/04-render.display.webp",
+    "mobile": "projects/panda-line-to-life/04-render.display.mobile.webp",
+    "before": 347834,
+    "after": 84670
+  },
+  {
+    "source": "projects/panda-manual/page-0.display.webp",
+    "mobile": "projects/panda-manual/page-0.display.mobile.webp",
+    "before": 88166,
+    "after": 37068
+  },
+  {
+    "source": "projects/panda-manual/page-3.display.webp",
+    "mobile": "projects/panda-manual/page-3.display.mobile.webp",
+    "before": 150138,
+    "after": 57704
+  },
+  {
+    "source": "projects/panda-manual/page-6.display.webp",
+    "mobile": "projects/panda-manual/page-6.display.mobile.webp",
+    "before": 109494,
+    "after": 44780
+  },
+  {
+    "source": "projects/panda-manual/page-7.display.webp",
+    "mobile": "projects/panda-manual/page-7.display.mobile.webp",
+    "before": 125526,
+    "after": 50072
+  },
+  {
+    "source": "projects/panda-packaging/evolution/aigc-gift-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/aigc-gift-preview.mobile.webp",
+    "before": 179476,
+    "after": 43822
+  },
+  {
+    "source": "projects/panda-packaging/evolution/aigc-gift.display.webp",
+    "mobile": "projects/panda-packaging/evolution/aigc-gift.display.mobile.webp",
+    "before": 215636,
+    "after": 44284
+  },
+  {
+    "source": "projects/panda-packaging/evolution/aigc-lifestyle-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/aigc-lifestyle-preview.mobile.webp",
+    "before": 114926,
+    "after": 23200
+  },
+  {
+    "source": "projects/panda-packaging/evolution/aigc-lifestyle.display.webp",
+    "mobile": "projects/panda-packaging/evolution/aigc-lifestyle.display.mobile.webp",
+    "before": 139326,
+    "after": 23244
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-closeup-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-closeup-preview.mobile.webp",
+    "before": 108704,
+    "after": 24412
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-closeup.display.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-closeup.display.mobile.webp",
+    "before": 133116,
+    "after": 24524
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-giftbox-pair.display.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-giftbox-pair.display.mobile.webp",
+    "before": 122240,
+    "after": 22618
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-interaction-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-interaction-preview.mobile.webp",
+    "before": 102780,
+    "after": 23842
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-interaction.display.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-interaction.display.mobile.webp",
+    "before": 124710,
+    "after": 24174
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-open-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-open-preview.mobile.webp",
+    "before": 140310,
+    "after": 29202
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-open.display.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-open.display.mobile.webp",
+    "before": 154736,
+    "after": 29728
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-pair-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-pair-preview.mobile.webp",
+    "before": 99550,
+    "after": 22210
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-pair.display.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-pair.display.mobile.webp",
+    "before": 122240,
+    "after": 22618
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-travel-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-travel-preview.mobile.webp",
+    "before": 194024,
+    "after": 43552
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-travel.display.webp",
+    "mobile": "projects/panda-packaging/evolution/cultural-travel.display.mobile.webp",
+    "before": 238098,
+    "after": 44166
+  },
+  {
+    "source": "projects/panda-packaging/evolution/playful-giftbox-manual.display.webp",
+    "mobile": "projects/panda-packaging/evolution/playful-giftbox-manual.display.mobile.webp",
+    "before": 149138,
+    "after": 29134
+  },
+  {
+    "source": "projects/panda-packaging/evolution/product-concept-cover.display.webp",
+    "mobile": "projects/panda-packaging/evolution/product-concept-cover.display.mobile.webp",
+    "before": 92328,
+    "after": 15010
+  },
+  {
+    "source": "projects/panda-packaging/evolution/product-reference-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/product-reference-preview.mobile.webp",
+    "before": 174876,
+    "after": 35774
+  },
+  {
+    "source": "projects/panda-packaging/evolution/product-reference.display.webp",
+    "mobile": "projects/panda-packaging/evolution/product-reference.display.mobile.webp",
+    "before": 276078,
+    "after": 37100
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-back-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/v2-back-preview.mobile.webp",
+    "before": 405896,
+    "after": 97462
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-back.display.webp",
+    "mobile": "projects/panda-packaging/evolution/v2-back.display.mobile.webp",
+    "before": 514376,
+    "after": 99356
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-front-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/v2-front-preview.mobile.webp",
+    "before": 284814,
+    "after": 63494
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-front.display.webp",
+    "mobile": "projects/panda-packaging/evolution/v2-front.display.mobile.webp",
+    "before": 357644,
+    "after": 65044
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-left-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/v2-left-preview.mobile.webp",
+    "before": 102260,
+    "after": 29578
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-left.display.webp",
+    "mobile": "projects/panda-packaging/evolution/v2-left.display.mobile.webp",
+    "before": 126258,
+    "after": 29574
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-right-preview.webp",
+    "mobile": "projects/panda-packaging/evolution/v2-right-preview.mobile.webp",
+    "before": 123066,
+    "after": 30634
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-right.display.webp",
+    "mobile": "projects/panda-packaging/evolution/v2-right.display.mobile.webp",
+    "before": 148802,
+    "after": 31102
+  },
+  {
+    "source": "projects/panda-packaging/evolution/yuanyuan-concept-atlas.display.webp",
+    "mobile": "projects/panda-packaging/evolution/yuanyuan-concept-atlas.display.mobile.webp",
+    "before": 218756,
+    "after": 49034
+  },
+  {
+    "source": "projects/panda-packaging/evolution/yuanyuan-product-display.display.webp",
+    "mobile": "projects/panda-packaging/evolution/yuanyuan-product-display.display.mobile.webp",
+    "before": 92328,
+    "after": 15010
+  },
+  {
+    "source": "projects/panda-packaging/panda-dual-awards-visual.display.webp",
+    "mobile": "projects/panda-packaging/panda-dual-awards-visual.display.mobile.webp",
+    "before": 222940,
+    "after": 44492
+  },
+  {
+    "source": "projects/panda-packaging/panda-overall-visual.display.webp",
+    "mobile": "projects/panda-packaging/panda-overall-visual.display.mobile.webp",
+    "before": 188152,
+    "after": 40268
+  },
+  {
+    "source": "projects/panda-packaging/v1-detail.display.webp",
+    "mobile": "projects/panda-packaging/v1-detail.display.mobile.webp",
+    "before": 185922,
+    "after": 30602
+  },
+  {
+    "source": "projects/panda-packaging/v1-hero.display.webp",
+    "mobile": "projects/panda-packaging/v1-hero.display.mobile.webp",
+    "before": 197536,
+    "after": 35430
+  },
+  {
+    "source": "projects/panda-packaging/v1-product.display.webp",
+    "mobile": "projects/panda-packaging/v1-product.display.mobile.webp",
+    "before": 479586,
+    "after": 76590
+  },
+  {
+    "source": "projects/panda-packaging/v1/design-bamboo.display.webp",
+    "mobile": "projects/panda-packaging/v1/design-bamboo.display.mobile.webp",
+    "before": 403324,
+    "after": 108260
+  },
+  {
+    "source": "projects/panda-packaging/v1/design-pandas.display.webp",
+    "mobile": "projects/panda-packaging/v1/design-pandas.display.mobile.webp",
+    "before": 131050,
+    "after": 40270
+  },
+  {
+    "source": "projects/panda-packaging/v1/design-wordmark.display.webp",
+    "mobile": "projects/panda-packaging/v1/design-wordmark.display.mobile.webp",
+    "before": 57272,
+    "after": 16806
+  },
+  {
+    "source": "projects/panda-packaging/v1/product-detail.display.webp",
+    "mobile": "projects/panda-packaging/v1/product-detail.display.mobile.webp",
+    "before": 391872,
+    "after": 79072
+  },
+  {
+    "source": "projects/panda-packaging/v1/product-main.display.webp",
+    "mobile": "projects/panda-packaging/v1/product-main.display.mobile.webp",
+    "before": 276078,
+    "after": 37100
+  },
+  {
+    "source": "projects/panda-packaging/v2-hero.display.webp",
+    "mobile": "projects/panda-packaging/v2-hero.display.mobile.webp",
+    "before": 236962,
+    "after": 42854
+  },
+  {
+    "source": "projects/panda-packaging/v2-open.display.webp",
+    "mobile": "projects/panda-packaging/v2-open.display.mobile.webp",
+    "before": 113310,
+    "after": 28468
+  },
+  {
+    "source": "projects/panda-packaging/v2-system.display.webp",
+    "mobile": "projects/panda-packaging/v2-system.display.mobile.webp",
+    "before": 136004,
+    "after": 29422
+  },
+  {
+    "source": "projects/panda-packaging/v2/closed.display.webp",
+    "mobile": "projects/panda-packaging/v2/closed.display.mobile.webp",
+    "before": 100728,
+    "after": 53272
+  },
+  {
+    "source": "projects/panda-packaging/v2/cultural-field.display.webp",
+    "mobile": "projects/panda-packaging/v2/cultural-field.display.mobile.webp",
+    "before": 226718,
+    "after": 33172
+  },
+  {
+    "source": "projects/panda-packaging/v2/display.display.webp",
+    "mobile": "projects/panda-packaging/v2/display.display.mobile.webp",
+    "before": 146134,
+    "after": 29848
+  },
+  {
+    "source": "projects/panda-packaging/v2/monkey-role.display.webp",
+    "mobile": "projects/panda-packaging/v2/monkey-role.display.mobile.webp",
+    "before": 223480,
+    "after": 56806
+  },
+  {
+    "source": "projects/panda-packaging/v2/open.display.webp",
+    "mobile": "projects/panda-packaging/v2/open.display.mobile.webp",
+    "before": 56258,
+    "after": 30664
+  },
+  {
+    "source": "projects/panda-packaging/v2/panda-role.display.webp",
+    "mobile": "projects/panda-packaging/v2/panda-role.display.mobile.webp",
+    "before": 176464,
+    "after": 42590
+  },
+  {
+    "source": "projects/panda-packaging/v3-hero.display.webp",
+    "mobile": "projects/panda-packaging/v3-hero.display.mobile.webp",
+    "before": 248850,
+    "after": 46970
+  },
+  {
+    "source": "projects/panda-packaging/v3-product.display.webp",
+    "mobile": "projects/panda-packaging/v3-product.display.mobile.webp",
+    "before": 115216,
+    "after": 20496
+  },
+  {
+    "source": "projects/panda-packaging/v3-result.display.webp",
+    "mobile": "projects/panda-packaging/v3-result.display.mobile.webp",
+    "before": 273432,
+    "after": 60226
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-back.display.webp",
+    "mobile": "projects/panda-packaging/v3/final-back.display.mobile.webp",
+    "before": 169762,
+    "after": 38002
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-front.display.webp",
+    "mobile": "projects/panda-packaging/v3/final-front.display.mobile.webp",
+    "before": 181336,
+    "after": 40702
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-left.display.webp",
+    "mobile": "projects/panda-packaging/v3/final-left.display.mobile.webp",
+    "before": 195670,
+    "after": 46106
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-right.display.webp",
+    "mobile": "projects/panda-packaging/v3/final-right.display.mobile.webp",
+    "before": 268232,
+    "after": 60128
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-top.display.webp",
+    "mobile": "projects/panda-packaging/v3/final-top.display.mobile.webp",
+    "before": 192324,
+    "after": 42818
+  },
+  {
+    "source": "projects/panda-software/1.display.webp",
+    "mobile": "projects/panda-software/1.display.mobile.webp",
+    "before": 91832,
+    "after": 22624
+  },
+  {
+    "source": "projects/panda-software/10.display.webp",
+    "mobile": "projects/panda-software/10.display.mobile.webp",
+    "before": 91496,
+    "after": 21778
+  },
+  {
+    "source": "projects/panda-software/2.display.webp",
+    "mobile": "projects/panda-software/2.display.mobile.webp",
+    "before": 75390,
+    "after": 19004
+  },
+  {
+    "source": "projects/panda-software/3.display.webp",
+    "mobile": "projects/panda-software/3.display.mobile.webp",
+    "before": 98798,
+    "after": 24056
+  },
+  {
+    "source": "projects/panda-software/4.display.webp",
+    "mobile": "projects/panda-software/4.display.mobile.webp",
+    "before": 90648,
+    "after": 22394
+  },
+  {
+    "source": "projects/panda-software/5.display.webp",
+    "mobile": "projects/panda-software/5.display.mobile.webp",
+    "before": 101822,
+    "after": 24438
+  },
+  {
+    "source": "projects/panda-software/6.display.webp",
+    "mobile": "projects/panda-software/6.display.mobile.webp",
+    "before": 130640,
+    "after": 30648
+  },
+  {
+    "source": "projects/panda-software/7.display.webp",
+    "mobile": "projects/panda-software/7.display.mobile.webp",
+    "before": 112276,
+    "after": 25668
+  },
+  {
+    "source": "projects/panda-software/8.display.webp",
+    "mobile": "projects/panda-software/8.display.mobile.webp",
+    "before": 128316,
+    "after": 29172
+  },
+  {
+    "source": "projects/panda-software/9.display.webp",
+    "mobile": "projects/panda-software/9.display.mobile.webp",
+    "before": 92378,
+    "after": 21496
+  },
+  {
+    "source": "projects/tour-guide/brochure-01.webp",
+    "mobile": "projects/tour-guide/brochure-01.mobile.webp",
+    "before": 403540,
+    "after": 38378
+  },
+  {
+    "source": "projects/tour-guide/brochure-02.webp",
+    "mobile": "projects/tour-guide/brochure-02.mobile.webp",
+    "before": 269048,
+    "after": 26062
+  },
+  {
+    "source": "projects/tour-guide/brochure-03.webp",
+    "mobile": "projects/tour-guide/brochure-03.mobile.webp",
+    "before": 346960,
+    "after": 38458
+  },
+  {
+    "source": "projects/tour-guide/brochure-04.webp",
+    "mobile": "projects/tour-guide/brochure-04.mobile.webp",
+    "before": 344650,
+    "after": 32854
+  },
+  {
+    "source": "projects/tour-guide/brochure-05.webp",
+    "mobile": "projects/tour-guide/brochure-05.mobile.webp",
+    "before": 284722,
+    "after": 32550
+  },
+  {
+    "source": "projects/tour-guide/brochure-06.webp",
+    "mobile": "projects/tour-guide/brochure-06.mobile.webp",
+    "before": 394412,
+    "after": 44576
+  },
+  {
+    "source": "projects/tour-guide/brochure-07.webp",
+    "mobile": "projects/tour-guide/brochure-07.mobile.webp",
+    "before": 356686,
+    "after": 36500
+  },
+  {
+    "source": "projects/tour-guide/brochure-08.webp",
+    "mobile": "projects/tour-guide/brochure-08.mobile.webp",
+    "before": 285790,
+    "after": 29948
+  },
+  {
+    "source": "projects/tour-guide/field-photos-collage.display.webp",
+    "mobile": "projects/tour-guide/field-photos-collage.display.mobile.webp",
+    "before": 322204,
+    "after": 60114
+  },
+  {
+    "source": "projects/tour-guide/museum-scene.webp",
+    "mobile": "projects/tour-guide/museum-scene.mobile.webp",
+    "before": 213734,
+    "after": 28966
+  },
+  {
+    "source": "projects/tour-guide/product-back.webp",
+    "mobile": "projects/tour-guide/product-back.mobile.webp",
+    "before": 105282,
+    "after": 19318
+  },
+  {
+    "source": "projects/tour-guide/product-controls.webp",
+    "mobile": "projects/tour-guide/product-controls.mobile.webp",
+    "before": 129872,
+    "after": 18942
+  },
+  {
+    "source": "projects/tour-guide/product-overview.webp",
+    "mobile": "projects/tour-guide/product-overview.mobile.webp",
+    "before": 116866,
+    "after": 24358
+  },
+  {
+    "source": "projects/tour-guide/travel-scene.webp",
+    "mobile": "projects/tour-guide/travel-scene.mobile.webp",
+    "before": 243094,
+    "after": 35122
+  },
+  {
+    "source": "projects/tour-guide/visitor-centre.webp",
+    "mobile": "projects/tour-guide/visitor-centre.mobile.webp",
+    "before": 174150,
+    "after": 29296
+  },
+  {
+    "source": "projects/waiwai-product-promo-cover.display.webp",
+    "mobile": "projects/waiwai-product-promo-cover.display.mobile.webp",
+    "before": 89214,
+    "after": 20836
+  },
+  {
+    "source": "projects/waiwai-product-promo.poster.webp",
+    "mobile": "projects/waiwai-product-promo.poster.mobile.webp",
+    "before": 36498,
+    "after": 21512
+  },
+  {
+    "source": "projects/warmview-ai-core.poster.webp",
+    "mobile": "projects/warmview-ai-core.poster.mobile.webp",
+    "before": 18428,
+    "after": 11180
+  },
+  {
+    "source": "projects/warmview-ai-plush.poster.webp",
+    "mobile": "projects/warmview-ai-plush.poster.mobile.webp",
+    "before": 33960,
+    "after": 20124
+  },
+  {
+    "source": "projects/warmview-project-cover.display.webp",
+    "mobile": "projects/warmview-project-cover.display.mobile.webp",
+    "before": 84434,
+    "after": 13722
+  },
+  {
+    "source": "projects/warmview-video-intercom-cover.display.webp",
+    "mobile": "projects/warmview-video-intercom-cover.display.mobile.webp",
+    "before": 81200,
+    "after": 17600
+  },
+  {
+    "source": "projects/warmview-video-intercom.poster.webp",
+    "mobile": "projects/warmview-video-intercom.poster.mobile.webp",
+    "before": 14810,
+    "after": 9188
+  },
+  {
+    "source": "skill-falling-boy.display.webp",
+    "mobile": "skill-falling-boy.display.mobile.webp",
+    "before": 137092,
+    "after": 30106
+  }
+]

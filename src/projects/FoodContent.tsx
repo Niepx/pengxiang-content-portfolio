@@ -1,3 +1,4 @@
+import VideoPlayer from './VideoPlayer';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -39,7 +40,7 @@ function FoodVideo({ film, onClose }: { film: FoodFilm; onClose: () => void }) {
     }
   }}>
     <header><span>{film.englishTitle}</span><button ref={close} type="button" aria-label="关闭美食视频" onClick={() => { video.current?.pause(); onClose(); }}><X size={26} /></button></header>
-    <video ref={video} src={film.videoSrc || undefined} poster={film.poster || undefined} controls playsInline preload="none" aria-label={film.title} />
+    <VideoPlayer ref={video} src={film.videoSrc || undefined} poster={film.poster || undefined} controls playsInline preload="none" aria-label={film.title} />
     <p>{film.title}</p>
   </motion.div>, document.body);
 }

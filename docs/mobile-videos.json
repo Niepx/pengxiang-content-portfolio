@@ -1,0 +1,226 @@
+[
+  {
+    "source": "projects/ai-robot-maker-assembly.mp4",
+    "mobile": "projects/ai-robot-maker-assembly.mobile.mp4",
+    "before": 17371559,
+    "after": 17371539,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/ai-robot-maker-chip-board.mp4",
+    "mobile": "projects/ai-robot-maker-chip-board.mobile.mp4",
+    "before": 4699579,
+    "after": 4699559,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/warmview-ai-core.mp4",
+    "mobile": "projects/warmview-ai-core.mobile.mp4",
+    "before": 17954609,
+    "after": 5133875,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/ai-robot-other-crowdfunding.mp4",
+    "mobile": "projects/ai-robot-other-crowdfunding.mobile.mp4",
+    "before": 6957631,
+    "after": 6957611,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/ai-robot-other-family.mp4",
+    "mobile": "projects/ai-robot-other-family.mobile.mp4",
+    "before": 8545198,
+    "after": 8545178,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/warmview-ai-plush.mp4",
+    "mobile": "projects/warmview-ai-plush.mobile.mp4",
+    "before": 53326472,
+    "after": 12909507,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/ai-robot-maker-3d-print.mp4",
+    "mobile": "projects/ai-robot-maker-3d-print.mobile.mp4",
+    "before": 2699319,
+    "after": 2699299,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/ai-robot-maker-code-flash.mp4",
+    "mobile": "projects/ai-robot-maker-code-flash.mobile.mp4",
+    "before": 5134431,
+    "after": 5134411,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/ai-robot-other-how-to.mp4",
+    "mobile": "projects/ai-robot-other-how-to.mobile.mp4",
+    "before": 2016970,
+    "after": 2016950,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/ai-robot-maker-design.mp4",
+    "mobile": "projects/ai-robot-maker-design.mobile.mp4",
+    "before": 5189547,
+    "after": 5189527,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/ai-robot-launch-film.mp4",
+    "mobile": "projects/ai-robot-launch-film.mobile.mp4",
+    "before": 13944079,
+    "after": 13944087,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/warmview-video-intercom.mp4",
+    "mobile": "projects/warmview-video-intercom.mobile.mp4",
+    "before": 41399307,
+    "after": 9442144,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/ai-robot-other-open-source.mp4",
+    "mobile": "projects/ai-robot-other-open-source.mobile.mp4",
+    "before": 4316164,
+    "after": 4316144,
+    "mode": "remux"
+  },
+  {
+    "source": "projects/panda-demo.mp4",
+    "mobile": "projects/panda-demo.mobile.mp4",
+    "before": 12078851,
+    "after": 2905915,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/waiwai-product-promo.mp4",
+    "mobile": "projects/waiwai-product-promo.mobile.mp4",
+    "before": 37789734,
+    "after": 11724783,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/food/chicken-kimchi.mp4",
+    "mobile": "projects/food/chicken-kimchi.mobile.mp4",
+    "before": 27225015,
+    "after": 11507593,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/food/chili-ribs.mp4",
+    "mobile": "projects/food/chili-ribs.mobile.mp4",
+    "before": 32853334,
+    "after": 14589239,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/food/sour-spicy-pork.mp4",
+    "mobile": "projects/food/sour-spicy-pork.mobile.mp4",
+    "before": 21977253,
+    "after": 10322772,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/food/beef-soup-rice.mp4",
+    "mobile": "projects/food/beef-soup-rice.mobile.mp4",
+    "before": 3347673,
+    "after": 375574,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-05.mp4",
+    "mobile": "projects/core-workflow/ai-motion-05.mobile.mp4",
+    "before": 17306995,
+    "after": 421951,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-04.mp4",
+    "mobile": "projects/core-workflow/ai-motion-04.mobile.mp4",
+    "before": 12683723,
+    "after": 523777,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-06.mp4",
+    "mobile": "projects/core-workflow/ai-motion-06.mobile.mp4",
+    "before": 8679978,
+    "after": 437376,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-03.mp4",
+    "mobile": "projects/core-workflow/ai-motion-03.mobile.mp4",
+    "before": 5192147,
+    "after": 296409,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/ai-motion-01.mp4",
+    "mobile": "projects/core-workflow/ai-motion-01.mobile.mp4",
+    "before": 17196482,
+    "after": 632412,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/ai-motion.mp4",
+    "mobile": "projects/core-workflow/ai-motion.mobile.mp4",
+    "before": 8810854,
+    "after": 518135,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/ai-box-quick-edit.mp4",
+    "mobile": "projects/core-workflow/ai-box-quick-edit.mobile.mp4",
+    "before": 10300296,
+    "after": 2188435,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-01.mp4",
+    "mobile": "projects/core-workflow/keyframe-clip-01.mobile.mp4",
+    "before": 8978725,
+    "after": 510060,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-02.mp4",
+    "mobile": "projects/core-workflow/keyframe-clip-02.mobile.mp4",
+    "before": 4976069,
+    "after": 435570,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-03.mp4",
+    "mobile": "projects/core-workflow/keyframe-clip-03.mobile.mp4",
+    "before": 1253577,
+    "after": 126587,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-06.mp4",
+    "mobile": "projects/core-workflow/keyframe-clip-06.mobile.mp4",
+    "before": 6409305,
+    "after": 424406,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-04.mp4",
+    "mobile": "projects/core-workflow/keyframe-clip-04.mobile.mp4",
+    "before": 5251835,
+    "after": 326601,
+    "mode": "encode"
+  },
+  {
+    "source": "projects/core-workflow/keyframe-clip-05.mp4",
+    "mobile": "projects/core-workflow/keyframe-clip-05.mobile.mp4",
+    "before": 3939385,
+    "after": 268353,
+    "mode": "encode"
+  }
+]
