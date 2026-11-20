@@ -1,12 +1,10 @@
 import { optimizedAsset } from './assetDelivery';
 import { ElementType, ReactNode, useEffect, useRef, useState } from 'react';
-import { ArrowUpRight } from 'lucide-react';
 import { motion, MotionValue, useInView, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import ProjectsSection from './projects/ProjectsSection';
 import ExpertiseSection from './ExpertiseSection';
 import ContactSection from './contact/ContactSection';
 import MobileAboutSkills from './MobileAboutSkills';
-import StarBorder from './components/react-bits/StarBorder/StarBorder';
 
 const publicAsset = (path: string) => optimizedAsset(`${import.meta.env.BASE_URL}${path}`);
 
@@ -15,13 +13,6 @@ function FadeIn({ children, delay=0, duration=.7, x=0, y=30, as='div', className
   const El = motion.create(as);
   return <El id={id} className={className} initial={{opacity:0,x,y}} whileInView={{opacity:1,x:0,y:0}} viewport={{once:true,margin:'50px',amount:0}} transition={{duration,delay,ease:[.25,.1,.25,1]}}>{children}</El>;
 }
-
-function ContactButton(){return <StarBorder as="a" href="#contact" className="contact-final__button hero-contact-button"
-  color="#ffffff" trailColor="#ffffff" duration={4} direction="clockwise" stars={1} trailLength={0.3}
-  thickness={1} radius={12} glow={0.6} hover="lap" sparkle={false} clickPulse theme="dark"
-  backgroundColor="transparent" textColor="#D7E2E9" borderColor="#9AA8B3">
-  CONTACT ME <ArrowUpRight aria-hidden="true" />
-</StarBorder>}
 
 const TAU=Math.PI*2;
 const FRONT_TIME=.7;
@@ -230,11 +221,11 @@ function InteractiveCharacter(){
   </div>
 }
 
-function HeroSection(){return <section className="relative flex h-[100svh] min-h-[620px] flex-col overflow-x-clip px-6 md:px-10">
+function HeroSection(){return <section className="hero-section relative flex h-[100svh] min-h-[620px] flex-col overflow-x-clip px-6 md:px-10">
   <FadeIn as="nav" y={-20} className="z-30 flex justify-between pt-6 text-sm font-medium uppercase tracking-wider md:pt-8 md:text-lg lg:text-[1.4rem]">{[{label:'About',href:'#about'},{label:'Projects',href:'#projects'},{label:'Expertise',href:'#experience'},{label:'Contact',href:'#contact'}].map(({label,href})=><a key={label} className="transition-opacity duration-200 hover:opacity-70" href={href}>{label}</a>)}</FadeIn>
   <div className="overflow-hidden"><FadeIn id="hero-title" as="h1" delay={.15} y={40} className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[14vw] font-black uppercase leading-none tracking-[-.015em] sm:mt-4 sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]">Hi, i&apos;m joji</FadeIn></div>
-  <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="pointer-events-auto w-[270px] sm:w-[340px] md:w-[420px] lg:w-[480px]"><InteractiveCharacter/></FadeIn></div>
-  <div className="relative z-20 mt-auto flex items-end justify-between gap-4 pb-7 sm:pb-8 md:pb-10"><FadeIn as="p" delay={.35} y={20} className="min-w-0 flex-1 text-[clamp(.55rem,.9vw,.95rem)] font-light leading-tight tracking-[.02em]"><span className="block sm:whitespace-nowrap">From product insight to final output,</span><span className="block sm:whitespace-nowrap">make ideas easier to see, understand, and share.</span></FadeIn><FadeIn delay={.5} y={20} className="shrink-0"><ContactButton/></FadeIn></div>
+  <div className="hero-character-layer pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="hero-character-frame pointer-events-auto w-[270px] sm:w-[340px] md:w-[420px] lg:w-[480px]"><InteractiveCharacter/></FadeIn></div>
+  <div className="relative z-20 mt-auto flex items-end justify-between gap-4 pb-7 sm:pb-8 md:pb-10"><FadeIn as="p" delay={.35} y={20} className="min-w-0 flex-1 text-[clamp(.55rem,.9vw,.95rem)] font-light leading-tight tracking-[.02em]"><span className="block sm:whitespace-nowrap">From product insight to final output,</span><span className="block sm:whitespace-nowrap">make ideas easier to see, understand, and share.</span></FadeIn></div>
   </section>}
 
 function Character({char,progress,range}:{char:string;progress:MotionValue<number>;range:[number,number]}){const opacity=useTransform(progress,range,[.2,1]);if(char==='\n')return <br/>;return <span className="relative inline-block"><span className="opacity-0">{char===' '?'\u00a0':char}</span><motion.span aria-hidden className="absolute inset-0" style={{opacity}}>{char===' '?'\u00a0':char}</motion.span></span>}

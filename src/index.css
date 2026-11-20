@@ -81,5 +81,10 @@ html{scroll-behavior:smooth;background:#0c0c0c}html,body,#root{min-height:100%;b
   .experience-item:hover .experience-number{opacity:.86}
 }
 
-.hero-contact-button.star-border{padding:.875rem 2.5rem;white-space:nowrap;font-size:.9rem}
-@media(max-width:639px){.hero-contact-button.star-border{padding:.75rem 1.15rem;font-size:.7rem;gap:.45rem}.hero-contact-button svg{width:14px;height:14px}}
+/* On phones, the supplied shoulder crop meets the screen edges.
+   71px is the former CTA top edge: 28px footer inset + 43px button height. */
+@media(max-width:767px){
+ .hero-section{min-height:max(620px,calc(120vw + 200px))}
+ .hero-character-layer{align-items:flex-end;bottom:71px}
+ .hero-character-layer .hero-character-frame{width:100%;max-width:none}
+}
