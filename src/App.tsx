@@ -2,6 +2,8 @@ import { ElementType, ReactNode, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 import { motion, MotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import ProjectsSection from './projects/ProjectsSection';
+import ExpertiseSection from './ExpertiseSection';
+import ContactSection from './contact/ContactSection';
 
 const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
 
@@ -217,8 +219,8 @@ function InteractiveCharacter(){
 }
 
 function HeroSection(){return <section className="relative flex h-[100svh] min-h-[620px] flex-col overflow-x-clip px-6 md:px-10">
-  <FadeIn as="nav" y={-20} className="z-30 flex justify-between pt-6 text-sm font-medium uppercase tracking-wider md:pt-8 md:text-lg lg:text-[1.4rem]">{[{label:'About',href:'#about'},{label:'Projects',href:'#projects'},{label:'Experience',href:'#experience'},{label:'Contact',href:'#contact'}].map(({label,href})=><a key={label} className="transition-opacity duration-200 hover:opacity-70" href={href}>{label}</a>)}</FadeIn>
-  <div className="overflow-hidden"><FadeIn id="hero-title" as="h1" delay={.15} y={40} className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[14vw] font-black uppercase leading-none tracking-tight sm:mt-4 sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]">Hi, i&apos;m joji</FadeIn></div>
+  <FadeIn as="nav" y={-20} className="z-30 flex justify-between pt-6 text-sm font-medium uppercase tracking-wider md:pt-8 md:text-lg lg:text-[1.4rem]">{[{label:'About',href:'#about'},{label:'Projects',href:'#projects'},{label:'Expertise',href:'#experience'},{label:'Contact',href:'#contact'}].map(({label,href})=><a key={label} className="transition-opacity duration-200 hover:opacity-70" href={href}>{label}</a>)}</FadeIn>
+  <div className="overflow-hidden"><FadeIn id="hero-title" as="h1" delay={.15} y={40} className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[14vw] font-black uppercase leading-none tracking-[-.015em] sm:mt-4 sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]">Hi, i&apos;m joji</FadeIn></div>
   <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="pointer-events-auto w-[270px] sm:w-[340px] md:w-[420px] lg:w-[480px]"><InteractiveCharacter/></FadeIn></div>
   <div className="relative z-20 mt-auto flex items-end justify-between gap-4 pb-7 sm:pb-8 md:pb-10"><FadeIn as="p" delay={.35} y={20} className="shrink-0 text-[clamp(.55rem,.9vw,.95rem)] font-light leading-tight tracking-[.02em]"><span className="block whitespace-nowrap">From product insight to final output,</span><span className="block whitespace-nowrap">make ideas easier to see, understand, and share.</span></FadeIn><FadeIn delay={.5} y={20}><ContactButton/></FadeIn></div>
   </section>}
@@ -352,18 +354,18 @@ function AboutSkillsScene(){
       </motion.div>
       <motion.div style={{opacity:aboutOpacity,x:aboutX}} className="absolute inset-0 z-10 mx-auto hidden w-full max-w-[1600px] items-start px-10 py-[6vh] md:flex lg:px-16">
         <div className="w-[49%] max-w-[700px]">
-          <h2 className="mb-7 text-[clamp(3.25rem,6.3vw,96px)] font-black uppercase leading-[.84] tracking-tight lg:mb-9">About me</h2>
+          <h2 className="mb-7 text-[clamp(3.25rem,6.3vw,96px)] font-black uppercase leading-[.84] tracking-[-.015em] lg:mb-9">About me</h2>
           <SceneAnimatedText progress={smoothProgress} className="max-w-[680px] text-left !text-[clamp(1rem,.9vw,1.05rem)] !leading-[1.52] [text-wrap:pretty]">{aboutCopy}</SceneAnimatedText>
         </div>
       </motion.div>
       <motion.div style={{opacity:aboutOpacity}} className="absolute inset-x-0 top-[6vh] z-10 h-[58vh] overflow-hidden bg-white px-5 md:hidden">
         <motion.div style={{y:aboutMobileY}}>
-        <h2 className="mb-8 text-[3.25rem] font-black uppercase leading-[.82] tracking-tight">About me</h2>
+        <h2 className="mb-8 text-[3.25rem] font-black uppercase leading-[.82] tracking-[-.015em]">About me</h2>
         <SceneAnimatedText progress={smoothProgress} className="!text-[1rem] !leading-[1.58] [text-wrap:pretty]">{aboutCopy}</SceneAnimatedText>
         </motion.div>
       </motion.div>
       <motion.div style={{opacity:skillsOpacity,y:skillsY}} className="absolute inset-0 z-20 mx-auto flex w-full max-w-[1500px] flex-col items-center px-5 pt-[7vh] text-center sm:px-8 md:px-10 lg:px-16">
-        <h2 className="text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-tight">Skills</h2>
+        <h2 className="text-[clamp(3.5rem,9vw,132px)] font-black uppercase leading-[.82] tracking-[-.015em]">Skills</h2>
         <p className="mt-7 w-full max-w-[1280px] text-[clamp(.95rem,1.05vw,1.08rem)] font-medium leading-[1.55] [text-wrap:pretty] sm:mt-9 md:mt-11">
           {skillCopyLines.map((line, index) => (
             <span key={line} className="xl:block xl:whitespace-nowrap">
@@ -376,81 +378,6 @@ function AboutSkillsScene(){
   </section>
 }
 
-type Experience = {
-  number: string;
-  title: string;
-  company: string;
-  period: string;
-  description: string;
-};
+function ContactFooter(){return <ContactSection/>;}
 
-const experiences: Experience[] = [
-  {
-    number: '01',
-    title: 'AI PRODUCT CONTENT',
-    company: '四川旭创启元科技有限公司',
-    period: '2025.12 — 2026',
-    description: '围绕 AI 陪伴产品、智能硬件与行业终端，参与产品内容梳理、AIGC 视觉、短视频及多平台传播相关工作。',
-  },
-  {
-    number: '02',
-    title: 'AI ROBOT CONTENT',
-    company: '四川意外科技有限公司',
-    period: '2025.06 — 2025.12',
-    description: '围绕 AI 桌面机器人参与产品内容策划、短视频、电商与众筹物料，以及新品发布相关内容制作。',
-  },
-  {
-    number: '03',
-    title: 'NEW MEDIA & CONTENT',
-    company: '',
-    period: '2022 — 2025',
-    description: '早期经历覆盖医疗、本地生活、电商等方向，主要参与短视频内容、账号运营、用户互动及线索承接。',
-  },
-  {
-    number: '04',
-    title: 'PERSONAL MEDIA',
-    company: '',
-    period: '2023.09 — NOW',
-    description: '持续运营个人 Bilibili 音乐内容，并尝试抖音与小红书美食自媒体等新的个人创作方向。',
-  },
-];
-
-function ExperienceItem({experience}:{experience:Experience}) {
-  const prefersReducedMotion = useReducedMotion();
-  const reveal = (y:number, delay:number) => ({
-    initial: prefersReducedMotion ? false : {opacity:0,y},
-    whileInView: {opacity:1,y:0},
-    viewport: {once:true,amount:.22},
-    transition: {duration:.58,delay:prefersReducedMotion?0:delay,ease:[.22,1,.36,1] as [number,number,number,number]},
-  });
-
-  return <article className="experience-item grid grid-cols-1 gap-8 border-b border-black/15 py-16 md:grid-cols-[23%_1fr] md:gap-10 md:py-20 lg:gap-14 lg:py-24">
-    <motion.div {...reveal(20,0)}>
-      <div className="experience-number text-[clamp(4.5rem,10vw,140px)] font-black leading-[.78] tracking-[-.045em]">{experience.number}</div>
-    </motion.div>
-    <div className="md:pt-2 lg:pt-3">
-      <motion.div {...reveal(16,.06)}>
-        <h3 className="experience-title text-[clamp(1.6rem,3.1vw,2.7rem)] font-bold uppercase leading-[1.02] tracking-[-.025em]">{experience.title}</h3>
-      </motion.div>
-      <motion.div {...reveal(16,.12)} className="mt-4 flex flex-col text-[clamp(.78rem,1.15vw,.95rem)] font-medium leading-relaxed tracking-[.02em] text-black/45 md:mt-5 md:flex-row md:items-center">
-        {experience.company && <span>{experience.company}</span>}
-        {experience.company && <span aria-hidden="true" className="mx-2 hidden md:inline">·</span>}
-        <span>{experience.period}</span>
-      </motion.div>
-      <motion.div {...reveal(16,.18)}>
-        <p className="mt-5 max-w-[820px] text-[clamp(.95rem,1.35vw,1.14rem)] font-light leading-[1.8] text-black/55 [text-wrap:pretty] md:mt-6">{experience.description}</p>
-      </motion.div>
-    </div>
-  </article>;
-}
-
-function ExperienceSection(){return <section id="experience" className="relative scroll-mt-0 rounded-t-[40px] bg-white px-5 py-20 text-[#0C0C0C] sm:rounded-t-[50px] sm:px-8 sm:py-24 md:rounded-t-[60px] md:px-10 md:py-32">
-  <FadeIn as="h2" className="mb-16 text-center text-[clamp(3rem,12vw,160px)] font-black uppercase leading-none tracking-tight sm:mb-20 md:mb-28">Experience</FadeIn>
-  <div className="mx-auto max-w-5xl border-t border-black/15">
-    {experiences.map(experience=><ExperienceItem key={experience.number} experience={experience}/>)}
-  </div>
-</section>}
-
-function ContactFooter(){return <footer id="contact" className="relative z-20 -mx-3 flex min-h-[90svh] flex-col items-center justify-center gap-8 bg-[#0C0C0C] px-5 py-24 text-center sm:-mx-6 md:-mx-10"><p className="hero-heading text-[clamp(2.5rem,8vw,110px)] font-black uppercase leading-none">Have a wild idea?</p><ContactButton/><p className="mt-10 text-xs font-light uppercase tracking-[.3em] opacity-50">© 2026 Pengxiang studio</p></footer>}
-
-export default function App(){return <main className="overflow-x-clip bg-[#0C0C0C]"><HeroSection/><AboutSkillsScene/><ExperienceSection/><ProjectsSection footer={<ContactFooter/>}/></main>}
+export default function App(){return <main className="overflow-x-clip bg-[#0C0C0C]"><HeroSection/><AboutSkillsScene/><ExpertiseSection/><ProjectsSection footer={<ContactFooter/>}/></main>}

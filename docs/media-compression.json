@@ -1,0 +1,95 @@
+[
+  {
+    "file": "public/assets/projects/warmview-ai-core.mp4",
+    "before_bytes": 166385986,
+    "after_bytes": 17954609,
+    "validation": "duration and audio preserved; frame decodes",
+    "duration": 54.33
+  },
+  {
+    "file": "public/assets/projects/warmview-ai-plush.mp4",
+    "before_bytes": 277022305,
+    "after_bytes": 53326472,
+    "validation": "duration and audio preserved; frame decodes",
+    "duration": 182.49
+  },
+  {
+    "file": "public/assets/projects/warmview-video-intercom.mp4",
+    "before_bytes": 182159312,
+    "after_bytes": 41399307,
+    "validation": "duration and audio preserved; frame decodes",
+    "duration": 95.55
+  },
+  {
+    "file": "public/assets/projects/panda-demo.mp4",
+    "before_bytes": 49349375,
+    "after_bytes": 12078851,
+    "validation": "duration and audio preserved; frame decodes",
+    "duration": 33.78
+  },
+  {
+    "file": "public/assets/projects/waiwai-product-promo.mp4",
+    "before_bytes": 1182151259,
+    "after_bytes": 37789734,
+    "validation": "duration and audio preserved; frame decodes",
+    "duration": 165.0
+  },
+  {
+    "file": "public/assets/projects/brand-work/commercial-visuals/tour-product.png",
+    "before_bytes": 14693857,
+    "after_bytes": 13313878,
+    "validation": "identical RGBA pixels"
+  },
+  {
+    "file": "public/assets/projects/brand-work/commercial-visuals/tour-scenes.png",
+    "before_bytes": 13460847,
+    "after_bytes": 12273813,
+    "validation": "identical RGBA pixels"
+  },
+  {
+    "file": "public/assets/projects/brand-work/commercial-visuals/tour-functions.png",
+    "before_bytes": 10943737,
+    "after_bytes": 9897611,
+    "validation": "identical RGBA pixels"
+  },
+  {
+    "file": "public/assets/projects/food/chicken-kimchi.mp4",
+    "before_bytes": 63131272,
+    "after_bytes": 27225015,
+    "validation": "duration and audio preserved; frame decodes",
+    "duration": 95.69
+  },
+  {
+    "file": "public/assets/projects/food/chili-ribs.mp4",
+    "before_bytes": 81219066,
+    "after_bytes": 32853334,
+    "validation": "duration and audio preserved; frame decodes",
+    "duration": 124.2
+  },
+  {
+    "file": "public/assets/projects/food/sour-spicy-pork.mp4",
+    "before_bytes": 55308436,
+    "after_bytes": 21977253,
+    "validation": "duration and audio preserved; frame decodes",
+    "duration": 84.64
+  },
+  {
+    "file": "public/assets/projects/core-workflow/ai-box-quick-edit.mp4",
+    "before_bytes": 54528670,
+    "after_bytes": 10300296,
+    "validation": "duration and audio preserved; frame decodes",
+    "duration": 19.01
+  },
+  {
+    "file": "public/assets/projects/panda-packaging/evolution/v2-back.png",
+    "before_bytes": 41610583,
+    "after_bytes": 22420776,
+    "validation": "identical RGBA pixels"
+  },
+  {
+    "file": "public/assets/projects/panda-packaging/evolution/v2-front.png",
+    "before_bytes": 39747521,
+    "after_bytes": 18590987,
+    "validation": "identical RGBA pixels"
+  }
+]

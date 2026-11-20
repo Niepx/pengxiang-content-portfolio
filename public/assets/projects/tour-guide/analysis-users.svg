@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+<rect width="1600" height="1100" fill="#151c20"/>
+<g font-family="PingFang SC,Microsoft YaHei,sans-serif">
+<text x="100" y="105" fill="#99a9b4" font-size="25" letter-spacing="3">PRODUCT ANALYSIS / AUDIENCE &amp; CONTEXT</text>
+<text x="100" y="205" fill="#e0e8ed" font-size="54" font-weight="600">用户与应用需求</text>
+<g stroke="#34424c"><path d="M100 290H1500M100 500H1500M100 710H1500"/></g>
+<g fill="#e0e8ed" font-size="38" font-weight="600"><text x="100" y="365">游客</text><text x="100" y="575">场景方</text><text x="100" y="785">运营方</text></g>
+<g fill="#c1cdd5" font-size="32"><text x="470" y="365">补充手机电量，获取讲解与即时问答。</text><text x="470" y="575">组织景点与展品信息，服务不同语言的游客。</text><text x="470" y="785">协调设备使用、内容更新与服务反馈。</text></g>
+<g fill="#99a9b4" font-size="27"><text x="470" y="420">关注便携、易用与沿途的信息获取。</text><text x="470" y="630">适用方向：景区、博物馆、文旅街区与研学。</text><text x="470" y="840">将游客问题与内容偏好作为后续优化参考。</text></g>
+<text x="100" y="1010" fill="#99a9b4" font-size="24">基于现有资料的需求整理，不代表客户合作或实际运营成果。</text>
+</g></svg>

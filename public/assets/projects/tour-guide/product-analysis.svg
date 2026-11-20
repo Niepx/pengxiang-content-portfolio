@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1300" viewBox="0 0 1600 1300">
+  <rect width="1600" height="1300" fill="#151c20"/>
+  <g font-family="PingFang SC,Microsoft YaHei,sans-serif">
+    <text x="100" y="100" fill="#99a9b4" font-size="25" letter-spacing="3">PRODUCT ANALYSIS / PUBLIC SUMMARY</text>
+    <text x="100" y="185" fill="#e0e8ed" font-size="52" font-weight="600">产品定位与业务分析</text>
+    <g stroke="#34424c"><path d="M100 265H1500M100 440H1500M100 615H1500M100 790H1500M100 965H1500"/></g>
+    <g fill="#99a9b4" font-size="28"><text x="100" y="320">产品定位</text><text x="100" y="495">目标用户</text><text x="100" y="670">应用场景</text><text x="100" y="845">核心价值</text><text x="100" y="1020">基础运营逻辑</text></g>
+    <g fill="#e0e8ed" font-size="34" font-weight="600"><text x="420" y="320">AI 文旅随身导览解决方案</text><text x="420" y="495">游客 / 场景方 / 运营方</text><text x="420" y="670">景区 / 博物馆 / 文旅街区 / 研学</text><text x="420" y="845">充电 + 讲解 + AI 问答 + 多语言</text><text x="420" y="1020">设备 + 场景知识库 + 运营服务 + 数据反馈</text></g>
+    <g fill="#b3bfc7" font-size="27"><text x="420" y="375">以移动电源作为入口，连接讲解与问答。</text><text x="420" y="550">分别梳理出游需求、服务内容与运营协同。</text><text x="420" y="725">围绕场景知识组织导览信息。</text><text x="420" y="900">将硬件功能转化为清晰的传播重点。</text><text x="420" y="1075">用于方案分析，不代表已实现的经营成果。</text></g>
+    <text x="100" y="1210" fill="#99a9b4" font-size="24">依据现有产品分析资料整理 · 已排除定价、收益测算与内部合作方案</text>
+  </g>
+</svg>

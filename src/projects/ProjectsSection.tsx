@@ -140,7 +140,9 @@ function CaseStudyOverlay({ project, onClose }: { project: PortfolioProject | nu
     if (!project) return;
     overlayRef.current?.focus();
     const keydown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && project.caseType !== 'hardware') onClose();
+      if (event.key !== 'Escape' || project.caseType === 'hardware') return;
+      const dialogs = document.querySelectorAll('[role="dialog"]');
+      if (dialogs[dialogs.length - 1] === overlayRef.current) onClose();
     };
     window.addEventListener('keydown', keydown);
     return () => window.removeEventListener('keydown', keydown);
@@ -149,7 +151,7 @@ function CaseStudyOverlay({ project, onClose }: { project: PortfolioProject | nu
   const renderMedia = (id: string, className = '', autoPreview = false) => <MediaTile item={getMedia(project, id)} className={className} autoPreview={autoPreview} />;
   return createPortal(<div ref={overlayRef} tabIndex={-1} className={`case-overlay ${project.caseType === 'personal' ? 'case-overlay--personal' : ''} ${project.caseType === 'hardware' ? 'case-overlay--hardware' : ''}`} role="dialog" aria-modal="true" aria-label={`${project.title} 项目详情`}>
     <header className="case-overlay__bar"><button type="button" onClick={onClose}><ArrowLeft size={19} /> BACK TO PROJECTS</button>{project.caseType !== 'hardware' && <button type="button" onClick={onClose} aria-label="关闭项目详情"><X size={24} /></button>}</header>
-    {project.caseType === 'robot' ? <RobotCase project={project} renderMedia={renderMedia} /> : project.caseType === 'hardware' ? <HardwareCase project={project} renderMedia={renderMedia} /> : <PersonalCase project={project} renderMedia={renderMedia} />}
+    {project.caseType === 'robot' ? <RobotCase project={project} renderMedia={renderMedia} /> : project.caseType === 'hardware' ? <HardwareCase project={project} renderMedia={renderMedia} onBack={onClose} /> : <PersonalCase project={project} renderMedia={renderMedia} />}
     <footer className="case-overlay__footer">{project.title} <span>{project.company ? `${project.company} · ` : ''}{project.year}</span></footer>
   </div>, document.body);
 }

@@ -1,0 +1,130 @@
+.p02-panda-finale{margin-top:clamp(4rem,7vw,7rem)}
+.p02-panda-finale .p02-finale-label{color:#8f9ea8;font-size:.68rem;font-weight:700;letter-spacing:.14em}
+.p02-panda-finale h3{margin:1.2rem 0 1.6rem;color:#d3dfe6;font-size:clamp(1.9rem,3vw,3rem);line-height:1.2;letter-spacing:-.025em;font-weight:750;text-wrap:balance}
+.p02-panda-finale p{color:#9ba9b2;font-size:1rem;line-height:1.85;text-wrap:pretty}
+.p02-panda-record{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center;gap:clamp(2rem,7vw,7rem);border-top:1px solid #344049;padding-top:clamp(2.5rem,5vw,5rem)}
+.p02-panda-record__copy>p{max-width:36rem}
+.p02-panda-record__awards{margin-top:2.5rem;display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.p02-panda-record__awards article{border-top:1px solid #344049;padding-top:1.1rem;min-width:0}
+.p02-panda-record__awards small{font-size:.59rem;letter-spacing:.09em;color:#788a96;line-height:1.6}
+.p02-panda-record__awards h4{margin:.9rem 0 .6rem;color:#d2dee5;font-size:1.3rem;font-weight:650}
+.p02-panda-record__awards p{font-size:.82rem;line-height:1.8}
+.p02-panda-record__awards a{display:inline-block;margin-top:1rem;font-size:.75rem;color:#b1c0ca;text-underline-offset:4px}
+.p02-panda-record__awards a i{display:inline-block;font-style:normal;transition:transform .25s}
+.p02-panda-record__awards a:hover{text-decoration:underline}
+.p02-panda-record__awards a:hover i{transform:translate(2px,-2px)}
+.p02-panda-record__object{width:min(100%,430px);justify-self:center}
+.p02-panda-record__honors{width:100%;min-width:0;justify-self:center;cursor:default}
+.p02-panda-record__honors>img{display:block;width:100%;height:auto;object-fit:contain;cursor:default;transform-origin:center;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  .p02-panda-record__honors>img:hover{transform:scale(1.035)}
+}
+@media(max-width:700px){
+  .p02-panda-record--honors .p02-award-enter{transform:none!important}
+  .p02-panda-record__honors{filter:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .p02-panda-record__honors{opacity:1!important;transform:none!important;filter:none!important}
+  .p02-panda-record__honors>img{transition:none}
+}
+.p02-panda-record__object>button{position:relative;width:100%;display:block;cursor:zoom-in}
+.p02-panda-record__object img{display:block;width:100%;max-height:580px;object-fit:contain;border-radius:8px}
+.p02-panda-record__object button>span{position:absolute;right:1rem;bottom:1rem;padding:.4rem .6rem;background:#101619cc;color:#d7e2ea;font-size:.7rem}
+.p02-panda-record__object>p{margin-top:1rem;font-size:.59rem;line-height:1.7;letter-spacing:.08em}
+.p02-panda-record__object>p small{display:block;margin-top:.35rem;letter-spacing:.02em;font-size:.78rem;color:#b0bdc6}
+.p02-panda-reflection{margin-top:clamp(5rem,9vw,9rem);padding-top:clamp(2.5rem,5vw,5rem);border-top:1px solid #344049}
+.p02-panda-reflection__intro{max-width:48rem;display:grid;gap:1rem}
+.p02-panda-reflection__topics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.5rem,4vw,4rem);margin-top:3.5rem}
+.p02-panda-reflection__topics article{border-top:1px solid #344049;padding-top:1.4rem}
+.p02-panda-reflection__topics article>span{color:#738590;font-size:.72rem;letter-spacing:.12em}
+.p02-panda-reflection__topics h4{margin:1rem 0 1.2rem;max-width:17ch;font-size:1.3rem;line-height:1.5;font-weight:650;color:#cbd8e0;text-wrap:balance}
+.p02-panda-reflection__topics p{font-size:.9rem;line-height:1.9}
+.p02-panda-reflection__topics small{display:block;margin-top:1.7rem;color:#748792;font-size:.58rem;line-height:1.8;letter-spacing:.06em;overflow-wrap:anywhere}
+.p02-panda-closing{padding:clamp(4rem,8vw,8rem) 0 clamp(1rem,3vw,3rem);margin-top:clamp(5rem,9vw,9rem);border-top:1px solid #344049}
+.p02-panda-closing h3{max-width:28ch;color:#aabac5;font-size:clamp(1.9rem,3.2vw,3.3rem);line-height:1.3}
+.p02-panda-closing h3 span{color:#e0e9ee}
+.p02-panda-closing>div:last-child>div{display:grid;gap:1rem;max-width:43rem;margin-top:2rem}
+.p02-panda-closing>div:last-child>small{display:block;margin-top:3rem;color:#71838f;font-size:.65rem;letter-spacing:.14em;line-height:1.9}
+@media(max-width:980px){.p02-panda-reflection__topics{grid-template-columns:1fr}.p02-panda-reflection__topics h4{max-width:none}.p02-panda-reflection__topics p{max-width:48rem}.p02-panda-record{gap:2.5rem}}
+@media(max-width:700px){.p02-panda-record{grid-template-columns:1fr}.p02-panda-record__object{width:min(100%,340px)}.p02-panda-record__awards{gap:1.2rem}.p02-panda-finale p{font-size:.94rem}.p02-panda-record__awards p{font-size:.76rem}.p02-panda-finale h3 br{display:none}.p02-panda-closing h3{line-height:1.4}}
+@media(prefers-reduced-motion:reduce){.p02-panda-record__awards a i{transition:none}}
+/* Award Record: transparent object; hover is separate from its entry transform. */
+.p02-panda-record--angle .p02-panda-record__object img{border-radius:0}
+.p02-panda-record--angle .p02-panda-record__object>button{background:transparent;transition:transform .35s ease-out,filter .35s ease-out}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  .p02-panda-record--angle .p02-panda-record__object>button:hover{transform:translateY(-5px) scale(1.02);box-shadow:none;filter:drop-shadow(0 12px 16px #0005)}
+}
+@media(max-width:700px){
+  .p02-panda-record--angle .p02-award-enter{transform:none!important}
+}
+/* Recognition-only motion surfaces; dimensions follow the existing composition. */
+.p02-recognition-video>.p02-media{width:100%;aspect-ratio:16/9}
+.p02-recognition-hero .p02-archive-heading>div:first-child span{font-size:.68rem;font-weight:700;letter-spacing:.14em;color:#90a0aa}
+.p02-recognition-hero .p02-archive-heading>div{display:block;margin:0;padding:0;border:0}
+.p02-recognition-hero .p02-archive-heading>div p{color:#9ba9b2;font-size:.9rem;line-height:1.7}
+.p02-recognition-hero .p02-archive-heading>.p02-recognition-summary{position:relative;display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:2rem;padding-top:1.3rem;font-size:.78rem;color:#91a0aa}
+.p02-recognition-line{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.p02-recognition-line>span{display:block}
+.p02-recognition-hero__title>span{display:block}
+.p02-recognition-hero .p02-recognition-official{display:flex;flex-direction:column;align-items:flex-start;gap:.4rem;margin-top:1.25rem;padding-top:.8rem;border-top:1px solid #344049}
+.p02-recognition-official a{display:inline-flex;align-items:center;gap:.35rem;min-height:44px;color:#91a0aa;font-size:.75rem;transition:color .28s ease}
+.p02-recognition-official a>span{position:relative}
+.p02-recognition-official a>span::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .28s ease}
+.p02-recognition-official i{display:inline-block;font-style:normal;transition:transform .28s ease}
+.p02-recognition-official a:hover,.p02-recognition-official a:focus-visible{color:#d7e2ea}
+.p02-recognition-official a:hover>span::after,.p02-recognition-official a:focus-visible>span::after{transform:scaleX(1)}
+.p02-recognition-official a:hover i{transform:translate(2px,-2px)}
+.p02-recognition-official a:focus-visible{outline:1px solid #91a0aa;outline-offset:5px}
+.p02-recognition-official button{display:inline-flex;align-items:center;gap:.35rem;min-height:44px;color:#91a0aa;font-size:.75rem;text-align:left;transition:color .28s ease}
+.p02-recognition-official button>span{position:relative}
+.p02-recognition-official button>span::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .28s ease}
+.p02-recognition-official button:hover,.p02-recognition-official button:focus-visible{color:#d7e2ea}
+.p02-recognition-official button:hover>span::after,.p02-recognition-official button:focus-visible>span::after{transform:scaleX(1)}
+.p02-recognition-official button:hover i{transform:translate(2px,-2px)}
+.p02-recognition-official button:focus-visible{outline:1px solid #91a0aa;outline-offset:5px}
+.p02-award-document{display:grid;grid-template-columns:104px minmax(0,1fr);gap:1.2rem;align-items:center;margin-top:2rem;padding-top:1.5rem;border-top:1px solid #344049}
+.p02-award-document__preview{cursor:zoom-in}
+.p02-award-document__preview img{display:block;width:100%;height:auto;object-fit:contain;box-shadow:0 3px 12px #0002}
+.p02-award-document h5{margin:.6rem 0;color:#cbd8e0;font-size:.95rem;font-weight:600}
+.p02-panda-finale .p02-award-document p{font-size:.75rem;line-height:1.7}
+.p02-award-document>div>button,.p02-award-document a{display:inline-flex;align-items:center;min-height:44px;margin-right:1rem;color:#aebdc7;font-size:.75rem;text-underline-offset:4px}
+.p02-award-document>div>button:hover,.p02-award-document a:hover{text-decoration:underline;color:#d7e2ea}
+.p02-award-document button:focus-visible,.p02-award-document a:focus-visible{outline:1px solid #91a0aa;outline-offset:4px}
+@media(max-width:420px){.p02-award-document{grid-template-columns:80px minmax(0,1fr);gap:.9rem}}
+@media(prefers-reduced-motion:reduce){.p02-recognition-official button,.p02-recognition-official button>span::after{transition:none}}
+@media(max-width:700px){.p02-recognition-hero__title>span{transform:none!important}.p02-recognition-hero .p02-recognition-official{flex-direction:column;align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){.p02-recognition-official a,.p02-recognition-official a>span::after,.p02-recognition-official i{transition:none}.p02-recognition-hero__title>span{opacity:1!important;transform:none!important}}
+.p02-recognition-rule{position:absolute;top:0;left:0;right:0;height:1px;background:#344049;transform-origin:left center;pointer-events:none}
+.p02-panda-record__awards article{position:relative;border-top:0}
+.p02-panda-record__awards .is-gold h4{color:#c9a86a;background:linear-gradient(105deg,#c9a86a 10%,#e0c48a 45%,#c9a86a 80%);background-size:180% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:background-position .3s ease,filter .3s ease}
+.p02-panda-record__awards .is-silver h4{color:#aeb6be;background:linear-gradient(105deg,#aeb6be 10%,#d8dde2 45%,#aeb6be 80%);background-size:180% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;transition:background-position .3s ease,filter .3s ease}
+.p02-panda-record__copy>div>p{max-width:36rem}
+.p02-panda-record__object>button{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease}
+.p02-panda-record__object>div>p{margin-top:1rem;font-size:.59rem;line-height:1.7;letter-spacing:.08em}
+.p02-panda-record__object>div>p small{display:block;margin-top:.35rem;letter-spacing:.02em;font-size:.78rem;color:#b0bdc6}
+.p02-panda-reflection__topics h4,.p02-panda-reflection__topics article>span,.p02-panda-reflection__topics article{transition:color .3s ease,border-color .3s ease}
+.p02-panda-closing h3 .p02-recognition-line,.p02-panda-closing h3 .p02-recognition-line>span{color:inherit}
+.p02-panda-closing>div:last-child>div:last-child>small{display:block;margin-top:3rem;color:#71838f;font-size:.65rem;letter-spacing:.14em;line-height:1.9}
+.p02-panda-closing>div:last-child>div:last-child{display:block;max-width:none;margin-top:0}
+@media(hover:hover) and (pointer:fine){
+  .p02-panda-record__awards article:hover h4{background-position:100% 0;filter:brightness(1.08)}
+  .p02-panda-record__object>button:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 14px 28px #0004}
+  .p02-panda-reflection__topics article:hover{border-color:#71838f}
+  .p02-panda-reflection__topics article:hover h4{color:#e0e9ee}
+  .p02-panda-reflection__topics article:hover>span{color:#b4c4cf}
+}
+@media(prefers-reduced-motion:reduce){.p02-panda-record__object>button,.p02-panda-record__awards h4,.p02-panda-reflection__topics h4,.p02-panda-reflection__topics article>span,.p02-panda-reflection__topics article{transition:none!important}.p02-panda-record__object>button:hover{transform:none}.p02-recognition-line{overflow:visible}}
+
+/* Work Reflection: entry wrappers and reading focus control separate properties. */
+.p02-panda-reflection__title>span{display:block}
+.p02-panda-reflection__topics article{position:relative;border-top-color:transparent;transition:opacity .3s ease-out}
+.p02-panda-reflection__rule{position:absolute;inset:0 0 auto;height:1px;background:#344049;transform-origin:left;transition:background-color .3s ease-out}
+@media(hover:hover) and (pointer:fine){
+  .p02-panda-reflection__topics:has(article:hover) article:not(:hover){opacity:.76}
+  .p02-panda-reflection__topics article:hover{border-top-color:transparent}
+  .p02-panda-reflection__topics article:hover .p02-panda-reflection__rule{background-color:#71838f}
+}
+@media(prefers-reduced-motion:reduce){
+  .p02-panda-reflection [style]{opacity:1!important;transform:none!important}
+  .p02-panda-reflection__topics article,.p02-panda-reflection__rule{transition:none!important}
+}

@@ -3,6 +3,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { PortfolioProject } from './data';
 import Project02Case from './Project02Case';
+import MusicProject from './MusicProject';
+import FoodContent from './FoodContent';
 
 type RenderMedia = (id: string, className?: string) => ReactNode;
 type CaseProps = { project: PortfolioProject; renderMedia: RenderMedia };
@@ -152,21 +154,6 @@ function TourGuide({ renderMedia }: CaseProps) {
   </section>;
 }
 
-function FiveElementsHorse({ project, renderMedia }: CaseProps) {
-  const reduceMotion = useReducedMotion();
-  const personas = project.smart!.personas!;
-  const [active, setActive] = useState(0);
-  const current = personas[active];
-  return <section className="case-section case-container smart-horse">
-    <SectionHeading title={<>FIVE ELEMENTS<br />HORSE.</>} note="05 / FIVE ELEMENTS HORSE" />
-    <p className="smart-section-intro">原创产品概念以马年生肖与五行文化为起点，建立五组人格映射、心理锚点与 AI Persona，并延伸至众筹策划。</p>
-    <div className="smart-horse__hero">{renderMedia('horse-hero')}</div>
-    <ol className="smart-horse__concept"><li>马年生肖</li><li>五行文化</li><li>人格映射</li><li>心理锚点</li><li>AI Persona</li></ol>
-    <div className="smart-horse__picker" role="tablist" aria-label="选择五行马角色">{personas.map((persona, index) => <button key={persona.name} type="button" role="tab" aria-selected={active === index} onClick={() => setActive(index)}><span>{String(index + 1).padStart(2, '0')}</span>{persona.name}<small>{persona.chinese}</small></button>)}</div>
-    <motion.div className="smart-horse__persona" key={current.name} role="tabpanel" initial={reduceMotion ? false : { opacity: .55, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduceMotion ? 0 : .45, ease }}><div>{renderMedia(current.mediaId)}</div><dl><div><dt>ELEMENT / MATERIAL</dt><dd>{current.element} · {current.material}</dd></div><div><dt>PERSONALITY</dt><dd>{current.personality}</dd></div><div><dt>PROMPT DIRECTION</dt><dd>{current.prompt}</dd></div><div><dt>INTERACTION STYLE</dt><dd>{current.interaction}</dd></div><div><dt>TARGET SCENARIO</dt><dd>{current.scenario}</dd></div></dl></motion.div>
-    <div className="smart-crowdfunding"><div><span>CROWDFUNDING</span><h3>真实众筹详情页预留</h3><p>后续上传长图后可直接替换，不需要重新调整页面结构。当前区域仅标示正确的纵向浏览比例。</p></div><div className="smart-crowdfunding__scroll" tabIndex={0} aria-label="众筹详情页滚动预览">{renderMedia('horse-crowdfunding')}</div></div>
-  </section>;
-}
 
 function BrandWork({ renderMedia }: CaseProps) {
   const execution = ['设计', '对接打印厂家', '与厂家设计师沟通', '制作跟进', '物料到场', '现场安装 / 张贴'];
@@ -188,29 +175,30 @@ function HardwareSelectedWork({ project, renderMedia }: CaseProps) {
   return <section className="case-section case-container smart-selected"><SectionHeading title="SELECTED WORK" note="04 / MEDIA" /><div className="selected-work-grid">{project.selectedIds.map((id, index) => <div key={id} className={`selected-work-grid__item selected-work-grid__item--${index % 7} smart-selected__item`}>{renderMedia(id)}</div>)}</div></section>;
 }
 
-export function HardwareCase({ project, renderMedia }: CaseProps) {
-  return <Project02Case project={project} renderMedia={renderMedia} />;
+export function HardwareCase({ project, renderMedia, onBack }: CaseProps & { onBack: () => void }) {
+  return <Project02Case project={project} renderMedia={renderMedia} onBack={onBack} />;
 }
 
 function PersonalOverview({ project }: { project: PortfolioProject }) {
   return <section className="case-overview case-container personal-overview"><h2>PERSONAL<br />MEDIA</h2><p className="personal-overview__statement">工作之外，我也持续进行个人内容创作。</p><p className="personal-overview__copy">目前主要包括长期运营的 Bilibili 音乐内容，以及正在尝试的抖音 / 小红书美食内容。不同题材的创作让我持续接触选题、画面表达、内容包装和平台内容逻辑。</p><div className="case-capabilities">{project.personal!.capabilities.map(([name, detail]) => <div key={name}><h3>{name}</h3><p>{detail}</p></div>)}</div></section>;
 }
 
-function MusicProject({ project, renderMedia }: CaseProps) {
-  return <section className="case-section case-container personal-music"><SectionHeading title={<>BILIBILI<br />MUSIC PROJECT</>} /><p className="personal-section-intro">以音乐和情绪表达为核心的个人内容项目。</p><div className="personal-music__body"><div className="personal-music__hero">{renderMedia('music')}</div><div className="personal-music__details">{project.personal!.music.map(([name, detail]) => <div key={name}><h3>{name}</h3><p>{detail}</p></div>)}</div></div>
-    <div className="personal-posts"><h3>SELECTED POSTS</h3><div>{project.personal!.posts.map(post => <article key={post.id}><div className="personal-posts__image">{renderMedia(post.mediaId)}</div><span>{post.id} / {post.type}</span><h4>{post.title}</h4><p>{post.description}</p></article>)}</div></div>
+
+function CreativePractice() {
+  const reduceMotion = useReducedMotion();
+  const reveal = (delay = 0) => ({
+    initial: reduceMotion ? false as const : { opacity: 0, y: 18 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: .15 },
+    transition: { duration: reduceMotion ? 0 : .6, delay: reduceMotion ? 0 : delay, ease },
+  });
+  return <section className="case-section case-container personal-practice">
+    <motion.div {...reveal()}><SectionHeading title={<>KEEP MAKING.<br />KEEP TESTING.</>} /></motion.div>
+    <motion.p className="personal-practice__reflection" {...reveal(.12)}>音乐内容让我积累了选题、歌单编排、视觉包装与用户反馈方面的经验；美食影像则让我更加深入地参与拍摄、剪辑和日常生活的记录。两种创作形式各有不同，也让我不断尝试新的表达方式。</motion.p>
+    <hr className="personal-practice__end-line" />
   </section>;
 }
 
-function FoodContent({ project, renderMedia }: CaseProps) {
-  return <section className="case-section case-container personal-food"><div className="personal-food__intro"><div><SectionHeading title="FOOD CONTENT" /><span className="personal-food__status">ONGOING PROJECT</span><p>DOUYIN<br />XIAOHONGSHU / REDNOTE</p></div><p>目前正在尝试新的美食内容方向，从菜品研发、选题、拍摄方式、画面风格到账号内容形式都还在持续探索。</p></div><div className="personal-food__themes">{project.personal!.food.map(([name, detail]) => <div key={name}><strong>{name}</strong><span>{detail}</span></div>)}</div><div className="personal-food__diary">{project.personal!.diaryIds.map((id, index) => <div key={id} className={`personal-food__diary-item personal-food__diary-item--${index}`}>{renderMedia(id)}<span>{['EXPERIMENT', 'PROCESS', 'ONGOING', 'VISUAL NOTES'][index]}</span></div>)}</div></section>;
-}
-
-function CreativePractice({ project, renderMedia }: CaseProps) {
-  const reduceMotion = useReducedMotion();
-  return <section className="case-section case-container personal-practice"><SectionHeading title={<>KEEP MAKING.<br />KEEP TESTING.</>} /><p>个人项目对我来说也是持续测试内容方向、视觉表达和平台反馈的一部分。</p><div className="personal-practice__rows">{project.personal!.practice.map(([name, detail], index) => <motion.div key={name} initial={reduceMotion ? false : { opacity: .55, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .3 }} transition={{ duration: reduceMotion ? 0 : .5, delay: reduceMotion ? 0 : index * .09, ease }}><strong>{name}</strong><span>{detail}</span><div>{renderMedia(['post-1', 'food-1', 'food-2', 'cover'][index])}</div></motion.div>)}</div></section>;
-}
-
 export function PersonalCase({ project, renderMedia }: CaseProps) {
-  return <><PersonalOverview project={project} /><MusicProject project={project} renderMedia={renderMedia} /><FoodContent project={project} renderMedia={renderMedia} /><CreativePractice project={project} renderMedia={renderMedia} /></>;
+  return <><PersonalOverview project={project} /><MusicProject project={project} renderMedia={renderMedia} /><FoodContent /><CreativePractice /></>;
 }

@@ -120,7 +120,7 @@ function useMediaQuery(query: string) {
 function RobotHero({ project, renderMedia }: RobotCaseProps) {
   return <section className="robot-hero case-container">
     <div className="robot-hero__copy">
-      <p>01 / AI ROBOT</p>
+      <p>02 / AI ROBOT</p>
       <h1>FROM PRODUCT<br />TO CONTENT SYSTEM.</h1>
       <div className="robot-hero__meta"><strong>小喜财 Pro<br />AI DESKTOP ROBOT</strong><span>{project.company}<br />{project.period}</span></div>
       <p className="robot-hero__intro">{project.overview}</p>

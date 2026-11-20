@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1100" viewBox="0 0 1600 1100">
+<rect width="1600" height="1100" fill="#151c20"/>
+<g font-family="PingFang SC,Microsoft YaHei,sans-serif">
+<text x="100" y="105" fill="#99a9b4" font-size="25" letter-spacing="3">PRODUCT ANALYSIS / SERVICE &amp; CONTENT</text>
+<text x="100" y="205" fill="#e0e8ed" font-size="54" font-weight="600">服务与内容逻辑</text>
+<g stroke="#34424c"><path d="M100 290H1500M100 445H1500M100 600H1500M100 755H1500"/></g>
+<g fill="#e0e8ed" font-size="36" font-weight="600"><text x="100" y="355">设备入口</text><text x="100" y="510">场景知识库</text><text x="100" y="665">运营服务</text><text x="100" y="820">数据反馈</text></g>
+<g fill="#c1cdd5" font-size="31"><text x="470" y="355">通过充电、讲解与语音问答连接游客需求。</text><text x="470" y="510">围绕景点、展品、路线与常见问题组织内容。</text><text x="470" y="665">关注使用说明、设备维护与内容持续更新。</text><text x="470" y="820">以使用问题与游客反馈辅助内容和服务优化。</text></g>
+<text x="100" y="1010" fill="#99a9b4" font-size="24">方案分析摘要；未展示内部定价、收益测算或未经验证的业务数据。</text>
+</g></svg>
