@@ -51,10 +51,12 @@ function InteractiveCharacter(){
   const lastPointer=useRef<{x:number;y:number}|null>(null);
   const scrollTimer=useRef<number>();
   const animationFrame=useRef<number>();
+  const [interactive]=useState(()=>window.innerWidth>=768&&window.matchMedia('(hover:hover) and (pointer:fine)').matches&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   const [ready,setReady]=useState(false);
   const [direction,setDirection]=useState('front');
 
   useEffect(()=>{
+    if(!interactive)return;
     const video=videoRef.current,canvas=canvasRef.current;
     if(!video||!canvas)return;
     const width=canvas.width,height=canvas.height,total=width*height;
@@ -115,9 +117,10 @@ function InteractiveCharacter(){
     video.addEventListener('seeked',render);
     if(video.readyState>=1)seekFront();
     return()=>{video.removeEventListener('loadedmetadata',seekFront);video.removeEventListener('seeked',render)};
-  },[]);
+  },[interactive]);
 
   useEffect(()=>{
+    if(!interactive)return;
     let lastScrollY=window.scrollY;
     const reset=()=>{neutral.current=true;transitioningFront.current=true;targetTime.current=FRONT_TIME;setDirection('front')};
     const lookAt=(angle:number,name=directionName(angle))=>{
@@ -212,12 +215,12 @@ function InteractiveCharacter(){
     window.addEventListener('blur',reset);
     animationFrame.current=requestAnimationFrame(animate);
     return()=>{window.removeEventListener('mousemove',pointerMove);window.removeEventListener('wheel',wheel,{capture:true});window.removeEventListener('scroll',scroll);window.removeEventListener('blur',reset);window.clearTimeout(scrollTimer.current);if(animationFrame.current)cancelAnimationFrame(animationFrame.current)};
-  },[]);
+  },[interactive]);
 
   return <div ref={hostRef} data-direction={direction} className="hero-character relative aspect-[5/6] w-full" role="img" aria-label={`Joji IP character looking ${direction}`}>
     <img src={publicAsset("assets/hero-character-poster.webp")} width="480" height="576" alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-contain" style={{opacity:ready?0:1}} />
     <canvas ref={canvasRef} width="480" height="576" className="relative h-full w-full select-none object-contain" style={{opacity:ready?1:0}}/>
-    <video ref={videoRef} src={publicAsset('assets/joji-ip-expression-v2.mp4')} muted playsInline preload="metadata" className="hidden" aria-hidden="true"/>
+    <video ref={videoRef} src={interactive?publicAsset('assets/joji-ip-expression-v2.mp4'):undefined} muted playsInline preload="metadata" className="hidden" aria-hidden="true"/>
   </div>
 }
 
