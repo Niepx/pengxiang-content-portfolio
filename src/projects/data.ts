@@ -1,3 +1,4 @@
+import { optimizedAsset } from '../assetDelivery';
 import { packagingEvolutionMedia } from './packagingEvolutionData';
 import { softwareScreens } from './softwareScreens';
 
@@ -62,7 +63,7 @@ export type PortfolioProject = {
   };
 };
 
-const projectAsset = (name: string) => `${import.meta.env.BASE_URL}assets/projects/${name}`;
+const projectAsset = (name: string) => optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/${name}`);
 
 // Add real image URLs to `src` and a video URL to the video item's `src`.
 // Gallery layouts derive from selectedIds/outputIds, so their counts can change later.

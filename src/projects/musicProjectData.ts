@@ -1,3 +1,4 @@
+import { optimizedAsset } from '../assetDelivery';
 export type MusicPost = {
   id: string;
   mediaId: string;
@@ -38,7 +39,7 @@ export const musicPosts: MusicPost[] = [
     published: '2024.07.16',
     description: '账号目前数据表现最突出的作品，在播放量与收藏量上获得了较好的反馈，成为持续歌单创作过程中的代表性成果。',
     metrics: { views: '107.8万', likes: '约3万', coins: '约1.6万', saves: '约9.2万', shares: '398', followersGained: '1,054' },
-    cover: `${import.meta.env.BASE_URL}assets/projects/bilibili-music/rnb-playlist.png`, videoUrl: 'https://www.bilibili.com/video/BV1px4y1x7Qj/',
+    cover: optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/bilibili-music/rnb-playlist.png`), videoUrl: 'https://www.bilibili.com/video/BV1px4y1x7Qj/',
   },
   {
     id: '02', mediaId: 'post-2', category: 'EARLY EXPLORATION', title: '静谧冬夜 & INFJ',
@@ -46,7 +47,7 @@ export const musicPosts: MusicPost[] = [
     published: '2023.12.13',
     description: 'Night Playlist 系列初期探索中的代表作品。围绕安静、抒情的聆听氛围进行选曲与编排，并从发布后的用户反馈中进一步认识这一内容方向。',
     metrics: { views: '16.6万', likes: '6,500', coins: '1,606', saves: '9,642', shares: '453', followersGained: '1,724' },
-    cover: `${import.meta.env.BASE_URL}assets/projects/bilibili-music/night-infj.png`, videoUrl: 'https://www.bilibili.com/video/BV1494y1N7Wg/',
+    cover: optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/bilibili-music/night-infj.png`), videoUrl: 'https://www.bilibili.com/video/BV1494y1N7Wg/',
   },
   {
     id: '03', mediaId: 'post-3', category: 'DIRECTION VALIDATION', title: '宝藏粤语歌单',
@@ -54,7 +55,7 @@ export const musicPosts: MusicPost[] = [
     published: '2023.10.06',
     description: '这条作品获得的真实反馈，让我进一步明确了长期更新粤语音乐的方向，也成为后续持续整理与分享粤语歌曲的重要参考。',
     metrics: { views: '7.5万', likes: '7,146', coins: '807', saves: '4,909', shares: '265', followersGained: '2,586' },
-    cover: `${import.meta.env.BASE_URL}assets/projects/bilibili-music/cantonese-playlist.png`, videoUrl: 'https://www.bilibili.com/video/BV1HN4y1o7yT/',
+    cover: optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/bilibili-music/cantonese-playlist.png`), videoUrl: 'https://www.bilibili.com/video/BV1HN4y1o7yT/',
   },
 ];
 

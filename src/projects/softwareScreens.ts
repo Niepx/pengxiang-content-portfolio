@@ -1,3 +1,4 @@
+import { optimizedAsset } from '../assetDelivery';
 const screenCopy = [
   ['首页 / 登录 / 完善个人信息', '将首次进入、手机号登录与个人资料完善组织为连续的使用起点。'],
   ['首页 / 设备状态 / 获得称号', '区分未添加设备与已连接状态，并呈现陪伴称号的记录路径。'],
@@ -10,4 +11,4 @@ const screenCopy = [
   ['完整记录 / 完整报告 / 我的', '通过时间记录、趋势报告和个人入口组织回顾与管理功能。'],
   ['个人信息 / 反馈帮助 / 在线客服', '将资料编辑、建议反馈、常见问题与客服入口组织为独立支持页面。'],
 ];
-export const softwareScreens = screenCopy.map(([title, description], index) => ({ id: `panda-software-${index + 1}`, image: `${import.meta.env.BASE_URL}assets/projects/panda-software/${index + 1}.png`, title, description, index }));
+export const softwareScreens = screenCopy.map(([title, description], index) => ({ id: `panda-software-${index + 1}`, image: optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/panda-software/${index + 1}.png`), title, description, index }));

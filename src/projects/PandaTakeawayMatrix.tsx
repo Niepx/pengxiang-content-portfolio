@@ -1,3 +1,4 @@
+import { optimizedAsset } from '../assetDelivery';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import './panda-takeaway-matrix.css';
@@ -30,8 +31,8 @@ export default function PandaTakeawayMatrix() {
         visible: { opacity: 1, y: 0, transition: { duration: reduced ? 0 : .55, delay: reduced ? 0 : .55 + index * .1, ease: [.22, 1, .36, 1] } },
       }}>
         <div className={`p02-takeaway-character${reduced || revealed.includes(id) ? ' is-revealed' : ''}`}>
-          <img className="is-sketch" src={`${root}/${id}-sketch.png`} alt={`${pose}熊猫线稿`} loading="lazy" />
-          <img className="is-render" src={`${root}/${id}-render.png`} alt={`${pose}熊猫最终渲染`} width="1448" height="1086" loading="lazy" />
+          <img className="is-sketch" src={optimizedAsset(`${root}/${id}-sketch.png`)} alt={`${pose}熊猫线稿`} loading="lazy" />
+          <img className="is-render" src={optimizedAsset(`${root}/${id}-render.png`)} alt={`${pose}熊猫最终渲染`} width="1448" height="1086" loading="lazy" />
         </div>
       </motion.div>
     </motion.div>)}

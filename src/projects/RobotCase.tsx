@@ -1,3 +1,4 @@
+import { posterForVideo } from '../assetDelivery';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
@@ -318,9 +319,10 @@ function LaunchFilm({ project, onEnter }: RobotCaseProps & { onEnter: () => void
     <figure className="robot-launch__video">
       <video
         src={launchMedia.src}
+        poster={posterForVideo(launchMedia.src)}
         controls
         playsInline
-        preload="auto"
+        preload="none"
         aria-label={`${launchMedia.title}视频播放器`}
       />
       <figcaption><span>PRODUCT LAUNCH</span>{launchMedia.title}</figcaption>

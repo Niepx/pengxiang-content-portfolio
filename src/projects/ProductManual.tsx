@@ -1,10 +1,11 @@
+import { optimizedAsset } from '../assetDelivery';
 import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { X } from 'lucide-react';
 import DepthCarousel from '../components/react-bits/DepthCarousel/DepthCarousel';
 import './product-manual.css';
 
-const manualPages = Array.from({ length: 16 }, (_, index) => ({ image: `${import.meta.env.BASE_URL}assets/projects/panda-manual/page-${index}.png`, alt: `产品说明书 第 ${index + 1} 页` }));
+const manualPages = Array.from({ length: 16 }, (_, index) => ({ image: optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/panda-manual/page-${index}.png`), alt: `产品说明书 第 ${index + 1} 页` }));
 export default function ProductManual() {
   const reduced = useReducedMotion();
   const [gallery, setGallery] = useState(false);

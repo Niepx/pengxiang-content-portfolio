@@ -1,3 +1,4 @@
+import { optimizedAsset } from '../assetDelivery';
 import { RecognitionReveal as Reveal } from './RecognitionMotion';
 import './panda-reflection.css';
 import { motion, useReducedMotion } from 'framer-motion';
@@ -9,7 +10,7 @@ export const provincialAward: AwardRecord =
   { label: '01 / PROVINCIAL RECOGNITION', title: '四川金奖', event: '2026 四川旅游商品大赛', officialUrl: 'https://mp.weixin.qq.com/s/CWCSMpvxcEFLmxhwojw-yg',
     document: {
       pdfUrl: `${import.meta.env.BASE_URL}assets/projects/panda-awards/official/sichuan-awards-2026.pdf`,
-      previewUrl: `${import.meta.env.BASE_URL}assets/projects/panda-awards/official/sichuan-awards-notice.png`,
+      previewUrl: optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/panda-awards/official/sichuan-awards-notice.png`),
       previewMediaId: 'panda-official-sichuan-notice',
       mediaIds: ['panda-official-sichuan-list', 'panda-official-sichuan-notice'],
     } };
@@ -65,7 +66,7 @@ function AwardRecordDisplay({ onOpenDocument }: { onOpenDocument: (ids: string[]
       hidden: { opacity: 0, y: 24, scale: .96, filter: 'blur(4px)' },
       visible: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', transition: { duration: reduced ? 0 : .8, delay: reduced ? 0 : 2.05, ease: recognitionEase } },
     }}>
-      <img src={`${import.meta.env.BASE_URL}assets/projects/panda-awards/award-honors-transparent.png`} width="900" height="562" alt="2026 四川旅游商品大赛金奖证书、中国旅游商品大赛银奖证书及全国银牌组合展示" />
+      <img src={optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/panda-awards/award-honors-transparent.png`)} width="900" height="562" alt="2026 四川旅游商品大赛金奖证书、中国旅游商品大赛银奖证书及全国银牌组合展示" />
     </motion.div>
   </motion.section>;
 }

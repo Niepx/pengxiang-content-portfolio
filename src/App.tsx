@@ -1,11 +1,13 @@
+import { optimizedAsset } from './assetDelivery';
 import { ElementType, ReactNode, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { motion, MotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, MotionValue, useInView, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import ProjectsSection from './projects/ProjectsSection';
 import ExpertiseSection from './ExpertiseSection';
 import ContactSection from './contact/ContactSection';
+import MobileAboutSkills from './MobileAboutSkills';
 
-const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path}`;
+const publicAsset = (path: string) => optimizedAsset(`${import.meta.env.BASE_URL}${path}`);
 
 type FadeProps = { children: ReactNode; delay?: number; duration?: number; x?: number; y?: number; as?: ElementType; className?: string; id?: string };
 function FadeIn({ children, delay=0, duration=.7, x=0, y=30, as='div', className, id }: FadeProps) {
@@ -212,9 +214,10 @@ function InteractiveCharacter(){
     return()=>{window.removeEventListener('mousemove',pointerMove);window.removeEventListener('wheel',wheel,{capture:true});window.removeEventListener('scroll',scroll);window.removeEventListener('blur',reset);window.clearTimeout(scrollTimer.current);if(animationFrame.current)cancelAnimationFrame(animationFrame.current)};
   },[]);
 
-  return <div ref={hostRef} data-direction={direction} className={`hero-character relative aspect-[5/6] w-full transition-[opacity,filter] duration-700 ${ready?'opacity-100 blur-0':'opacity-0 blur-md'}`} role="img" aria-label={`Joji IP character looking ${direction}`}>
-    <canvas ref={canvasRef} width="480" height="576" className="relative h-full w-full select-none object-contain"/>
-    <video ref={videoRef} src={publicAsset('assets/joji-ip-expression-v2.mp4')} muted playsInline preload="auto" className="hidden" aria-hidden="true"/>
+  return <div ref={hostRef} data-direction={direction} className="hero-character relative aspect-[5/6] w-full" role="img" aria-label={`Joji IP character looking ${direction}`}>
+    <img src={publicAsset("assets/hero-character-poster.webp")} width="480" height="576" alt="" fetchPriority="high" className="absolute inset-0 h-full w-full object-contain" style={{opacity:ready?0:1}} />
+    <canvas ref={canvasRef} width="480" height="576" className="relative h-full w-full select-none object-contain" style={{opacity:ready?1:0}}/>
+    <video ref={videoRef} src={publicAsset('assets/joji-ip-expression-v2.mp4')} muted playsInline preload="metadata" className="hidden" aria-hidden="true"/>
   </div>
 }
 
@@ -222,7 +225,7 @@ function HeroSection(){return <section className="relative flex h-[100svh] min-h
   <FadeIn as="nav" y={-20} className="z-30 flex justify-between pt-6 text-sm font-medium uppercase tracking-wider md:pt-8 md:text-lg lg:text-[1.4rem]">{[{label:'About',href:'#about'},{label:'Projects',href:'#projects'},{label:'Expertise',href:'#experience'},{label:'Contact',href:'#contact'}].map(({label,href})=><a key={label} className="transition-opacity duration-200 hover:opacity-70" href={href}>{label}</a>)}</FadeIn>
   <div className="overflow-hidden"><FadeIn id="hero-title" as="h1" delay={.15} y={40} className="hero-heading mt-6 w-full whitespace-nowrap text-center text-[14vw] font-black uppercase leading-none tracking-[-.015em] sm:mt-4 sm:text-[15vw] md:-mt-5 md:text-[16vw] lg:text-[17.5vw]">Hi, i&apos;m joji</FadeIn></div>
   <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center sm:items-end"><FadeIn delay={.6} y={30} className="pointer-events-auto w-[270px] sm:w-[340px] md:w-[420px] lg:w-[480px]"><InteractiveCharacter/></FadeIn></div>
-  <div className="relative z-20 mt-auto flex items-end justify-between gap-4 pb-7 sm:pb-8 md:pb-10"><FadeIn as="p" delay={.35} y={20} className="shrink-0 text-[clamp(.55rem,.9vw,.95rem)] font-light leading-tight tracking-[.02em]"><span className="block whitespace-nowrap">From product insight to final output,</span><span className="block whitespace-nowrap">make ideas easier to see, understand, and share.</span></FadeIn><FadeIn delay={.5} y={20}><ContactButton/></FadeIn></div>
+  <div className="relative z-20 mt-auto flex items-end justify-between gap-4 pb-7 sm:pb-8 md:pb-10"><FadeIn as="p" delay={.35} y={20} className="min-w-0 flex-1 text-[clamp(.55rem,.9vw,.95rem)] font-light leading-tight tracking-[.02em]"><span className="block sm:whitespace-nowrap">From product insight to final output,</span><span className="block sm:whitespace-nowrap">make ideas easier to see, understand, and share.</span></FadeIn><FadeIn delay={.5} y={20} className="shrink-0"><ContactButton/></FadeIn></div>
   </section>}
 
 function Character({char,progress,range}:{char:string;progress:MotionValue<number>;range:[number,number]}){const opacity=useTransform(progress,range,[.2,1]);if(char==='\n')return <br/>;return <span className="relative inline-block"><span className="opacity-0">{char===' '?'\u00a0':char}</span><motion.span aria-hidden className="absolute inset-0" style={{opacity}}>{char===' '?'\u00a0':char}</motion.span></span>}
@@ -247,8 +250,12 @@ const skillCopyLines = [
 
 const skillFramePaths=Array.from({length:54},(_,index)=>publicAsset(`assets/skill-sequence/frame-${String(index).padStart(3,'0')}.jpg`));
 
-function AboutSkillsScene(){
+function DesktopAboutSkillsScene(){
   const sectionRef=useRef<HTMLElement>(null);
+  const sequenceVisible=useInView(sectionRef,{once:true,margin:"-10% 0px"});
+  const [sequencePaths]=useState(()=>window.matchMedia("(max-width: 767px)").matches
+    ? Array.from({length:18},(_,index)=>publicAsset(`assets/skill-sequence/mobile/frame-${String(index===17?53:index*3).padStart(3,"0")}.jpg`))
+    : skillFramePaths);
   const canvasRef=useRef<HTMLCanvasElement>(null);
   const framesRef=useRef<HTMLImageElement[]>([]);
   const progressRef=useRef(0);
@@ -286,19 +293,18 @@ function AboutSkillsScene(){
 
   useEffect(()=>{
     const canvas=canvasRef.current;
-    if(!canvas)return;
+    if(!canvas||!sequenceVisible)return;
     const context=canvas.getContext('2d',{alpha:false});
     if(!context)return;
-    let cancelled=false,loaded=0;
-    const frames=skillFramePaths.map((src,index)=>{
+    let cancelled=false;
+    const frames=sequencePaths.map((src,index)=>{
       const image=new Image();
       image.decoding='async';
       image.src=src;
       image.onload=()=>{
-        loaded+=1;
         if(cancelled)return;
-        if(index===0)drawRef.current(progressRef.current,true);
-        if(loaded===skillFramePaths.length)setFramesReady(true);
+        if(index===0){setFramesReady(true);drawRef.current(progressRef.current,true);}
+        else drawRef.current(progressRef.current,true);
       };
       return image;
     });
@@ -334,7 +340,7 @@ function AboutSkillsScene(){
     window.addEventListener('resize',resize,{passive:true});
     draw(progressRef.current,true);
     return()=>{cancelled=true;window.removeEventListener('resize',resize);frames.forEach(image=>{image.onload=null});if(animationFrameRef.current)cancelAnimationFrame(animationFrameRef.current)}
-  },[]);
+  },[sequenceVisible,sequencePaths]);
 
   useMotionValueEvent(smoothProgress,'change',progress=>{
     progressRef.current=progress;
@@ -345,8 +351,8 @@ function AboutSkillsScene(){
   return <section ref={sectionRef} id="about" className="relative h-[500vh] bg-[#0C0C0C] text-[#0C0C0C]">
     <div id="skills" className="pointer-events-none absolute left-0 top-[72%] h-px w-px"/>
     <motion.div style={{scale:sceneScale,y:sceneY,borderRadius:sceneRadius}} className="sticky top-0 h-[100svh] overflow-hidden bg-[#F3F3F0] will-change-transform">
-      <motion.img src={publicAsset('assets/about-angry-laptop-boy.png')} alt="" aria-hidden="true" loading="eager" style={{opacity:aboutImageOpacity,x:aboutImageX,y:aboutImageY,scale:aboutImageScale,filter:aboutImageFilter,transformOrigin:'72% 68%'}} className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] w-full object-contain object-bottom will-change-[transform,opacity,filter] md:inset-0 md:h-full md:object-cover md:object-center"/>
-      <motion.div aria-hidden="true" style={{opacity:canvasOpacity,scale:canvasScale,y:canvasY,borderRadius:canvasRadius}} className="absolute inset-0 origin-center overflow-hidden bg-white will-change-transform">
+      <motion.img src={publicAsset('assets/about-angry-laptop-boy.png')} alt="" aria-hidden="true" loading="eager" style={{opacity:framesReady?aboutImageOpacity:1,x:aboutImageX,y:aboutImageY,scale:aboutImageScale,filter:aboutImageFilter,transformOrigin:'72% 68%'}} className="pointer-events-none absolute inset-x-0 bottom-0 h-[36%] w-full object-contain object-bottom will-change-[transform,opacity,filter] md:inset-0 md:h-full md:object-cover md:object-center"/>
+      <motion.div aria-hidden="true" style={{opacity:framesReady?canvasOpacity:0,scale:canvasScale,y:canvasY,borderRadius:canvasRadius}} className="absolute inset-0 origin-center overflow-hidden bg-white will-change-transform">
         <canvas ref={canvasRef} role="img" aria-label="Joji moves from his About workspace into the Skills scene" className={`h-full w-full transition-opacity duration-500 ${framesReady?'opacity-100':'opacity-0'}`}/>
       </motion.div>
       <motion.div aria-hidden="true" style={{opacity:skillsImageOpacity,top:skillsImageTop,bottom:skillsImageBottom,left:skillsImageInset,right:skillsImageInset,borderRadius:skillsImageRadius}} className="pointer-events-none absolute z-[1] overflow-hidden bg-white shadow-[0_28px_90px_rgba(25,20,14,0.08)] will-change-[top,bottom,left,right,border-radius]">
@@ -378,6 +384,17 @@ function AboutSkillsScene(){
   </section>
 }
 
+function AboutSkillsScene(){
+  const [mobile,setMobile]=useState(()=>window.matchMedia('(max-width: 767px)').matches);
+  useEffect(()=>{
+    const query=window.matchMedia('(max-width: 767px)');
+    const update=()=>setMobile(query.matches);
+    query.addEventListener('change',update);
+    return()=>query.removeEventListener('change',update);
+  },[]);
+  return mobile ? <MobileAboutSkills aboutCopy={aboutCopy} skillCopy={skillCopyLines.join(' ')} /> : <DesktopAboutSkillsScene/>;
+}
+
 function ContactFooter(){return <ContactSection/>;}
 
-export default function App(){return <main className="overflow-x-clip bg-[#0C0C0C]"><HeroSection/><AboutSkillsScene/><ExpertiseSection/><ProjectsSection footer={<ContactFooter/>}/></main>}
+export default function App(){return <main className="bg-[#0C0C0C]"><HeroSection/><AboutSkillsScene/><ExpertiseSection/><ProjectsSection footer={<ContactFooter/>}/></main>}

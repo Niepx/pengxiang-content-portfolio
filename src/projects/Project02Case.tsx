@@ -1,3 +1,4 @@
+import { optimizedAsset, posterForVideo } from '../assetDelivery';
 import {
   CSSProperties,
   PointerEvent as ReactPointerEvent,
@@ -184,11 +185,11 @@ function Lightbox({ project, renderMedia, state, setState, onClose }: Props & {
             if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) move(dx < 0 ? 1 : -1);
           }}>
           {item.kind === 'video' && item.src
-            ? <video key={item.src} src={item.src} poster={item.poster} controls autoPlay playsInline />
+            ? <video key={item.src} src={item.src} poster={item.poster || posterForVideo(item.src)} controls autoPlay playsInline />
             : item.kind === 'image' && item.src
               ? packagingGallery
-                ? <motion.img key={item.src} src={item.src} alt={copy?.title || item.title} initial={reduced ? false : { opacity: .25 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : .25 }} />
-                : <img src={item.src} alt={copy?.title || item.title} />
+                ? <motion.img key={item.src} src={optimizedAsset(item.src)} alt={copy?.title || item.title} initial={reduced ? false : { opacity: .25 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : .25 }} />
+                : <img src={optimizedAsset(item.src)} alt={copy?.title || item.title} />
               : renderMedia(item.id)}
         </div>
         <footer>

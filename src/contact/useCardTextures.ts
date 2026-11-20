@@ -19,13 +19,19 @@ export function useCardTextures(enabled: boolean) {
       const [portrait, qr, icons] = await Promise.all([
         load(cardDesign.portrait), load(cardDesign.qrImage),
         Promise.all(cardDesign.socialIcons.map(src => load(src).catch(() => null))),
-        document.fonts.ready,
       ]);
-      await Promise.all([
-        document.fonts.load('500 112px Kanit', 'Joji PERSONAL ID'),
-        document.fonts.load('900 230px "PingFang SC"', cardDesign.chineseName),
-        document.fonts.load('500 100px "PingFang SC"', '聂鹏翔保持联系微信邮箱'),
+      // A failed font must not prevent the portrait and contact QR from rendering.
+      let fontTimer: ReturnType<typeof setTimeout> | undefined;
+      await Promise.race([
+        Promise.allSettled([
+          document.fonts.load('500 112px Kanit', 'Joji PERSONAL ID'),
+          document.fonts.load('900 230px "PingFang SC"', cardDesign.chineseName),
+          document.fonts.load('500 100px "PingFang SC"', '聂鹏翔保持联系微信邮箱'),
+        ]),
+        new Promise(resolve => { fontTimer = setTimeout(resolve, 2000); }),
       ]);
+      clearTimeout(fontTimer);
+      if (!alive) return;
       const canvas = document.createElement('canvas');
       canvas.width = WIDTH; canvas.height = HEIGHT;
       const ctx = canvas.getContext('2d');

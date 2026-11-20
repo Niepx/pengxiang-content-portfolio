@@ -1,7 +1,8 @@
+import { optimizedAsset } from '../assetDelivery';
 // Editable artwork content; independent of the Lanyard physics.
 const assets = `${import.meta.env.BASE_URL}assets/lanyard/`;
 export const cardDesign = {
-  portrait: `${assets}portrait.png`,
+  portrait: optimizedAsset(`${assets}portrait.png`),
   qrImage: `${assets}wechat-qr.jpg`,
   name: 'Joji',
   chineseName: '聂鹏翔',

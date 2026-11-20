@@ -1,10 +1,13 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { optimizedAsset, posterForVideo } from '../assetDelivery';
+import { CSSProperties, lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, X } from 'lucide-react';
 import { MediaItem, PortfolioProject, projects } from './data';
-import { HardwareCase, PersonalCase } from './CaseVariants';
-import { RobotCase } from './RobotCase';
+const HardwareCase = lazy(() => import('./CaseVariants').then(module => ({ default: module.HardwareCase })));
+const PersonalCase = lazy(() => import('./CaseVariants').then(module => ({ default: module.PersonalCase })));
+const RobotCase = lazy(() => import('./RobotCase').then(module => ({ default: module.RobotCase })));
+import LoadingBoundary from '../LoadingBoundary';
 import './projects.css';
 import './case-variants.css';
 
@@ -16,7 +19,7 @@ function placeholder() {
 }
 
 const getMedia = (project: PortfolioProject, id: string) => project.media.find(item => item.id === id)!;
-const mediaPoster = (item: MediaItem) => item.poster || item.src && item.kind === 'image' && item.src || (item.src ? undefined : placeholder());
+const mediaPoster = (item: MediaItem) => { const source = item.poster || (item.kind === 'video' ? posterForVideo(item.src) : undefined) || item.src && item.kind === 'image' && item.src || (item.src ? undefined : placeholder()); return source ? optimizedAsset(source) : undefined; };
 
 function useScrollLock(active: boolean) {
   useEffect(() => {
@@ -58,7 +61,7 @@ function MediaTile({ item, className = '', priority = false, autoPreview = false
   const preview = () => { if (window.matchMedia('(hover: hover)').matches) { hoverRef.current = true; setNearViewport(true); videoRef.current?.play().catch(() => {}); } };
   const stopPreview = () => { hoverRef.current = false; if (videoRef.current && !autoVisibleRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } };
   return <div ref={tileRef} className={`project-media group/media ${className}`} onMouseEnter={preview} onMouseLeave={stopPreview}>
-    {hasVideo ? <video ref={videoRef} src={nearViewport ? item.src : undefined} poster={mediaPoster(item)} muted loop playsInline preload={item.poster ? 'metadata' : 'auto'} onCanPlay={() => { if (hoverRef.current || autoVisibleRef.current) videoRef.current?.play().catch(() => {}); }} aria-hidden="true" /> : <img className={item.mirrored ? 'is-mirrored' : undefined} src={mediaPoster(item)} alt={item.src ? item.title : ''} loading={priority ? 'eager' : 'lazy'} />}
+    {hasVideo ? <video ref={videoRef} src={nearViewport ? item.src : undefined} poster={mediaPoster(item)} muted loop playsInline preload="none" onCanPlay={() => { if (hoverRef.current || autoVisibleRef.current) videoRef.current?.play().catch(() => {}); }} aria-hidden="true" /> : <img className={item.mirrored ? 'is-mirrored' : undefined} src={mediaPoster(item)} alt={item.src ? item.title : ''} loading={priority ? 'eager' : 'lazy'} />}
     <span className="project-media__shade" />
     {!item.hideMeta && <span className="project-media__meta"><span>{item.type}</span><span>{item.src ? item.title : '素材待替换'}</span></span>}
   </div>;
@@ -67,7 +70,7 @@ function MediaTile({ item, className = '', priority = false, autoPreview = false
 function ProjectGallery({ project }: { project: PortfolioProject }) {
   const hero = getMedia(project, project.coverIds[project.coverIds.length - 1]);
   return <div className="project-cover-gallery">
-    <MediaTile item={hero} priority className="project-cover-gallery__hero" />
+    <MediaTile item={hero} className="project-cover-gallery__hero" />
   </div>;
 }
 
@@ -151,7 +154,7 @@ function CaseStudyOverlay({ project, onClose }: { project: PortfolioProject | nu
   const renderMedia = (id: string, className = '', autoPreview = false) => <MediaTile item={getMedia(project, id)} className={className} autoPreview={autoPreview} />;
   return createPortal(<div ref={overlayRef} tabIndex={-1} className={`case-overlay ${project.caseType === 'personal' ? 'case-overlay--personal' : ''} ${project.caseType === 'hardware' ? 'case-overlay--hardware' : ''}`} role="dialog" aria-modal="true" aria-label={`${project.title} 项目详情`}>
     <header className="case-overlay__bar"><button type="button" onClick={onClose}><ArrowLeft size={19} /> BACK TO PROJECTS</button>{project.caseType !== 'hardware' && <button type="button" onClick={onClose} aria-label="关闭项目详情"><X size={24} /></button>}</header>
-    {project.caseType === 'robot' ? <RobotCase project={project} renderMedia={renderMedia} /> : project.caseType === 'hardware' ? <HardwareCase project={project} renderMedia={renderMedia} onBack={onClose} /> : <PersonalCase project={project} renderMedia={renderMedia} />}
+    <LoadingBoundary><Suspense fallback={<p role="status" className="case-container" style={{ paddingTop: '3rem', paddingBottom: '3rem' }}>正在加载项目内容…</p>}>{project.caseType === 'robot' ? <RobotCase project={project} renderMedia={renderMedia} /> : project.caseType === 'hardware' ? <HardwareCase project={project} renderMedia={renderMedia} onBack={onClose} /> : <PersonalCase project={project} renderMedia={renderMedia} />}</Suspense></LoadingBoundary>
     <footer className="case-overlay__footer">{project.title} <span>{project.company ? `${project.company} · ` : ''}{project.year}</span></footer>
   </div>, document.body);
 }
@@ -169,7 +172,7 @@ export default function ProjectsSection({ footer }: { footer: React.ReactNode })
       <motion.h2 initial={reduceMotion ? false : { opacity: 0, y: 34, clipPath: 'inset(0 0 22% 0)', filter: 'blur(8px)' }} whileInView={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0% 0)', filter: 'blur(0px)' }} viewport={{ once: true, amount: .35 }} transition={{ duration: reduceMotion ? 0 : .72, ease }}>SELECTED PROJECTS</motion.h2>
       <motion.p initial={reduceMotion ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .5 }} transition={{ duration: reduceMotion ? 0 : .55, delay: reduceMotion ? 0 : .12, ease }}>一些我真正参与过的产品项目与个人内容实践。</motion.p>
     </div>
-    <div className="projects-section__list">{projects.map((project, index) => <motion.div key={project.id} className="project-stack-item" style={{ '--stack-offset': `${index * 32}px`, zIndex: index + 1 } as CSSProperties} initial={reduceMotion ? false : { opacity: 0, y: 38, scale: .992, filter: 'blur(8px)' }} whileInView={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }} viewport={{ once: true, amount: .14 }} transition={{ duration: reduceMotion ? 0 : .68, delay: reduceMotion ? 0 : index * .05, ease }}><ProjectCard project={project} onOpenCase={trigger => openCase(project, trigger)} /></motion.div>)}</div>
+    <div className="projects-section__list">{projects.map((project, index) => <div key={project.id} className="project-stack-item" style={{ '--stack-offset': `${index * 32}px`, zIndex: index + 1 } as CSSProperties}><ProjectCard project={project} onOpenCase={trigger => openCase(project, trigger)} /></div>)}</div>
     {footer}
     <CaseStudyOverlay project={activeCase} onClose={closeCase} />
   </section>;

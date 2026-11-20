@@ -1,3 +1,4 @@
+import { optimizedAsset } from '../assetDelivery';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import CardSwap, { Card } from '../components/react-bits/CardSwap/CardSwap';
@@ -121,7 +122,7 @@ export default function PackagingEvolution({ renderMedia, open }: { renderMedia:
         {packagingVersions.map((version, index) => <Card key={version.label} customClass="p02-packaging-card">
           <div className="p02-packaging-card__inner">
             <header><small>{version.label} / {version.category}</small><strong>{version.cardTitle}</strong></header>
-            <div className="p02-packaging-card__media">{index === 0 ? <div className="project-media"><img src={`${import.meta.env.BASE_URL}assets/projects/panda-packaging/evolution/yuanyuan-concept-atlas.png`} alt="元元熊猫 IP 诞生图鉴" /></div> : renderMedia(version.assets[0])}</div>
+            <div className="p02-packaging-card__media">{index === 0 ? <div className="project-media"><img src={optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/panda-packaging/evolution/yuanyuan-concept-atlas.png`)} alt="元元熊猫 IP 诞生图鉴" /></div> : renderMedia(version.assets[0])}</div>
             <footer><span>{String(index + 1).padStart(2, '0')} / 03</span><small>{index === active ? 'CLICK FRONT CARD TO VIEW DETAIL ↘' : 'CLICK TO BRING FORWARD'}</small></footer>
           </div>
         </Card>)}

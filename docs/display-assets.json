@@ -1,0 +1,1146 @@
+[
+  {
+    "source": "about-angry-laptop-boy.png",
+    "display": "about-angry-laptop-boy.display.webp",
+    "before": 1809420,
+    "after": 84650,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "skill-falling-boy.png",
+    "display": "skill-falling-boy.display.webp",
+    "before": 1839429,
+    "after": 137092,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/ai-robot-maker-3d-print-cover.jpg",
+    "display": "projects/ai-robot-maker-3d-print-cover.display.webp",
+    "before": 652562,
+    "after": 358688,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-hero.png",
+    "display": "projects/ai-robot-hero.display.webp",
+    "before": 1650190,
+    "after": 77196,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-content-launch.jpg",
+    "display": "projects/ai-robot-content-launch.display.webp",
+    "before": 468266,
+    "after": 230966,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-maker-chip-board-cover.jpg",
+    "display": "projects/ai-robot-maker-chip-board-cover.display.webp",
+    "before": 527393,
+    "after": 263984,
+    "width": 1451,
+    "height": 1084
+  },
+  {
+    "source": "projects/ai-robot-capability-memory.jpg",
+    "display": "projects/ai-robot-capability-memory.display.webp",
+    "before": 429203,
+    "after": 208992,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-content-feature.jpg",
+    "display": "projects/ai-robot-content-feature.display.webp",
+    "before": 350404,
+    "after": 146642,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-content-product.jpg",
+    "display": "projects/ai-robot-content-product.display.webp",
+    "before": 353531,
+    "after": 159200,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-capability-customization.jpg",
+    "display": "projects/ai-robot-capability-customization.display.webp",
+    "before": 436511,
+    "after": 202420,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-capability-motion.jpg",
+    "display": "projects/ai-robot-capability-motion.display.webp",
+    "before": 376217,
+    "after": 174446,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-product.jpg",
+    "display": "projects/ai-robot-product.display.webp",
+    "before": 317810,
+    "after": 121964,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-content-maker.jpg",
+    "display": "projects/ai-robot-content-maker.display.webp",
+    "before": 451836,
+    "after": 214820,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-capability-open-development.jpg",
+    "display": "projects/ai-robot-capability-open-development.display.webp",
+    "before": 484695,
+    "after": 243246,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/warmview-project-cover.png",
+    "display": "projects/warmview-project-cover.display.webp",
+    "before": 1571864,
+    "after": 84434,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/warmview-video-intercom-cover.jpg",
+    "display": "projects/warmview-video-intercom-cover.display.webp",
+    "before": 336979,
+    "after": 81200,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/waiwai-product-promo-cover.jpg",
+    "display": "projects/waiwai-product-promo-cover.display.webp",
+    "before": 328772,
+    "after": 89214,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/ai-robot-capability-vision.jpg",
+    "display": "projects/ai-robot-capability-vision.display.webp",
+    "before": 327894,
+    "after": 141194,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-maker-design-cover.jpg",
+    "display": "projects/ai-robot-maker-design-cover.display.webp",
+    "before": 488412,
+    "after": 239870,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-content-how-to.jpg",
+    "display": "projects/ai-robot-content-how-to.display.webp",
+    "before": 345657,
+    "after": 143298,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-maker-code-flash-cover.jpg",
+    "display": "projects/ai-robot-maker-code-flash-cover.display.webp",
+    "before": 535133,
+    "after": 269398,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/ai-robot-maker-assembly-cover.jpg",
+    "display": "projects/ai-robot-maker-assembly-cover.display.webp",
+    "before": 613546,
+    "after": 326212,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/8.png",
+    "display": "projects/panda-software/8.display.webp",
+    "before": 1555394,
+    "after": 128316,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/9.png",
+    "display": "projects/panda-software/9.display.webp",
+    "before": 1399120,
+    "after": 92378,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/10.png",
+    "display": "projects/panda-software/10.display.webp",
+    "before": 1313594,
+    "after": 91496,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/4.png",
+    "display": "projects/panda-software/4.display.webp",
+    "before": 1332933,
+    "after": 90648,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/5.png",
+    "display": "projects/panda-software/5.display.webp",
+    "before": 1373809,
+    "after": 101822,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/7.png",
+    "display": "projects/panda-software/7.display.webp",
+    "before": 1518905,
+    "after": 112276,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/6.png",
+    "display": "projects/panda-software/6.display.webp",
+    "before": 1604803,
+    "after": 130640,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/2.png",
+    "display": "projects/panda-software/2.display.webp",
+    "before": 1317021,
+    "after": 75390,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/3.png",
+    "display": "projects/panda-software/3.display.webp",
+    "before": 1414350,
+    "after": 98798,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-software/1.png",
+    "display": "projects/panda-software/1.display.webp",
+    "before": 1364833,
+    "after": 91832,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/tour-product.png",
+    "display": "projects/brand-work/commercial-visuals/tour-product.display.webp",
+    "before": 13313878,
+    "after": 184190,
+    "width": 1600,
+    "height": 1086
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/kbao-scenes.jpg",
+    "display": "projects/brand-work/commercial-visuals/kbao-scenes.display.webp",
+    "before": 483345,
+    "after": 194434,
+    "width": 1206,
+    "height": 1560
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/tour-scenes.png",
+    "display": "projects/brand-work/commercial-visuals/tour-scenes.display.webp",
+    "before": 12273813,
+    "after": 199282,
+    "width": 1600,
+    "height": 1086
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/kbao-product.jpg",
+    "display": "projects/brand-work/commercial-visuals/kbao-product.display.webp",
+    "before": 560781,
+    "after": 225058,
+    "width": 1206,
+    "height": 2178
+  },
+  {
+    "source": "projects/brand-work/commercial-visuals/tour-functions.png",
+    "display": "projects/brand-work/commercial-visuals/tour-functions.display.webp",
+    "before": 9897611,
+    "after": 155668,
+    "width": 1600,
+    "height": 1086
+  },
+  {
+    "source": "projects/brand-work/anjia/head-09.png",
+    "display": "projects/brand-work/anjia/head-09.display.webp",
+    "before": 1235784,
+    "after": 113518,
+    "width": 1080,
+    "height": 1080
+  },
+  {
+    "source": "projects/brand-work/anjia/head-08.png",
+    "display": "projects/brand-work/anjia/head-08.display.webp",
+    "before": 1368585,
+    "after": 177044,
+    "width": 1080,
+    "height": 1080
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-02.png",
+    "display": "projects/brand-work/anjia/detail-02.display.webp",
+    "before": 1040136,
+    "after": 117386,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-03.png",
+    "display": "projects/brand-work/anjia/detail-03.display.webp",
+    "before": 1534812,
+    "after": 243508,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-01.png",
+    "display": "projects/brand-work/anjia/detail-01.display.webp",
+    "before": 2423595,
+    "after": 182744,
+    "width": 1080,
+    "height": 1651
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-04.png",
+    "display": "projects/brand-work/anjia/detail-04.display.webp",
+    "before": 1937054,
+    "after": 157290,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-10.png",
+    "display": "projects/brand-work/anjia/detail-10.display.webp",
+    "before": 1275853,
+    "after": 184972,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-11.png",
+    "display": "projects/brand-work/anjia/detail-11.display.webp",
+    "before": 929927,
+    "after": 157688,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-05.png",
+    "display": "projects/brand-work/anjia/detail-05.display.webp",
+    "before": 2436031,
+    "after": 201832,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-07.png",
+    "display": "projects/brand-work/anjia/detail-07.display.webp",
+    "before": 2242882,
+    "after": 153530,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-06.png",
+    "display": "projects/brand-work/anjia/detail-06.display.webp",
+    "before": 1842370,
+    "after": 210016,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-08.png",
+    "display": "projects/brand-work/anjia/detail-08.display.webp",
+    "before": 1745651,
+    "after": 140700,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/detail-09.png",
+    "display": "projects/brand-work/anjia/detail-09.display.webp",
+    "before": 1338909,
+    "after": 136126,
+    "width": 1080,
+    "height": 1920
+  },
+  {
+    "source": "projects/brand-work/anjia/head-05.png",
+    "display": "projects/brand-work/anjia/head-05.display.webp",
+    "before": 2267942,
+    "after": 176840,
+    "width": 1080,
+    "height": 1080
+  },
+  {
+    "source": "projects/brand-work/anjia/head-04.png",
+    "display": "projects/brand-work/anjia/head-04.display.webp",
+    "before": 2148065,
+    "after": 154230,
+    "width": 1080,
+    "height": 1080
+  },
+  {
+    "source": "projects/brand-work/anjia/head-06.png",
+    "display": "projects/brand-work/anjia/head-06.display.webp",
+    "before": 1241551,
+    "after": 135408,
+    "width": 1080,
+    "height": 1080
+  },
+  {
+    "source": "projects/brand-work/anjia/head-07.png",
+    "display": "projects/brand-work/anjia/head-07.display.webp",
+    "before": 1327935,
+    "after": 168724,
+    "width": 1080,
+    "height": 1080
+  },
+  {
+    "source": "projects/brand-work/anjia/head-03.png",
+    "display": "projects/brand-work/anjia/head-03.display.webp",
+    "before": 2262900,
+    "after": 169376,
+    "width": 1080,
+    "height": 1080
+  },
+  {
+    "source": "projects/brand-work/anjia/head-02.png",
+    "display": "projects/brand-work/anjia/head-02.display.webp",
+    "before": 2348635,
+    "after": 180210,
+    "width": 1080,
+    "height": 1080
+  },
+  {
+    "source": "projects/brand-work/anjia/head-01.png",
+    "display": "projects/brand-work/anjia/head-01.display.webp",
+    "before": 1593846,
+    "after": 183452,
+    "width": 1080,
+    "height": 1080
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-design-01.png",
+    "display": "projects/brand-work/environmental-graphics/wall-design-01.display.webp",
+    "before": 2329270,
+    "after": 259074,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-design-02.png",
+    "display": "projects/brand-work/environmental-graphics/wall-design-02.display.webp",
+    "before": 2166165,
+    "after": 219696,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-layout-04.png",
+    "display": "projects/brand-work/environmental-graphics/wall-layout-04.display.webp",
+    "before": 1592221,
+    "after": 131104,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-layout-01.png",
+    "display": "projects/brand-work/environmental-graphics/wall-layout-01.display.webp",
+    "before": 1335669,
+    "after": 135110,
+    "width": 1055,
+    "height": 1491
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-layout-03.png",
+    "display": "projects/brand-work/environmental-graphics/wall-layout-03.display.webp",
+    "before": 1484679,
+    "after": 107678,
+    "width": 1254,
+    "height": 1254
+  },
+  {
+    "source": "projects/brand-work/environmental-graphics/wall-layout-02.png",
+    "display": "projects/brand-work/environmental-graphics/wall-layout-02.display.webp",
+    "before": 1299417,
+    "after": 127968,
+    "width": 1121,
+    "height": 1403
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-04-left.png",
+    "display": "projects/brand-work/corporate-brochure/brochure-04-left.display.webp",
+    "before": 708441,
+    "after": 174836,
+    "width": 1191,
+    "height": 1616
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-01-right.png",
+    "display": "projects/brand-work/corporate-brochure/brochure-01-right.display.webp",
+    "before": 441049,
+    "after": 124612,
+    "width": 1191,
+    "height": 1616
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-03-left.png",
+    "display": "projects/brand-work/corporate-brochure/brochure-03-left.display.webp",
+    "before": 538536,
+    "after": 146632,
+    "width": 1191,
+    "height": 1616
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-03-right.png",
+    "display": "projects/brand-work/corporate-brochure/brochure-03-right.display.webp",
+    "before": 553046,
+    "after": 158036,
+    "width": 1191,
+    "height": 1616
+  },
+  {
+    "source": "projects/brand-work/corporate-brochure/brochure-04-right.png",
+    "display": "projects/brand-work/corporate-brochure/brochure-04-right.display.webp",
+    "before": 683755,
+    "after": 163322,
+    "width": 1191,
+    "height": 1616
+  },
+  {
+    "source": "projects/bilibili-music/night-infj.png",
+    "display": "projects/bilibili-music/night-infj.display.webp",
+    "before": 2078550,
+    "after": 167448,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/bilibili-music/cantonese-playlist.png",
+    "display": "projects/bilibili-music/cantonese-playlist.display.webp",
+    "before": 1623486,
+    "after": 97928,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/bilibili-music/rnb-playlist.png",
+    "display": "projects/bilibili-music/rnb-playlist.display.webp",
+    "before": 1637046,
+    "after": 94130,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/tour-guide/field-photos-collage.png",
+    "display": "projects/tour-guide/field-photos-collage.display.webp",
+    "before": 5638123,
+    "after": 322204,
+    "width": 1600,
+    "height": 1335
+  },
+  {
+    "source": "projects/panda-awards/sichuan-gold-preview.png",
+    "display": "projects/panda-awards/sichuan-gold-preview.display.webp",
+    "before": 1583576,
+    "after": 107968,
+    "width": 910,
+    "height": 1260
+  },
+  {
+    "source": "projects/panda-awards/national-silver-preview.png",
+    "display": "projects/panda-awards/national-silver-preview.display.webp",
+    "before": 1943443,
+    "after": 158874,
+    "width": 1350,
+    "height": 1006
+  },
+  {
+    "source": "projects/panda-awards/silver-medal-angle.png",
+    "display": "projects/panda-awards/silver-medal-angle.display.webp",
+    "before": 2019781,
+    "after": 252098,
+    "width": 1086,
+    "height": 1448
+  },
+  {
+    "source": "projects/panda-awards/silver-medal.png",
+    "display": "projects/panda-awards/silver-medal.display.webp",
+    "before": 2432799,
+    "after": 211466,
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "source": "projects/panda-awards/national-silver.png",
+    "display": "projects/panda-awards/national-silver.display.webp",
+    "before": 1937229,
+    "after": 160830,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-awards/award-honors-composite.png",
+    "display": "projects/panda-awards/award-honors-composite.display.webp",
+    "before": 682109,
+    "after": 50106,
+    "width": 900,
+    "height": 562
+  },
+  {
+    "source": "projects/panda-awards/sichuan-gold.png",
+    "display": "projects/panda-awards/sichuan-gold.display.webp",
+    "before": 2023480,
+    "after": 110102,
+    "width": 1024,
+    "height": 1536
+  },
+  {
+    "source": "projects/panda-awards/award-honors-transparent.png",
+    "display": "projects/panda-awards/award-honors-transparent.display.webp",
+    "before": 581336,
+    "after": 54836,
+    "width": 900,
+    "height": 562
+  },
+  {
+    "source": "projects/panda-awards/official/sichuan-awards-notice.png",
+    "display": "projects/panda-awards/official/sichuan-awards-notice.display.webp",
+    "before": 376680,
+    "after": 150402,
+    "width": 1191,
+    "height": 1684
+  },
+  {
+    "source": "projects/panda-line-to-life/01-render.png",
+    "display": "projects/panda-line-to-life/01-render.display.webp",
+    "before": 1962384,
+    "after": 412028,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-line-to-life/04-render.png",
+    "display": "projects/panda-line-to-life/04-render.display.webp",
+    "before": 1554790,
+    "after": 347834,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-line-to-life/03-render.png",
+    "display": "projects/panda-line-to-life/03-render.display.webp",
+    "before": 1556019,
+    "after": 328610,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-line-to-life/02-render.png",
+    "display": "projects/panda-line-to-life/02-render.display.webp",
+    "before": 2130648,
+    "after": 491764,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/food/cooking-creator-cover.png",
+    "display": "projects/food/cooking-creator-cover.display.webp",
+    "before": 2057635,
+    "after": 191926,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-manual/page-0.png",
+    "display": "projects/panda-manual/page-0.display.webp",
+    "before": 533104,
+    "after": 88166,
+    "width": 1133,
+    "height": 1587
+  },
+  {
+    "source": "projects/panda-manual/page-3.png",
+    "display": "projects/panda-manual/page-3.display.webp",
+    "before": 537548,
+    "after": 150138,
+    "width": 1134,
+    "height": 1587
+  },
+  {
+    "source": "projects/panda-manual/page-6.png",
+    "display": "projects/panda-manual/page-6.display.webp",
+    "before": 333905,
+    "after": 109494,
+    "width": 1133,
+    "height": 1587
+  },
+  {
+    "source": "projects/panda-manual/page-7.png",
+    "display": "projects/panda-manual/page-7.display.webp",
+    "before": 329318,
+    "after": 125526,
+    "width": 1134,
+    "height": 1587
+  },
+  {
+    "source": "projects/core-workflow/ai-scene.png",
+    "display": "projects/core-workflow/ai-scene.display.webp",
+    "before": 1691569,
+    "after": 89106,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/core-workflow/product-traits.png",
+    "display": "projects/core-workflow/product-traits.display.webp",
+    "before": 1772307,
+    "after": 150532,
+    "width": 1536,
+    "height": 1024
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-06.png",
+    "display": "projects/core-workflow/keyframe-visual-06.display.webp",
+    "before": 1625057,
+    "after": 104554,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-04.png",
+    "display": "projects/core-workflow/keyframe-visual-04.display.webp",
+    "before": 1627579,
+    "after": 82338,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-05.png",
+    "display": "projects/core-workflow/keyframe-visual-05.display.webp",
+    "before": 1658961,
+    "after": 112832,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-01.png",
+    "display": "projects/core-workflow/keyframe-visual-01.display.webp",
+    "before": 1689616,
+    "after": 110524,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-02.png",
+    "display": "projects/core-workflow/keyframe-visual-02.display.webp",
+    "before": 1689247,
+    "after": 105070,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/core-workflow/keyframe-visual-03.png",
+    "display": "projects/core-workflow/keyframe-visual-03.display.webp",
+    "before": 1681995,
+    "after": 95318,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/v3-result.jpg",
+    "display": "projects/panda-packaging/v3-result.display.webp",
+    "before": 875914,
+    "after": 273432,
+    "width": 1600,
+    "height": 1600
+  },
+  {
+    "source": "projects/panda-packaging/v3-hero.jpg",
+    "display": "projects/panda-packaging/v3-hero.display.webp",
+    "before": 490290,
+    "after": 248850,
+    "width": 1586,
+    "height": 992
+  },
+  {
+    "source": "projects/panda-packaging/v2-hero.jpg",
+    "display": "projects/panda-packaging/v2-hero.display.webp",
+    "before": 489460,
+    "after": 236962,
+    "width": 1586,
+    "height": 992
+  },
+  {
+    "source": "projects/panda-packaging/panda-dual-awards-visual.png",
+    "display": "projects/panda-packaging/panda-dual-awards-visual.display.webp",
+    "before": 2163872,
+    "after": 222940,
+    "width": 1600,
+    "height": 902
+  },
+  {
+    "source": "projects/panda-packaging/panda-overall-visual.png",
+    "display": "projects/panda-packaging/panda-overall-visual.display.webp",
+    "before": 1971338,
+    "after": 188152,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-packaging/v1-product.jpg",
+    "display": "projects/panda-packaging/v1-product.display.webp",
+    "before": 949398,
+    "after": 479586,
+    "width": 1499,
+    "height": 2000
+  },
+  {
+    "source": "projects/panda-packaging/v1-detail.jpg",
+    "display": "projects/panda-packaging/v1-detail.display.webp",
+    "before": 674726,
+    "after": 185922,
+    "width": 1600,
+    "height": 1600
+  },
+  {
+    "source": "projects/panda-packaging/v2-open.jpg",
+    "display": "projects/panda-packaging/v2-open.display.webp",
+    "before": 521136,
+    "after": 113310,
+    "width": 1600,
+    "height": 1600
+  },
+  {
+    "source": "projects/panda-packaging/v3-product.jpg",
+    "display": "projects/panda-packaging/v3-product.display.webp",
+    "before": 396916,
+    "after": 115216,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/v1-hero.jpg",
+    "display": "projects/panda-packaging/v1-hero.display.webp",
+    "before": 413763,
+    "after": 197536,
+    "width": 1586,
+    "height": 992
+  },
+  {
+    "source": "projects/panda-packaging/v2-system.jpg",
+    "display": "projects/panda-packaging/v2-system.display.webp",
+    "before": 446555,
+    "after": 136004,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/v1/product-detail.jpg",
+    "display": "projects/panda-packaging/v1/product-detail.display.webp",
+    "before": 869385,
+    "after": 391872,
+    "width": 1363,
+    "height": 2428
+  },
+  {
+    "source": "projects/panda-packaging/v1/design-wordmark.png",
+    "display": "projects/panda-packaging/v1/design-wordmark.display.webp",
+    "before": 333681,
+    "after": 57272,
+    "width": 1600,
+    "height": 445
+  },
+  {
+    "source": "projects/panda-packaging/v1/design-bamboo.png",
+    "display": "projects/panda-packaging/v1/design-bamboo.display.webp",
+    "before": 1473689,
+    "after": 403324,
+    "width": 1600,
+    "height": 1067
+  },
+  {
+    "source": "projects/panda-packaging/v1/product-main.jpg",
+    "display": "projects/panda-packaging/v1/product-main.display.webp",
+    "before": 1361136,
+    "after": 276078,
+    "width": 1600,
+    "height": 1769
+  },
+  {
+    "source": "projects/panda-packaging/v1/design-pandas.png",
+    "display": "projects/panda-packaging/v1/design-pandas.display.webp",
+    "before": 519636,
+    "after": 131050,
+    "width": 1600,
+    "height": 1280
+  },
+  {
+    "source": "projects/panda-packaging/v2/panda-role.png",
+    "display": "projects/panda-packaging/v2/panda-role.display.webp",
+    "before": 1957950,
+    "after": 176464,
+    "width": 1260,
+    "height": 1400
+  },
+  {
+    "source": "projects/panda-packaging/v2/closed.png",
+    "display": "projects/panda-packaging/v2/closed.display.webp",
+    "before": 680904,
+    "after": 100728,
+    "width": 800,
+    "height": 800
+  },
+  {
+    "source": "projects/panda-packaging/v2/monkey-role.png",
+    "display": "projects/panda-packaging/v2/monkey-role.display.webp",
+    "before": 2069422,
+    "after": 223480,
+    "width": 1260,
+    "height": 1400
+  },
+  {
+    "source": "projects/panda-packaging/v2/display.png",
+    "display": "projects/panda-packaging/v2/display.display.webp",
+    "before": 1699697,
+    "after": 146134,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/v2/cultural-field.png",
+    "display": "projects/panda-packaging/v2/cultural-field.display.webp",
+    "before": 2309542,
+    "after": 226718,
+    "width": 1600,
+    "height": 1333
+  },
+  {
+    "source": "projects/panda-packaging/v2/open.png",
+    "display": "projects/panda-packaging/v2/open.display.webp",
+    "before": 438677,
+    "after": 56258,
+    "width": 800,
+    "height": 800
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-top.png",
+    "display": "projects/panda-packaging/v3/final-top.display.webp",
+    "before": 2742196,
+    "after": 192324,
+    "width": 1600,
+    "height": 1600
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-back.png",
+    "display": "projects/panda-packaging/v3/final-back.display.webp",
+    "before": 1944960,
+    "after": 169762,
+    "width": 1600,
+    "height": 1600
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-left.png",
+    "display": "projects/panda-packaging/v3/final-left.display.webp",
+    "before": 2912562,
+    "after": 195670,
+    "width": 1600,
+    "height": 1600
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-front.png",
+    "display": "projects/panda-packaging/v3/final-front.display.webp",
+    "before": 2372674,
+    "after": 181336,
+    "width": 1600,
+    "height": 1600
+  },
+  {
+    "source": "projects/panda-packaging/v3/final-right.png",
+    "display": "projects/panda-packaging/v3/final-right.display.webp",
+    "before": 3095390,
+    "after": 268232,
+    "width": 1600,
+    "height": 1600
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-giftbox-pair.png",
+    "display": "projects/panda-packaging/evolution/cultural-giftbox-pair.display.webp",
+    "before": 1847155,
+    "after": 122240,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-open.png",
+    "display": "projects/panda-packaging/evolution/cultural-open.display.webp",
+    "before": 1664160,
+    "after": 154736,
+    "width": 1448,
+    "height": 1086
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-travel.png",
+    "display": "projects/panda-packaging/evolution/cultural-travel.display.webp",
+    "before": 2235020,
+    "after": 238098,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/yuanyuan-product-display.png",
+    "display": "projects/panda-packaging/evolution/yuanyuan-product-display.display.webp",
+    "before": 1835337,
+    "after": 92328,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-interaction.png",
+    "display": "projects/panda-packaging/evolution/cultural-interaction.display.webp",
+    "before": 1904545,
+    "after": 124710,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/product-concept-cover.png",
+    "display": "projects/panda-packaging/evolution/product-concept-cover.display.webp",
+    "before": 1835337,
+    "after": 92328,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/yuanyuan-concept-atlas.png",
+    "display": "projects/panda-packaging/evolution/yuanyuan-concept-atlas.display.webp",
+    "before": 1678066,
+    "after": 218756,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-back.png",
+    "display": "projects/panda-packaging/evolution/v2-back.display.webp",
+    "before": 22420776,
+    "after": 514376,
+    "width": 1600,
+    "height": 1412
+  },
+  {
+    "source": "projects/panda-packaging/evolution/aigc-lifestyle.png",
+    "display": "projects/panda-packaging/evolution/aigc-lifestyle.display.webp",
+    "before": 1932997,
+    "after": 139326,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/playful-giftbox-manual.png",
+    "display": "projects/panda-packaging/evolution/playful-giftbox-manual.display.webp",
+    "before": 1911844,
+    "after": 149138,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-front.png",
+    "display": "projects/panda-packaging/evolution/v2-front.display.webp",
+    "before": 18590987,
+    "after": 357644,
+    "width": 1600,
+    "height": 1333
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-right.png",
+    "display": "projects/panda-packaging/evolution/v2-right.display.webp",
+    "before": 4071668,
+    "after": 148802,
+    "width": 1600,
+    "height": 960
+  },
+  {
+    "source": "projects/panda-packaging/evolution/aigc-gift.png",
+    "display": "projects/panda-packaging/evolution/aigc-gift.display.webp",
+    "before": 2140826,
+    "after": 215636,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/product-reference.jpeg",
+    "display": "projects/panda-packaging/evolution/product-reference.display.webp",
+    "before": 1361136,
+    "after": 276078,
+    "width": 1600,
+    "height": 1769
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-closeup.png",
+    "display": "projects/panda-packaging/evolution/cultural-closeup.display.webp",
+    "before": 1873541,
+    "after": 133116,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "projects/panda-packaging/evolution/v2-left.png",
+    "display": "projects/panda-packaging/evolution/v2-left.display.webp",
+    "before": 1046132,
+    "after": 126258,
+    "width": 1600,
+    "height": 960
+  },
+  {
+    "source": "projects/panda-packaging/evolution/cultural-pair.png",
+    "display": "projects/panda-packaging/evolution/cultural-pair.display.webp",
+    "before": 1847155,
+    "after": 122240,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "source": "lanyard/portrait.png",
+    "display": "lanyard/portrait.display.webp",
+    "before": 2094654,
+    "after": 165496,
+    "width": 1254,
+    "height": 1254
+  }
+]

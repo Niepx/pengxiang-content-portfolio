@@ -1,6 +1,7 @@
+import { optimizedAsset } from '../assetDelivery';
 export type BrandImage = { id: string; image: string; fullImage: string; text: string; isLong?: boolean; alt?: string; description?: string };
 export type BrandCollection = { id: string; title: string; category: string; previews: BrandImage[]; images: BrandImage[]; description?: string; pending?: boolean };
-const asset = (path: string) => `${import.meta.env.BASE_URL}assets/projects/brand-work/${path}`;
+const asset = (path: string) => optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/brand-work/${path}`);
 export const brandCollections: BrandCollection[] = [
   {
     "id": "corporate-brochure",

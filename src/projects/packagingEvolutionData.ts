@@ -1,5 +1,6 @@
+import { optimizedAsset } from '../assetDelivery';
 import type { MediaItem } from './data';
-const asset = (file: string) => `${import.meta.env.BASE_URL}assets/projects/panda-packaging/${file}`;
+const asset = (file: string) => optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/panda-packaging/${file}`);
 const image = (id: string, title: string, file: string, preview?: string): MediaItem & { preview: string } => ({
   id, title, type: 'PACKAGING EVOLUTION', kind: 'image', hideMeta: true,
   src: asset(file), preview: asset(preview ?? file),
@@ -54,7 +55,7 @@ export const conceptCharacters = [
   { key: '03', pose: '趴卧', label: '04 / RESTING' },
 ].map(({ key, pose, label }) => {
   const artwork = (mode: 'sketch' | 'render') => {
-    const src = `${import.meta.env.BASE_URL}assets/projects/panda-line-to-life/${key}-${mode}.png`;
+    const src = optimizedAsset(`${import.meta.env.BASE_URL}assets/projects/panda-line-to-life/${key}-${mode}.png`);
     return { id: `evolution-yuanyuan-${key}-${mode}`, title: `元元 · ${pose}${mode === 'sketch' ? '原创线描' : '彩色概念效果图'}`, type: 'PRODUCT EVOLUTION', kind: 'image' as const, src, preview: src, hideMeta: true };
   };
   return { label, sketch: artwork('sketch'), render: artwork('render') };
